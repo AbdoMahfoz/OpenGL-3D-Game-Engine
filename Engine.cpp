@@ -1,13 +1,17 @@
 #include "Engine.h"
+#include "GameObject.h"
+#include "Model.h"
 
 bool isInitalized = false;
 GLFWwindow* MainWindow;
 std::vector<void(*)()> routines;
+std::vector<std::pair<Model*, std::vector<const GameObject*>>> RenderArray;
 std::thread *LogicThread, *RenderingThread;
 
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
+
 GLFWwindow* CreateWindow(int width, int height, const char* title)
 {   
 	glfwWindowHint(GLFW_SAMPLES, 4);
@@ -41,35 +45,16 @@ void Rendering()
         RenderStarted.lock();
         RenderingMutex.lock();
         RenderStarted.unlock();
-        //Rendering goes here
-        RenderingMutex.unlock();
-    }
-}
-
-void Engine::RegisterRoutine(void (*ptr)(), bool shouldCheck)
-{
-    if(shouldCheck)
-    {
-        for(auto i : routines)
+        for(auto i : RenderArray)
         {
-            if(i == ptr)
+            i.first->SetUpEnviroment();
+            for(auto j : i.second)
             {
-                return;
+                i.first->Draw(*j);
             }
+            i.first->CleanUpEnviroment();
         }
-    }
-    routines.push_back(ptr);
-}
-
-void Engine::UnRegisterRoutine(void (*ptr)())
-{
-    for(int i = 0; i < routines.size(); i++)
-    {
-        if(routines[i] == ptr)
-        {
-            routines.erase(routines.begin() + i);
-            return;
-        }
+        RenderingMutex.unlock();
     }
 }
 
@@ -112,6 +97,52 @@ void Engine::FireEngine()
                 MainLoop();
             }
             glfwTerminate();
+        }
+    }
+}
+
+void Engine::RegisterRoutine(void (*ptr)(), bool shouldCheck = false)
+{
+    if(shouldCheck)
+    {
+        for(auto i : routines)
+        {
+            if(i == ptr)
+            {
+                return;
+            }
+        }
+    }
+    routines.push_back(ptr);
+}
+void Engine::UnRegisterRoutine(void (*ptr)())
+{
+    for(int i = 0; i < routines.size(); i++)
+    {
+        if(routines[i] == ptr)
+        {
+            routines.erase(routines.begin() + i);
+            return;
+        }
+    }
+}
+void Engine::RegisterModel(Model* model)
+{
+    RenderArray.push_back({model, std::vector<const GameObject*>()});
+}
+void Engine::RegisterGameObject(const GameObject* obj)
+{
+    RenderArray[obj->GetModel()->GetID()].second.push_back(obj);
+}
+void Engine::UnRegisterGameObject(const GameObject* obj)
+{
+    std::vector<const GameObject*>& arr = RenderArray[obj->GetModel()->GetID()].second;
+    for(int i = 0; i < arr.size(); i++)
+    {
+        if(arr[i] == obj)
+        {
+            arr.erase(arr.begin() + i);
+            return;
         }
     }
 }
