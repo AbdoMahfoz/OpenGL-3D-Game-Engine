@@ -28,7 +28,7 @@
             },
             "label": "build",
             "type": "shell",
-            "command": "g++ -std=c++11 *.cpp -lpthread -lGL -lglfw -lGLEW",
+            "command": "g++ -g -std=c++11 *.cpp -lpthread -lGL -lglfw -lGLEW",
             "problemMatcher": [
                 "$gcc"
             ]
