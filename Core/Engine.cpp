@@ -7,11 +7,9 @@ GLFWwindow* MainWindow;
 std::vector<void(*)()> routines;
 std::vector<std::pair<Model*, std::vector<const GameObject*>>> RenderArray;
 std::thread *LogicThread, *RenderingThread;
-
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
-
 GLFWwindow* CreateWindow(int width, int height, const char* title)
 {   
 	glfwWindowHint(GLFW_SAMPLES, 4);
@@ -22,7 +20,6 @@ GLFWwindow* CreateWindow(int width, int height, const char* title)
     glfwMakeContextCurrent(window);
     return window;
 }
-
 void Logic()
 {
     while(glfwWindowShouldClose(MainWindow) == 0)
@@ -37,7 +34,6 @@ void Logic()
         LogicMutex.unlock();
     }
 }
-
 void Rendering()
 {
     while(glfwWindowShouldClose(MainWindow) == 0)
@@ -57,7 +53,6 @@ void Rendering()
         RenderingMutex.unlock();
     }
 }
-
 void MainLoop()
 {
     Engine::Start();
@@ -75,10 +70,14 @@ void MainLoop()
 	    glfwPollEvents();
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
+    LogicMutex.unlock();
+    RenderingMutex.unlock();
+    LogicThread->join();
+    RenderingThread->join();
     delete LogicThread;
     delete RenderingThread;
+    glfwTerminate();
 }
-
 //------------End of Private functions(Inaccessable outside of this file)---------
 void Engine::FireEngine()
 {
@@ -100,7 +99,6 @@ void Engine::FireEngine()
         }
     }
 }
-
 void Engine::RegisterRoutine(void (*ptr)(), bool shouldCheck = false)
 {
     if(shouldCheck)

@@ -22,4 +22,3 @@ namespace Engine
     void RegisterGameObject(const GameObject* obj);
     void UnRegisterGameObject(const GameObject* obj);
 }
-
