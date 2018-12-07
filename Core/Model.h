@@ -21,7 +21,7 @@ public:
     Model(float* verts, int count);
     int GetID() const;
     virtual void SetUpEnviroment();
-    virtual void Draw(const GameObject&);
+    virtual void Draw(GameObject&);
     virtual void CleanUpEnviroment();
     virtual ~Model();
 };

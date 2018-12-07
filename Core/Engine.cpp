@@ -21,27 +21,27 @@ GLFWwindow* CreateWindow(int width, int height, const char* title)
 }
 void Logic()
 {
-    while(glfwWindowShouldClose(MainWindow) == 0)
+    /*while(glfwWindowShouldClose(MainWindow) == 0)
     {
         LogicMutex.unlock();
         LogicStarted.lock();
         LogicMutex.lock();
-        LogicStarted.unlock();
+        LogicStarted.unlock();*/
         for(auto i : routines)
         {
             i();
         }
-    }
+    //}
 }
 void Rendering()
 {
-    glfwMakeContextCurrent(MainWindow);
+    /*glfwMakeContextCurrent(MainWindow);
     while(glfwWindowShouldClose(MainWindow) == 0)
     {
         RenderingMutex.unlock();
         RenderStarted.lock();
         RenderingMutex.lock();
-        RenderStarted.unlock();
+        RenderStarted.unlock();*/
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         for(auto i : RenderArray)
         {
@@ -52,39 +52,34 @@ void Rendering()
             }
             i.first->CleanUpEnviroment();
         }
-    }
+    //}
 }
 void MainLoop()
 {
     Engine::Start();
-    int n = 0;
-    glfwSwapInterval(60);
+    //glfwSwapInterval(60);
     do
     {
-        n++;
-        if(n == 60)
-        {
-            std::cout << "60 frames\n";
-            n = 0;
-        }
-        LogicMutex.unlock();
+        /*LogicMutex.unlock();
         RenderingMutex.unlock();
         LogicStarted.lock();
         RenderStarted.lock();
         LogicMutex.lock();
         RenderingMutex.lock();
         LogicStarted.unlock();
-        RenderStarted.unlock();
+        RenderStarted.unlock();*/
+        Logic();
+        Rendering();
 	    glfwPollEvents();
         glfwSwapBuffers(MainWindow);
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
-    LogicMutex.unlock();
+    /*LogicMutex.unlock();
     RenderingMutex.unlock();
     LogicThread->join();
     RenderingThread->join();
     delete LogicThread;
-    delete RenderingThread;
+    delete RenderingThread;*/
     for(auto i : exitFuncs)
     {
         i();
@@ -100,10 +95,10 @@ void Engine::FireEngine()
         if(glfwInit())
         {
             MainWindow = CreateWindow(800, 600, "Engine");
-            LogicMutex.lock();
+            /*LogicMutex.lock();
             RenderingMutex.lock();
             LogicThread = new std::thread(Logic);
-            RenderingThread = new std::thread(Rendering);
+            RenderingThread = new std::thread(Rendering);*/
             if(glewInit() == GLEW_OK)
             {
                 glewExperimental = true;

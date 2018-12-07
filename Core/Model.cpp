@@ -38,7 +38,7 @@ void Model::SetUpEnviroment()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
 }
-void Model::Draw(const GameObject& obj)
+void Model::Draw(GameObject& obj)
 {
     glUniform3fv(colorID, 1, &(obj.GetColor()[0]));
     glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(obj.GetModelMatrix()[0][0]));
