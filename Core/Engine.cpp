@@ -8,6 +8,7 @@ std::vector<void(*)()> routines;
 std::vector<std::pair<Model*, std::vector<const GameObject*>>> RenderArray;
 std::thread *LogicThread, *RenderingThread;
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
+GLuint VertexArrayID;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
 GLFWwindow* CreateWindow(int width, int height, const char* title)
@@ -93,6 +94,8 @@ void Engine::FireEngine()
             RenderingThread = new std::thread(Rendering);
             if(glewInit() == GLEW_OK)
             {
+                glCreateVertexArrays(1, &VertexArrayID);
+                glBindVertexArray(VertexArrayID);
                 MainLoop();
             }
             glfwTerminate();
