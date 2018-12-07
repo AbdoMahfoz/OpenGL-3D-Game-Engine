@@ -7,6 +7,7 @@ std::vector<std::pair<Model*, std::vector<GameObject*>>> RenderArray;
 std::thread *LogicThread, *RenderingThread;
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
 GLuint VertexArrayID;
+FPCamera MainCamera, *CurrentCamera;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
 GLFWwindow* CreateWindow(int width, int height, const char* title)
@@ -42,10 +43,11 @@ void Rendering()
         RenderStarted.lock();
         RenderingMutex.lock();
         RenderStarted.unlock();*/
+        CurrentCamera->UpdateViewMatrix();
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         for(auto i : RenderArray)
         {
-            i.first->SetUpEnviroment();
+            i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix());
             for(auto j : i.second)
             {
                 i.first->Draw(*j);
@@ -101,6 +103,10 @@ void Engine::FireEngine()
             RenderingThread = new std::thread(Rendering);*/
             if(glewInit() == GLEW_OK)
             {
+                MainCamera.Walk(-1.0f);
+                MainCamera.SetPerspectiveProjection(75.0f, 800.0f/600.0f, 0.1f, 1000.0f);
+                MainCamera.UpdateViewMatrix();
+                CurrentCamera = &MainCamera;
                 glewExperimental = true;
                 glCreateVertexArrays(1, &VertexArrayID);
                 glBindVertexArray(VertexArrayID);
@@ -175,4 +181,17 @@ void Engine::UnRegisterGameObject(GameObject* obj)
             return;
         }
     }
+}
+FPCamera& Engine::GetCurrentCamera()
+{
+    return *CurrentCamera;
+}
+void SetCurrentCamera(FPCamera* Camera)
+{
+    CurrentCamera = Camera;
+    CurrentCamera->SetPerspectiveProjection(75.0f, 800.0f/600.0f, 0.1f, 1000.0f);
+}
+void Engine::SetMainCameraAsCurrent()
+{
+    CurrentCamera = &MainCamera;
 }

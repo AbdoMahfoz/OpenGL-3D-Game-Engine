@@ -10,6 +10,7 @@
 #include "shader.hpp"
 #include "GameObject.h"
 #include "AutoClean.h"
+#include "FPCamera.h"
 
 namespace Engine
 {
@@ -23,4 +24,7 @@ namespace Engine
     void RegisterModel(Model* model);
     void RegisterGameObject(GameObject* obj);
     void UnRegisterGameObject(GameObject* obj);
+    FPCamera& GetCurrentCamera();
+    void SetCurrentCamera(FPCamera* Camera);
+    void SetMainCameraAsCurrent();
 }

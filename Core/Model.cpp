@@ -18,7 +18,7 @@ int Model::GetID() const
 {
     return id;
 }
-void Model::SetUpEnviroment()
+void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View)
 {
     if(!isBufferCreated)
     {
@@ -37,11 +37,12 @@ void Model::SetUpEnviroment()
     glUseProgram(ShaderProgram);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
+    MVPMatrix = Prespective * View;
 }
 void Model::Draw(GameObject& obj)
 {
     glUniform3fv(colorID, 1, &(obj.GetColor()[0]));
-    glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(obj.GetModelMatrix()[0][0]));
+    glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(MVPMatrix * obj.GetModelMatrix())[0][0]);
     glDrawArrays(GL_TRIANGLE_FAN, 0, count);
 }
 void Model::CleanUpEnviroment()
