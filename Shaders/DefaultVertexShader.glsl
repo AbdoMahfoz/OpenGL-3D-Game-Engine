@@ -1,16 +1,18 @@
 #version 330 core
 
 layout(location = 0) in vec3 vertexPosition_modelspace;
-out vec3 theColor;
+layout(location = 1) in vec2 UV;
+
+out vec3 color;
+out vec2 uv;
 
 uniform vec3 Color;
 uniform mat4 MVP;
-void main(){
 
-	//gl_Position is one of the few built-in variables : you have to assign some value to it. 
-	//Everything else is optional; we�ll see what �everything else� means later.
-
+void main()
+{
     gl_Position = MVP * vec4(vertexPosition_modelspace, 1.0);
-    theColor = Color;
+    color = Color;
+    uv = UV;
 }
 

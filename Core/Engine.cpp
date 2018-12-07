@@ -70,9 +70,9 @@ void MainLoop()
         RenderingMutex.lock();
         LogicStarted.unlock();
         RenderStarted.unlock();*/
+	    glfwPollEvents();
         Logic();
         Rendering();
-	    glfwPollEvents();
         glfwSwapBuffers(MainWindow);
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
@@ -103,7 +103,7 @@ void Engine::FireEngine()
             RenderingThread = new std::thread(Rendering);*/
             if(glewInit() == GLEW_OK)
             {
-                MainCamera.Walk(-1.0f);
+                MainCamera.Walk(-0.5f);
                 MainCamera.SetPerspectiveProjection(75.0f, 800.0f/600.0f, 0.1f, 1000.0f);
                 MainCamera.UpdateViewMatrix();
                 CurrentCamera = &MainCamera;

@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "AutoClean.h"
 #include "FPCamera.h"
+#include "texture.h"
 
 namespace Engine
 {

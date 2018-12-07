@@ -1,14 +1,13 @@
 #version 330 core
 
+in vec3 color;
+in vec2 uv;
 
-// Ouput data
-in vec3 theColor;
-out vec3 color;
+out vec4 OutColor;
+
+uniform sampler2D Sampler;
 
 void main()
 {
-
-	// we set the color of each fragment to red.
-	color = theColor;
-
+	OutColor = vec4(color, 1) * texture(Sampler, uv);
 }

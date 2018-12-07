@@ -18,11 +18,15 @@ void Engine::Start()
     float verts[] = 
     {
         +0.1f, +0.1f, +0.0f,
+        +1.0f, +1.0f,
         +0.1f, -0.1f, +0.0f,
+        +1.0f, +0.0f,
         -0.1f, -0.1f, +0.0f,
+        +0.0f, +0.0f,
         -0.1f, +0.1f, +0.0f,
+        +0.0f, +1.0f,
     };
-    g = new GameObject(new Model(verts, 12));
+    g = new GameObject(new Model(new Texture("uvtemplate.bmp", 0), verts, 20));
     g->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
     Engine::RegisterRoutine(func, false);
 }

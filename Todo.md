@@ -1,7 +1,7 @@
-Vertex Array
+#Vertex Array
 Transformation of GameObject
-Camera
-Textures
+#Camera
+#Textures
 Rectangle Model
 Blender Model
 Testing...

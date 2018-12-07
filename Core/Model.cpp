@@ -2,8 +2,9 @@
 
 int Model::univ_id = 0;
 
-Model::Model(float* verts, int count)
+Model::Model(Texture* texture, float* verts, int count)
 {
+    this->texture = texture;
     id = univ_id++;
     isBufferCreated = false;
     this->verts = new float[count];
@@ -36,7 +37,10 @@ void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View)
     }
     glUseProgram(ShaderProgram);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (char*)(sizeof(float) * 3));
+    texture->Bind();
     MVPMatrix = Prespective * View;
 }
 void Model::Draw(GameObject& obj)
@@ -48,8 +52,10 @@ void Model::Draw(GameObject& obj)
 void Model::CleanUpEnviroment()
 {
     glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 }
 Model::~Model()
 {
     delete[] verts;
+    delete texture;
 }

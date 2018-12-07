@@ -1,6 +1,7 @@
-#include <vector>
 #ifndef AUTOCLEAN_CLASS
 #define AUTOCLEAN_CLASS
+
+#include <vector>
 
 class AutoClean
 {
