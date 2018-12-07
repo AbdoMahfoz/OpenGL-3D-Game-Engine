@@ -1,6 +1,7 @@
 #include "Engine.h"
+#include "AutoClean.h"
 
-class Model
+class Model : public AutoClean
 {
 private:
     static int univ_id;

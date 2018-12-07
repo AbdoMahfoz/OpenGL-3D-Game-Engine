@@ -43,7 +43,7 @@ void Model::Draw(const GameObject& obj)
 {
     glUniform3fv(colorID, 1, &(obj.GetColor()[0]));
     glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(obj.GetModelMatrix()[0][0]));
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, count);
 }
 void Model::CleanUpEnviroment()
 {

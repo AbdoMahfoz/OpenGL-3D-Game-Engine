@@ -4,7 +4,7 @@
 
 bool isInitalized = false;
 GLFWwindow* MainWindow;
-std::vector<void(*)()> routines;
+std::vector<void(*)()> routines, exitFuncs;
 std::vector<std::pair<Model*, std::vector<const GameObject*>>> RenderArray;
 std::thread *LogicThread, *RenderingThread;
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
@@ -37,11 +37,13 @@ void Logic()
 }
 void Rendering()
 {
+    glfwMakeContextCurrent(MainWindow);
     while(glfwWindowShouldClose(MainWindow) == 0)
     {
         RenderStarted.lock();
         RenderingMutex.lock();
         RenderStarted.unlock();
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         for(auto i : RenderArray)
         {
             i.first->SetUpEnviroment();
@@ -51,22 +53,30 @@ void Rendering()
             }
             i.first->CleanUpEnviroment();
         }
+        //glfwSwapBuffers(MainWindow);
         RenderingMutex.unlock();
     }
 }
 void MainLoop()
 {
     Engine::Start();
+    int n = 0;
     do
     {
+        n++;
+        if(n == 60)
+        {
+            std::cout << "60 frames\n";
+            n = 0;
+        }
         LogicMutex.unlock();
         RenderingMutex.unlock();
         LogicStarted.lock();
-        LogicStarted.unlock();
         RenderStarted.lock();
-        RenderStarted.unlock();
         LogicMutex.lock();
         RenderingMutex.lock();
+        LogicStarted.unlock();
+        RenderStarted.unlock();
         glfwSwapBuffers(MainWindow);
 	    glfwPollEvents();
     }
@@ -75,8 +85,14 @@ void MainLoop()
     RenderingMutex.unlock();
     LogicThread->join();
     RenderingThread->join();
+    //glfwMakeContextCurrent(MainWindow);
     delete LogicThread;
     delete RenderingThread;
+    Engine::Exit();
+    for(auto i : exitFuncs)
+    {
+        i();
+    }
     glfwTerminate();
 }
 //------------End of Private functions(Inaccessable outside of this file)---------
@@ -94,13 +110,20 @@ void Engine::FireEngine()
             RenderingThread = new std::thread(Rendering);
             if(glewInit() == GLEW_OK)
             {
+                glewExperimental = true;
                 glCreateVertexArrays(1, &VertexArrayID);
                 glBindVertexArray(VertexArrayID);
+                SetClearColor(glm::vec3(1.0f, 0.5f, 1.0f));
+                glEnable(GL_DEPTH_TEST);
+                glDepthFunc(GL_LESS);
                 MainLoop();
             }
-            glfwTerminate();
         }
     }
+}
+void Engine::SetClearColor(const glm::vec3& color)
+{
+    glClearColor(color.x, color.y, color.z, 1.0f);
 }
 void Engine::RegisterRoutine(void (*ptr)(), bool shouldCheck = false)
 {
@@ -123,6 +146,21 @@ void Engine::UnRegisterRoutine(void (*ptr)())
         if(routines[i] == ptr)
         {
             routines.erase(routines.begin() + i);
+            return;
+        }
+    }
+}
+void Engine::RegisterOnExit(void (*ptr)())
+{
+    exitFuncs.push_back(ptr);
+}
+void Engine::UnRegisterOnExit(void (*ptr)())
+{
+    for(int i = 0; i < exitFuncs.size(); i++)
+    {
+        if(exitFuncs[i] == ptr)
+        {
+            exitFuncs.erase(exitFuncs.begin() + i);
             return;
         }
     }

@@ -1,6 +1,7 @@
 #include "Engine.h"
+#include "AutoClean.h"
 
-class GameObject
+class GameObject : public AutoClean
 {
 private:
     Model* model;
