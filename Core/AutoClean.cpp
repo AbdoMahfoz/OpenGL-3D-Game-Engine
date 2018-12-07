@@ -1,4 +1,5 @@
 #include "AutoClean.h"
+#include "Engine.h"
 
 std::vector<AutoClean*> AutoClean::CleanUpList;
 bool AutoClean::CleanUpRegistered = false, AutoClean::IsCleaningUp = false;

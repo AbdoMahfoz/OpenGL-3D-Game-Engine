@@ -1,4 +1,9 @@
-#include "Engine.h"
+#ifndef GAMEOBJECT_CLASS
+#define GAMEOBJECT_CLASS
+
+#include "glm/glm.hpp"
+#include "glm/gtx/transform.hpp"
+#include "Model.h"
 #include "AutoClean.h"
 
 class GameObject : public AutoClean
@@ -24,3 +29,5 @@ public:
     Model* GetModel() const;
     ~GameObject();
 };
+
+#endif

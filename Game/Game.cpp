@@ -1,6 +1,4 @@
 #include "Engine.h"
-#include "Model.h"
-#include "GameObject.h"
 
 Model* m;
 GameObject* g;
@@ -14,6 +12,7 @@ void func()
         mode *= -1;
     }
     g->SetColor(g->GetColor() + (0.01f * mode));
+    g->Translate(glm::vec3(0.0001f, 0.0f, 0.0f));
 }
 void Engine::Start()
 {
@@ -28,8 +27,4 @@ void Engine::Start()
     g = new GameObject(m);
     g->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
     Engine::RegisterRoutine(func, false);
-}
-void Engine::Exit()
-{
-
 }

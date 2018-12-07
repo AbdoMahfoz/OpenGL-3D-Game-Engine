@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "GameObject.h"
 
 GameObject::GameObject(Model* model)
 {
@@ -9,7 +8,8 @@ GameObject::GameObject(Model* model)
 }
 void GameObject::Translate(const glm::vec3& position)
 {
-    throw std::logic_error("function not implmented yet!");
+    ModelMatrix *= glm::translate(position);
+    this->position += position;
 }
 void GameObject::Rotate(const glm::vec3& rotation)
 {

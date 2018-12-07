@@ -1,5 +1,10 @@
-#include "Engine.h"
+#ifndef MODEL_CLASS
+#define MODEL_CLASS
+
+#include <GL/glew.h>
 #include "AutoClean.h"
+
+class GameObject;
 
 class Model : public AutoClean
 {
@@ -20,3 +25,5 @@ public:
     virtual void CleanUpEnviroment();
     virtual ~Model();
 };
+
+#endif

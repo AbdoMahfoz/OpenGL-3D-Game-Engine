@@ -1,11 +1,9 @@
 #include "Engine.h"
-#include "GameObject.h"
-#include "Model.h"
 
 bool isInitalized = false;
 GLFWwindow* MainWindow;
 std::vector<void(*)()> routines, exitFuncs;
-std::vector<std::pair<Model*, std::vector<const GameObject*>>> RenderArray;
+std::vector<std::pair<Model*, std::vector<GameObject*>>> RenderArray;
 std::thread *LogicThread, *RenderingThread;
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
 GLuint VertexArrayID;
@@ -25,6 +23,7 @@ void Logic()
 {
     while(glfwWindowShouldClose(MainWindow) == 0)
     {
+        LogicMutex.unlock();
         LogicStarted.lock();
         LogicMutex.lock();
         LogicStarted.unlock();
@@ -32,7 +31,6 @@ void Logic()
         {
             i();
         }
-        LogicMutex.unlock();
     }
 }
 void Rendering()
@@ -40,6 +38,7 @@ void Rendering()
     glfwMakeContextCurrent(MainWindow);
     while(glfwWindowShouldClose(MainWindow) == 0)
     {
+        RenderingMutex.unlock();
         RenderStarted.lock();
         RenderingMutex.lock();
         RenderStarted.unlock();
@@ -53,14 +52,13 @@ void Rendering()
             }
             i.first->CleanUpEnviroment();
         }
-        //glfwSwapBuffers(MainWindow);
-        RenderingMutex.unlock();
     }
 }
 void MainLoop()
 {
     Engine::Start();
     int n = 0;
+    glfwSwapInterval(60);
     do
     {
         n++;
@@ -77,18 +75,16 @@ void MainLoop()
         RenderingMutex.lock();
         LogicStarted.unlock();
         RenderStarted.unlock();
-        glfwSwapBuffers(MainWindow);
 	    glfwPollEvents();
+        glfwSwapBuffers(MainWindow);
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
     LogicMutex.unlock();
     RenderingMutex.unlock();
     LogicThread->join();
     RenderingThread->join();
-    //glfwMakeContextCurrent(MainWindow);
     delete LogicThread;
     delete RenderingThread;
-    Engine::Exit();
     for(auto i : exitFuncs)
     {
         i();
@@ -167,15 +163,15 @@ void Engine::UnRegisterOnExit(void (*ptr)())
 }
 void Engine::RegisterModel(Model* model)
 {
-    RenderArray.push_back({model, std::vector<const GameObject*>()});
+    RenderArray.push_back({model, std::vector<GameObject*>()});
 }
-void Engine::RegisterGameObject(const GameObject* obj)
+void Engine::RegisterGameObject(GameObject* obj)
 {
     RenderArray[obj->GetModel()->GetID()].second.push_back(obj);
 }
-void Engine::UnRegisterGameObject(const GameObject* obj)
+void Engine::UnRegisterGameObject(GameObject* obj)
 {
-    std::vector<const GameObject*>& arr = RenderArray[obj->GetModel()->GetID()].second;
+    std::vector<GameObject*>& arr = RenderArray[obj->GetModel()->GetID()].second;
     for(int i = 0; i < arr.size(); i++)
     {
         if(arr[i] == obj)
