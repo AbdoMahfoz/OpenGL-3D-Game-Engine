@@ -13,13 +13,13 @@ float Tverts[120] =
 		0.0f, +1.0f,
 	//right
 	1.0f, -1.0f, 1.0f,  //...
-	0.0f, 0.0f,
+	1.0f, 0.0f,
 	1.0f, -1.0f, -1.0f,
-	+1.0f, 0.0f,
+	+0.0f, 0.0f,
 	1.0f, 1.0f, -1.0f,
-	+1.0f, +1.0f,
+	+0.0f, +1.0f,
 	1.0f, 1.0f, 1.0f,
-	0.0f, +1.0f,
+	1.0f, +1.0f,
 	//back
 	1.0f, -1.0f, -1.0f,
 	0.0f, 0.0f,
@@ -66,6 +66,6 @@ void CubeModel::Draw(GameObject& obj)
     glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(MVPMatrix * obj.GetModelMatrix())[0][0]);
     for(int i = 0; i < count; i += 4)
     {
-        glDrawArrays(GL_TRIANGLE_FAN,i,4);
+        glDrawArrays(GL_TRIANGLE_FAN, i, 4);
     }
 }
