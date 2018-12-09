@@ -8,7 +8,7 @@
 
 class GameObject : public AutoClean
 {
-private:
+protected:
     Model* model;
     glm::vec3 position, rotation, scale, m_color;
     glm::mat4 ModelMatrix;

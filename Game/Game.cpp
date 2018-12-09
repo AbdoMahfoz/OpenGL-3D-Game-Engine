@@ -15,7 +15,7 @@ void func()
 }
 void Engine::Start()
 {
-    float verts[] = 
+    /*float verts[] = 
     {
         +0.1f, +0.1f, +0.0f,
         +1.0f, +1.0f,
@@ -25,8 +25,8 @@ void Engine::Start()
         +0.0f, +0.0f,
         -0.1f, +0.1f, +0.0f,
         +0.0f, +1.0f,
-    };
-    g = new GameObject(new Model(new Texture("uvtemplate.bmp", 0), verts, 20));
+    };*/
+    g = new GameObject(new CubeModel(new Texture("uvtemplate.bmp", 0)));
     g->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
-    Engine::RegisterRoutine(func, false);
+    //Engine::RegisterRoutine(func, false);
 }
