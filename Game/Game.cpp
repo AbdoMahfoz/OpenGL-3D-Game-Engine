@@ -28,5 +28,7 @@ void Engine::Start()
     };*/
     g = new GameObject(new CubeModel(new Texture("uvtemplate.bmp", 0)));
     g->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
+    g->Rotate(glm::vec3(0.0f, 45.0f, 0.0f));
+    Engine::GetCurrentCamera().Walk(-2.0f);
     //Engine::RegisterRoutine(func, false);
 }
