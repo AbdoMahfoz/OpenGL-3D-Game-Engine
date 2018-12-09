@@ -13,7 +13,6 @@ protected:
     static int univ_id;
     int id;
     float* verts;
-    Texture* texture;
     int count;
     GLuint bufferID;
     GLuint ShaderProgram;
@@ -21,7 +20,7 @@ protected:
     bool isBufferCreated;
     glm::mat4 MVPMatrix;
 public:
-    Model(Texture* texture, float* verts, int count);
+    Model(float* verts, int count);
     int GetID() const;
     virtual void SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View);
     virtual void CreateBuffer();

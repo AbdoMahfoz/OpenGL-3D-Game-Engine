@@ -57,11 +57,12 @@ float Tverts[120] =
 	-1.0f, 1.0f, -1.0f,
 	+1.0f, 0.0f,
 };
-CubeModel::CubeModel(Texture* texture) : Model(texture, Tverts, 120)
+CubeModel::CubeModel() : Model(Tverts, 120)
 {
 }
 void CubeModel::Draw(GameObject& obj)
 {
+    obj.BindTexture();
     glUniform3fv(colorID, 1, &(obj.GetColor()[0]));
     glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(MVPMatrix * obj.GetModelMatrix())[0][0]);
     for(int i = 0; i < count; i += 4)

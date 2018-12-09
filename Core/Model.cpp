@@ -2,9 +2,8 @@
 
 int Model::univ_id = 0;
 
-Model::Model(Texture* texture, float* verts, int count)
+Model::Model(float* verts, int count)
 {
-    this->texture = texture;
     id = univ_id++;
     isBufferCreated = false;
     this->verts = new float[count];
@@ -25,12 +24,12 @@ void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View)
     {
         CreateBuffer();
     }
+    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
     glUseProgram(ShaderProgram);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (char*)(sizeof(float) * 3));
-    texture->Bind();
     MVPMatrix = Prespective * View;
 }
 void Model::CreateBuffer()
@@ -45,6 +44,7 @@ void Model::CreateBuffer()
 }
 void Model::Draw(GameObject& obj)
 {
+    obj.BindTexture();
     glUniform3fv(colorID, 1, &(obj.GetColor()[0]));
     glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(MVPMatrix * obj.GetModelMatrix())[0][0]);
     glDrawArrays(GL_TRIANGLE_FAN, 0, count);
@@ -57,5 +57,4 @@ void Model::CleanUpEnviroment()
 Model::~Model()
 {
     delete[] verts;
-    delete texture;
 }

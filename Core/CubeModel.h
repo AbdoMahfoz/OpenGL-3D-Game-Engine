@@ -8,7 +8,7 @@
 class CubeModel : public Model 
 {
 public:
-    CubeModel(Texture* texture);
+    CubeModel();
     void Draw(GameObject&);
 };
 #endif
