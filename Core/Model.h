@@ -9,7 +9,7 @@ class GameObject;
 
 class Model : public AutoClean
 {
-private:
+protected:
     static int univ_id;
     int id;
     float* verts;
@@ -24,6 +24,7 @@ public:
     Model(Texture* texture, float* verts, int count);
     int GetID() const;
     virtual void SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View);
+    virtual void CreateBuffer();
     virtual void Draw(GameObject&);
     virtual void CleanUpEnviroment();
     virtual ~Model();

@@ -12,6 +12,7 @@
 #include "AutoClean.h"
 #include "FPCamera.h"
 #include "texture.h"
+#include "CubeModel.h"
 
 namespace Engine
 {

@@ -5,7 +5,7 @@
 
 class AutoClean
 {
-private:
+protected:
     static std::vector<AutoClean*> CleanUpList;
     static void CleanUp();
     static bool CleanUpRegistered, IsCleaningUp;

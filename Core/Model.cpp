@@ -23,17 +23,7 @@ void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View)
 {
     if(!isBufferCreated)
     {
-        glCreateBuffers(1, &bufferID);
-        glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, verts, GL_STATIC_DRAW);
-        ShaderProgram = LoadShaders("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
-        mvpID = glGetUniformLocation(ShaderProgram, "MVP");
-        colorID = glGetUniformLocation(ShaderProgram, "Color");
-        isBufferCreated = true;
-    }
-    else
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+        CreateBuffer();
     }
     glUseProgram(ShaderProgram);
     glEnableVertexAttribArray(0);
@@ -42,6 +32,16 @@ void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View)
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (char*)(sizeof(float) * 3));
     texture->Bind();
     MVPMatrix = Prespective * View;
+}
+void Model::CreateBuffer()
+{
+    glCreateBuffers(1, &bufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, verts, GL_STATIC_DRAW);
+    ShaderProgram = LoadShaders("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
+    mvpID = glGetUniformLocation(ShaderProgram, "MVP");
+    colorID = glGetUniformLocation(ShaderProgram, "Color");
+    isBufferCreated = true;
 }
 void Model::Draw(GameObject& obj)
 {
