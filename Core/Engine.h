@@ -7,12 +7,12 @@
 #include <iostream>
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
-#include "shader.hpp"
 #include "GameObject.h"
 #include "AutoClean.h"
 #include "FPCamera.h"
 #include "texture.h"
 #include "CubeModel.h"
+#include "ShaderManager.h"
 
 namespace Engine
 {

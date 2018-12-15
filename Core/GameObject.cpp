@@ -10,7 +10,7 @@ GameObject::GameObject(Model* model, Texture* texture)
     this->model = model;
     ModelMatrix = glm::mat4(1);
     Engine::RegisterGameObject(this);
-}
+} 
 void GameObject::Translate(const glm::vec3& position)
 {
     ModelMatrix *= glm::translate(position);

@@ -37,7 +37,7 @@ void Model::CreateBuffer()
     glCreateBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, verts, GL_STATIC_DRAW);
-    ShaderProgram = LoadShaders("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
+    ShaderProgram = ShaderManager::GetShaders("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
     mvpID = glGetUniformLocation(ShaderProgram, "MVP");
     colorID = glGetUniformLocation(ShaderProgram, "Color");
     isBufferCreated = true;
