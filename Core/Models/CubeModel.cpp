@@ -6,14 +6,6 @@ CubeModel::CubeModel()
 	indicesCount = 36;
 	indices = new unsigned short[indicesCount]
 	{
-		/*
-		0, 1, 2, 0, 2, 3, //Front
-		4, 5, 6, 4, 6, 7, //Back
-		4, 0, 3, 4, 3, 7, //Left
-		1, 5, 2, 5, 2, 6, //Right
-		0, 1, 5, 0, 5, 4, //Top
-		2, 6, 7, 2, 7, 3, //Bottom
-		*/
 		0 , 1 , 2 , 0 , 2 , 3 , //Front
 		4 , 5 , 6 , 4 , 6 , 7 , //Back
 		8 , 9 , 10, 8 , 10, 11, //left

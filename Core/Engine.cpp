@@ -8,10 +8,15 @@ std::thread *LogicThread, *RenderingThread;
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
 GLuint VertexArrayID;
 FPCamera MainCamera, *CurrentCamera;
+GLuint depthMapFB, depthMapTX, depthMapID;
+glm::vec3 LightPos;
+int SHADOW_WIDTH, SHADOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
 GLFWwindow* CreateWindow(int width, int height, const char* title)
 {   
+    SCREEN_WIDTH = width;
+    SCREEN_HEIGHT = height;
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); 
@@ -19,6 +24,32 @@ GLFWwindow* CreateWindow(int width, int height, const char* title)
     GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     glfwMakeContextCurrent(window);
     return window;
+}
+void SetUpShadowMap(int width, int height)
+{
+    SHADOW_WIDTH = width;
+    SHADOW_HEIGHT = height;
+    //Create frame buffer and texture
+    glGenFramebuffers(1, &depthMapFB);
+    glGenTextures(1, &depthMapTX);
+    //Set up textures
+    glBindTexture(GL_TEXTURE_2D, depthMapTX);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
+                 width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    //Bind frame buffer
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFB);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMapTX, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0); 
+    depthMapID = glGetUniformLocation(ShaderManager::GetShaders("Shaders/LVS.glsl", "Shaders/LFS.glsl"), "shadowMap");
+
 }
 void Logic()
 {
@@ -43,15 +74,34 @@ void Rendering()
         RenderStarted.lock();
         RenderingMutex.lock();
         RenderStarted.unlock();*/
-        CurrentCamera->UpdateViewMatrix();
+        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFB);
+        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+        //glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
+        glm::mat4 lightProjection = glm::perspective(75.0f, (float)SHADOW_WIDTH/SHADOW_HEIGHT, 1.0f, 7.5f);
+        glm::mat4 lightView = glm::lookAt(LightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glClear( GL_DEPTH_BUFFER_BIT );
+        for(auto i : RenderArray)
+        {
+            i.first->SetUpEnviroment(lightProjection, lightView);
+            for(auto j : i.second)
+            {
+                i.first->Draw(*j);
+            }
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        CurrentCamera->UpdateViewMatrix();
         for(auto i : RenderArray)
         {
             i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
-                                     glm::vec3(3.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 4.0f), 
-                                     glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 50);
+                                     LightPos, glm::vec3(0.0f, 0.0f, 4.0f), 
+                                     glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, 0.1f, 0.1f), 50);
             for(auto j : i.second)
             {
+                glActiveTexture(GL_TEXTURE1);
+                glUniform1i(depthMapID, 1);
+                glBindTexture(GL_TEXTURE_2D, depthMapTX);
                 i.first->Draw(*j);
             }
         }
@@ -60,6 +110,9 @@ void Rendering()
 void MainLoop()
 {
     Engine::Start();
+    SetUpShadowMap(2048, 2048);
+    LightPos = glm::vec3(2.0f, 2.0f, 2.0f);
+    glEnable(GL_TEXTURE_2D);
     //glfwSwapInterval(60);
     do
     {
@@ -97,7 +150,7 @@ void Engine::FireEngine()
         isInitalized = false;
         if(glfwInit())
         {
-            MainWindow = CreateWindow(800, 600, "Engine");
+            MainWindow = CreateWindow(1280, 720, "Engine");
             /*LogicMutex.lock();
             RenderingMutex.lock();
             LogicThread = new std::thread(Logic);
@@ -105,13 +158,13 @@ void Engine::FireEngine()
             if(glewInit() == GLEW_OK)
             {
                 MainCamera.Walk(-0.5f);
-                MainCamera.SetPerspectiveProjection(75.0f, 800.0f/600.0f, 0.1f, 1000.0f);
+                MainCamera.SetPerspectiveProjection(75.0f, (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 1000.0f);
                 MainCamera.UpdateViewMatrix();
                 CurrentCamera = &MainCamera;
                 glewExperimental = true;
                 glCreateVertexArrays(1, &VertexArrayID);
                 glBindVertexArray(VertexArrayID);
-                SetClearColor(glm::vec3(1.0f, 0.5f, 1.0f));
+                //SetClearColor(glm::vec3(1.0f, 0.5f, 1.0f));
                 glEnable(GL_DEPTH_TEST);
                 glDepthFunc(GL_LESS);
                 MainLoop();

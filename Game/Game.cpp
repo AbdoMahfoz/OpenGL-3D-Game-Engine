@@ -28,7 +28,11 @@ void Engine::Start()
         +0.0f, +1.0f,
     };*/
     Texture* tex = new Texture("uvtemplate.bmp", 0);
-    Cube = new GameObject(new CubeModel(), tex);
+    CubeModel* c = new CubeModel();
+    Cube = new GameObject(c, tex);
+    Plane = new GameObject(c, tex);
+    Plane->Scale(glm::vec3(100.0f, 0.2f, 100.0f));
+    Plane->Translate(glm::vec3(0.0f, -5.0f, 0.0f));
     //Plane = new GameObject(new Model(verts, sizeof(verts) / sizeof(verts[0])), tex);
     //Plane->Translate(glm::vec3(-1.0f, 0.0f, 4.0f));
     //g->Rotate(glm::vec3(0.0f, 95.0f, 0.0f));

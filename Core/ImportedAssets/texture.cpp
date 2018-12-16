@@ -33,7 +33,7 @@ Texture::~Texture()
 
 void Texture::Bind()
 {
-	glActiveTexture(texUnit);
+	//glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 }
 
