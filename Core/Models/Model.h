@@ -1,31 +1,33 @@
-#ifndef MODEL_CLASS
-#define MODEL_CLASS
+#ifndef Model_CLASS
+#define Model_CLASS
 
 #include <GL/glew.h>
-#include "AutoClean.h"
-#include "texture.h"
+#include "glm/glm.hpp"
+#include "glm/gtx/transform.hpp"
 
-class GameObject;
-
-class Model : public AutoClean
+class Model
 {
 protected:
     static int univ_id;
     int id;
-    float* verts;
-    int count;
-    GLuint bufferID;
-    GLuint ShaderProgram;
-    GLuint mvpID, colorID;
+    float *verts, *uvs, *normals;
+    GLushort *indices;
+    int count, indicesCount;
     bool isBufferCreated;
-    glm::mat4 MVPMatrix;
+    GLuint programID;
+    GLuint VAO, VertexID, NormalID, UVID, IndicesID;
+    GLuint MVPID, ColorID, ModelMatrixID, LightPosID, EyeID, LightColorID, AmbientLightID, SpeculatiyID;
+    glm::mat4 MVP;
+    Model();
 public:
-    Model(float* verts, int count);
+    Model(float* verts, float* uvs, float* normals, int count, GLushort* indices, int indicesCount);
     int GetID() const;
-    virtual void SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View);
-    virtual void CreateBuffer();
+    virtual void SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View,
+                                 const glm::vec3& LightPos, const glm::vec3& EyePos,
+                                 const glm::vec3& LigthColor, const glm::vec3& AmbientLight,
+                                 float Specularity);
     virtual void Draw(GameObject&);
-    virtual void CleanUpEnviroment();
+    virtual void CreateBuffer();
     virtual ~Model();
 };
 

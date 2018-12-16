@@ -9,6 +9,5 @@ class CubeModel : public Model
 {
 public:
     CubeModel();
-    void Draw(GameObject&);
 };
 #endif

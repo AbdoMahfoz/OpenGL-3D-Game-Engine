@@ -1,6 +1,6 @@
 #include "CubeModel.h"
 
-float Tverts[120] =
+/*float Tverts[120] =
 {
 	//front
 	-1.0f, -1.0f, 1.0f, //Vertex 0
@@ -56,17 +56,51 @@ float Tverts[120] =
 	+1.0f, +1.0f,
 	-1.0f, 1.0f, -1.0f,
 	+1.0f, 0.0f,
-};
-CubeModel::CubeModel() : Model(Tverts, 120)
+};*/
+CubeModel::CubeModel()
 {
-}
-void CubeModel::Draw(GameObject& obj)
-{
-    obj.BindTexture();
-    glUniform3fv(colorID, 1, &(obj.GetColor()[0]));
-    glUniformMatrix4fv(mvpID, 1, GL_FALSE, &(MVPMatrix * obj.GetModelMatrix())[0][0]);
-    for(int i = 0; i < count; i += 4)
-    {
-        glDrawArrays(GL_TRIANGLE_FAN, i, 4);
-    }
+	count = 24;
+	indicesCount = 36;
+	indices = new unsigned short[indicesCount]
+	{
+		0, 1, 2, 1, 2, 3, //Front
+		4, 5, 6, 5, 6, 7, //Back
+		4, 0, 3, 0, 3, 7, //Left
+		1, 5, 2, 5, 2, 6, //Right
+		0, 1, 5, 1, 5, 4, //Top
+		2, 6, 7, 6, 7, 3, //Bottom
+	};
+	verts = new float[count]
+	{
+		-1.0f, +1.0f, +0.5f,
+		+1.0f, +1.0f, +0.5f,
+		+1.0f, -1.0f, +0.5f,
+		-1.0f, -1.0f, +0.5f,
+		-1.0f, +1.0f, -0.5f,
+		+1.0f, +1.0f, -0.5f,
+		+1.0f, -1.0f, -0.5f,
+		-1.0f, -1.0f, -0.5f,
+	};
+	normals = new float[count]
+	{
+		+0.0f, +0.0f, +1.0f,
+		+0.0f, +0.0f, +1.0f,
+		+0.0f, +0.0f, +1.0f,
+		+0.0f, +0.0f, +1.0f,
+		+0.0f, +0.0f, -1.0f,
+		+0.0f, +0.0f, -1.0f,
+		+0.0f, +0.0f, -1.0f,
+		+0.0f, +0.0f, -1.0f,
+	};
+	uvs = new float[(count/3)*2]
+	{
+		+0.0f, +1.0f,
+		+1.0f, +1.0f,
+		+1.0f, +0.0f,
+		+0.0f, +0.0f,
+		+1.0f, +1.0f,
+		+0.0f, +1.0f,
+		+0.0f, +0.0f,
+		+1.0f, +0.0f,
+	};
 }
