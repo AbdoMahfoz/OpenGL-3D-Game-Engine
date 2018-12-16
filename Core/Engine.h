@@ -13,6 +13,7 @@
 #include "texture.h"
 #include "CubeModel.h"
 #include "ShaderManager.h"
+#include "LightModel.h"
 
 namespace Engine
 {
