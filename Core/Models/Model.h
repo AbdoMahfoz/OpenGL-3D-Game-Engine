@@ -5,6 +5,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
 
+class GameObject;
+
 class Model
 {
 protected:

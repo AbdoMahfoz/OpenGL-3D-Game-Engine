@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+int Model::univ_id = 0;
+
 Model::Model()
 {
     id = univ_id++;
@@ -34,12 +36,13 @@ Model::Model(float* verts, float* uvs, float* normals, int count, GLushort* indi
     }
     Engine::RegisterModel(this);
 }
+int Model::GetID() const
+{
+    return id;
+}
 void Model::CreateBuffer()
 {
     isBufferCreated = true;
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
     glCreateVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     glGenBuffers(1, &VertexID);
@@ -48,12 +51,15 @@ void Model::CreateBuffer()
     glGenBuffers(1, &IndicesID);
     glBindBuffer(GL_ARRAY_BUFFER, VertexID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, verts, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
     glBindBuffer(GL_ARRAY_BUFFER, NormalID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, normals, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
     glBindBuffer(GL_ARRAY_BUFFER, UVID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, uvs, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (count/3)*2, uvs, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndicesID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * indicesCount, indices, GL_STATIC_DRAW);

@@ -13,7 +13,7 @@ out vec3 WSNomral;
 
 void main()
 {
-    gl_position = MVP * vec4(MSPosition, 1);
+    gl_Position = MVP * vec4(MSPosition, 1);
     WSPosition = vec3(ModelMatrix * vec4(MSPosition, 1));
     WSNomral = normalize(vec3(ModelMatrix * vec4(MSNormal, 0)));
     uv = UV;

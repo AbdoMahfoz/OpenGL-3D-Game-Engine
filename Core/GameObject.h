@@ -4,6 +4,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
 #include "Model.h"
+#include "texture.h"
 #include "AutoClean.h"
 
 class GameObject : public AutoClean

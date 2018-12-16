@@ -48,8 +48,8 @@ void Rendering()
         for(auto i : RenderArray)
         {
             i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
-                                     glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, -4.0f), 
-                                     glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, 0.1f, 0.1f), 50);
+                                     glm::vec3(3.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 4.0f), 
+                                     glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 50);
             for(auto j : i.second)
             {
                 i.first->Draw(*j);
