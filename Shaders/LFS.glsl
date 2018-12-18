@@ -47,15 +47,15 @@ void main()
     //Diffuse
     vec3 LightVector = normalize(WSLight - WSPosition);
     float diffuse = dot(LightVector, WSNomral);
-    vec3 diffuseLight = clamp(vec3(diffuse, diffuse, diffuse), 0, 1);
+    vec3 diffuseLight = clamp(LightColor * diffuse, 0, 1);
     //Specular
     vec3 ReflectionVector = reflect(-LightVector, WSNomral);
     vec3 EyeVector = normalize(WSEye - WSPosition);
     float Specular = pow(clamp(dot(EyeVector, ReflectionVector), 0, 1), Specularity);
-    vec3 specularLight = clamp(vec3(Specular, Specular, Specular), 0, 1);
+    vec3 specularLight = clamp(LightColor * Specular, 0, 1) * Specularity;
     //Result
     vec4 PixelColor = (texture(InputTexture, uv) * vec4(Color, 1));
-    vec4 TotalLight = vec4(((1.0 - CalculateShadow(LightVector)) * (diffuseLight + specularLight)) + AmbientLight, 1) * vec4(LightColor * 1.7, 1);
+    vec4 TotalLight = vec4(((1.0 - CalculateShadow(LightVector)) * (diffuseLight + specularLight)) + AmbientLight, 1);
     float Attenuation = 1.0 / (1.0 + 0.1 * dist + 0.01 * dist * dist);
     Res = PixelColor * TotalLight * Attenuation;
 }
