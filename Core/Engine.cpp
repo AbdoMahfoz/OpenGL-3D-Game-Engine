@@ -96,7 +96,7 @@ void Rendering()
         {
             i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
                                      LightPos, glm::vec3(0.0f, 0.0f, 4.0f), 
-                                     glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, 0.1f, 0.1f), 50);
+                                     glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, 0.1f, 0.1f), 10);
             for(auto j : i.second)
             {
                 glActiveTexture(GL_TEXTURE1);
@@ -111,7 +111,7 @@ void MainLoop()
 {
     Engine::Start();
     SetUpShadowMap(2048, 2048);
-    LightPos = glm::vec3(2.0f, 2.0f, 2.0f);
+    LightPos = glm::vec3(2.0f, 1.0f, 2.0f);
     glEnable(GL_TEXTURE_2D);
     //glfwSwapInterval(60);
     do

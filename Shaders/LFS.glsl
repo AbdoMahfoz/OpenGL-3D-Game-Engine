@@ -43,19 +43,19 @@ float CalculateShadow(vec3 LightVector)
 
 void main()
 {
+    float dist = distance(WSPosition, WSLight);
     //Diffuse
     vec3 LightVector = normalize(WSLight - WSPosition);
     float diffuse = dot(LightVector, WSNomral);
-    float dist = distance(WSPosition, WSLight);
     vec3 diffuseLight = clamp(vec3(diffuse, diffuse, diffuse), 0, 1);
     //Specular
     vec3 ReflectionVector = reflect(-LightVector, WSNomral);
     vec3 EyeVector = normalize(WSEye - WSPosition);
-    float Specular = pow(dot(EyeVector, ReflectionVector), Specularity);
+    float Specular = pow(clamp(dot(EyeVector, ReflectionVector), 0, 1), Specularity);
     vec3 specularLight = clamp(vec3(Specular, Specular, Specular), 0, 1);
     //Result
-    Res = texture(InputTexture, uv) * 
-          vec4(Color, 1) 
-        * vec4(( (1.0 - CalculateShadow(LightVector)) * (diffuseLight + specularLight) + AmbientLight) * LightColor, 1)
-        * 1.0/(1.0+0.1*dist+0.01*dist*dist);
+    vec4 PixelColor = (texture(InputTexture, uv) * vec4(Color, 1));
+    vec4 TotalLight = vec4(((1.0 - CalculateShadow(LightVector)) * (diffuseLight + specularLight)) + AmbientLight, 1) * vec4(LightColor * 1.7, 1);
+    float Attenuation = 1.0 / (1.0 + 0.1 * dist + 0.01 * dist * dist);
+    Res = PixelColor * TotalLight * Attenuation;
 }
