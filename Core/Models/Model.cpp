@@ -77,10 +77,7 @@ void Model::CreateBuffer()
     LightColorID = glGetUniformLocation(programID, "LightColor");
     AmbientLightID = glGetUniformLocation(programID, "AmbientLight");
     SpeculatiyID = glGetUniformLocation(programID, "Specularity");
-    GLuint texID = glGetUniformLocation(programID, "InputTexture");
-    glUniform1i(texID, 0);
-    texID = glGetUniformLocation(programID, "shadowMap");
-    glUniform1i(texID, 1);
+    texID = glGetUniformLocation(programID, "InputTexture");
 }
 void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View,
                                  const glm::vec3& LightPos, const glm::vec3& EyePos,
@@ -117,7 +114,6 @@ void Model::Draw(GameObject& obj)
 {
     if(!isShadowRendering)
     {
-        GLuint texID = glGetUniformLocation(programID, "InputTexture");
         glActiveTexture(GL_TEXTURE0);
         glUniform1i(texID, 0);
         obj.BindTexture();

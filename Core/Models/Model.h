@@ -18,7 +18,7 @@ protected:
     bool isBufferCreated, isShadowRendering;
     GLuint programID, shadowProgramID;
     GLuint VAO, VertexID, NormalID, UVID, IndicesID;
-    GLuint LightMVPID, ShadowMVPID, MVPID, ColorID, ModelMatrixID, LightPosID, EyeID, LightColorID, AmbientLightID, SpeculatiyID;
+    GLuint LightMVPID, ShadowMVPID, MVPID, ColorID, ModelMatrixID, LightPosID, EyeID, LightColorID, AmbientLightID, SpeculatiyID, texID;
     glm::mat4 MVP, ShadowMVP;
     Model();
 public:
