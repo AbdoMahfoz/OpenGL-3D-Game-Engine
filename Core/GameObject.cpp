@@ -9,7 +9,8 @@ GameObject::GameObject(Model* model, Texture* texture)
     this->m_color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->model = model;
     ModelMatrix = glm::mat4(1);
-    Engine::RegisterGameObject(this);
+    if(model != 0)
+        Engine::RegisterGameObject(this);
 } 
 void GameObject::Translate(const glm::vec3& position)
 {
@@ -77,5 +78,6 @@ const glm::mat4& GameObject::GetModelMatrix() const
 }
 GameObject::~GameObject()
 {
-    Engine::UnRegisterGameObject(this);
+    if(model != 0)
+        Engine::UnRegisterGameObject(this);
 }

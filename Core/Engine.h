@@ -9,10 +9,11 @@
 #include "glm/gtx/transform.hpp"
 #include "GameObject.h"
 #include "AutoClean.h"
-#include "FPCamera.h"
+#include "EulerCamera.h"
 #include "texture.h"
 #include "CubeModel.h"
 #include "ShaderManager.h"
+#include "LightSource.h"
 
 namespace Engine
 {
@@ -23,10 +24,12 @@ namespace Engine
     void UnRegisterRoutine(void (*func)());
     void RegisterOnExit(void (*func)());
     void UnRegisterOnExit(void (*func)());
+    void RegisterLight(LightSource* light);
+    void UnRegisterLight(LightSource* light);
     void RegisterModel(Model* model);
     void RegisterGameObject(GameObject* obj);
     void UnRegisterGameObject(GameObject* obj);
-    FPCamera& GetCurrentCamera();
-    void SetCurrentCamera(FPCamera* Camera);
+    EulerCamera& GetCurrentCamera();
+    void SetCurrentCamera(EulerCamera* Camera);
     void SetMainCameraAsCurrent();
 }

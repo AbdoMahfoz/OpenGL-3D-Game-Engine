@@ -9,7 +9,7 @@ Model::Model()
     isShadowRendering = false;
     Engine::RegisterModel(this);
 }
-Model::Model(float* verts, float* uvs, float* normals, int count, GLushort* indices, int indicesCount)
+Model::Model(float* verts, float* uvs, float* normals, int count, GLushort* indices, int indicesCount, float Specularity)
 {
     id = univ_id++;
     isBufferCreated = false;
@@ -20,6 +20,7 @@ Model::Model(float* verts, float* uvs, float* normals, int count, GLushort* indi
     this->normals = new float[count];
     this->uvs = new float[(count/3) * 2];
     this->indices = new GLushort[indicesCount];
+    this->Specularity = Specularity;
     for(int i = 0; i < std::max(count, indicesCount); i++)
     {
         if(i < count)
@@ -72,17 +73,17 @@ void Model::CreateBuffer()
     MVPID = glGetUniformLocation(programID, "MVP");
     ModelMatrixID = glGetUniformLocation(programID, "ModelMatrix");
     ColorID = glGetUniformLocation(programID, "Color");
-    LightPosID = glGetUniformLocation(programID, "WSLight");
     EyeID = glGetUniformLocation(programID, "WSEye");
-    LightColorID = glGetUniformLocation(programID, "LightColor");
     AmbientLightID = glGetUniformLocation(programID, "AmbientLight");
     SpeculatiyID = glGetUniformLocation(programID, "Specularity");
     texID = glGetUniformLocation(programID, "InputTexture");
+    LightPosID = glGetUniformLocation(programID, "WSLight");
+    LightColorID = glGetUniformLocation(programID, "LightColor");
+    LightCountID = glGetUniformLocation(programID, "LightCount");
 }
 void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View,
-                                 const glm::vec3& LightPos, const glm::vec3& EyePos,
-                                 const glm::vec3& LigthColor, const glm::vec3& AmbientLight,
-                                 float Specularity)
+                            const glm::vec3& AmbientLight, const glm::vec3& EyePos,
+                            glm::vec3* LigthColor, glm::vec3* LightPos, int LightCount)
 {
     isShadowRendering = false;
     if(!isBufferCreated)
@@ -92,14 +93,15 @@ void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View,
     MVP = Prespective * View;
     glBindVertexArray(VAO);
     glUseProgram(programID);
-    glUniform3fv(LightPosID, 1, &LightPos[0]);
     glUniform3fv(EyeID, 1, &EyePos[0]);
-    glUniform3fv(LightColorID, 1, &LigthColor[0]);
     glUniform3fv(AmbientLightID, 1, &AmbientLight[0]);
     glUniform1fv(SpeculatiyID, 1, &Specularity);
     glUniformMatrix4fv(LightMVPID, 1, GL_FALSE, &ShadowMVP[0][0]);
+    glUniform3fv(LightPosID, LightCount, &LightPos[0][0]);
+    glUniform3fv(LightColorID, LightCount, &LigthColor[0][0]);
+    glUniform1iv(LightCountID, 1, &LightCount);
 }
-void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View)
+void Model::SetUpEnviroment(const glm::mat4& LightMVP)
 {
     isShadowRendering = true;
     if(!isBufferCreated)
@@ -108,7 +110,7 @@ void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View)
     }
     glBindVertexArray(VAO);
     glUseProgram(shadowProgramID);
-    ShadowMVP = Prespective * View;
+    ShadowMVP = LightMVP;
 }
 void Model::Draw(GameObject& obj)
 {

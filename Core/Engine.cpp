@@ -4,13 +4,13 @@ bool isInitalized = false;
 GLFWwindow* MainWindow;
 std::vector<void(*)()> routines, exitFuncs;
 std::vector<std::pair<Model*, std::vector<GameObject*>>> RenderArray;
+std::vector<LightSource*> Lights;
 std::thread *LogicThread, *RenderingThread;
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
-GLuint VertexArrayID;
-FPCamera MainCamera, *CurrentCamera;
-GLuint depthMapFB, depthMapTX, depthMapID;
-glm::vec3 LightPos;
-int SHADOW_WIDTH, SHADOW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT;
+GLuint VertexArrayID, shadowMap[MAX_LIGHT_COUNT];
+EulerCamera MainCamera, *CurrentCamera;
+glm::vec3 AmbientLight = glm::vec3(0.1f, 0.1f, 0.1f);
+int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
 GLFWwindow* CreateWindow(int width, int height, const char* title)
@@ -24,32 +24,6 @@ GLFWwindow* CreateWindow(int width, int height, const char* title)
     GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     glfwMakeContextCurrent(window);
     return window;
-}
-void SetUpShadowMap(int width, int height)
-{
-    SHADOW_WIDTH = width;
-    SHADOW_HEIGHT = height;
-    //Create frame buffer and texture
-    glGenFramebuffers(1, &depthMapFB);
-    glGenTextures(1, &depthMapTX);
-    //Set up textures
-    glBindTexture(GL_TEXTURE_2D, depthMapTX);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
-                 width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-    //Bind frame buffer
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFB);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMapTX, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0); 
-    depthMapID = glGetUniformLocation(ShaderManager::GetShaders("Shaders/LVS.glsl", "Shaders/LFS.glsl"), "shadowMap");
-
 }
 void Logic()
 {
@@ -74,18 +48,20 @@ void Rendering()
         RenderStarted.lock();
         RenderingMutex.lock();
         RenderStarted.unlock();*/
-        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFB);
-        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        //glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
-        glm::mat4 lightProjection = glm::perspective(75.0f, (float)SHADOW_WIDTH/SHADOW_HEIGHT, 1.0f, 7.5f);
-        glm::mat4 lightView = glm::lookAt(LightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glClear( GL_DEPTH_BUFFER_BIT );
-        for(auto i : RenderArray)
+        std::vector<glm::vec3> LightColor, LightPosition;
+        for(auto l : Lights)
         {
-            i.first->SetUpEnviroment(lightProjection, lightView);
-            for(auto j : i.second)
+            LightColor.push_back(l->GetLightColor());
+            LightPosition.push_back(l->GetCam().GetEyePosition());
+            l->SetUpEnviroment();
+            glm::mat4 m = l->GetLightVP();
+            for(auto i : RenderArray)
             {
-                i.first->Draw(*j);
+                i.first->SetUpEnviroment(m);
+                for(auto j : i.second)
+                {
+                    i.first->Draw(*j);
+                }
             }
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -95,13 +71,16 @@ void Rendering()
         for(auto i : RenderArray)
         {
             i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
-                                     LightPos, glm::vec3(0.0f, 0.0f, 4.0f), 
-                                     glm::vec3(1.0f, 1.0f, 1.0f) * 1.7f, glm::vec3(0.1f, 0.1f, 0.1f), 10);
+                                     AmbientLight, CurrentCamera->GetEyePosition(), 
+                                     &LightColor[0], &LightPosition[0], LightColor.size());
             for(auto j : i.second)
             {
-                glActiveTexture(GL_TEXTURE1);
-                glUniform1i(depthMapID, 1);
-                glBindTexture(GL_TEXTURE_2D, depthMapTX);
+                for(int l = 0; l < Lights.size(); l++)
+                {
+                    glActiveTexture(GL_TEXTURE1 + l);
+                    glUniform1i(shadowMap[l], l + 1);
+                    Lights[l]->BindDepthMap();
+                }
                 i.first->Draw(*j);
             }
         }
@@ -110,9 +89,6 @@ void Rendering()
 void MainLoop()
 {
     Engine::Start();
-    SetUpShadowMap(2048, 2048);
-    LightPos = glm::vec3(2.0f, 1.0f, 2.0f);
-    glEnable(GL_TEXTURE_2D);
     //glfwSwapInterval(60);
     do
     {
@@ -167,6 +143,12 @@ void Engine::FireEngine()
                 //SetClearColor(glm::vec3(1.0f, 0.5f, 1.0f));
                 glEnable(GL_DEPTH_TEST);
                 glDepthFunc(GL_LESS);
+                glEnable(GL_TEXTURE_2D);
+                GLuint pID = ShaderManager::GetShaders("Shaders/LVS.glsl", "Shaders/LFS.glsl");
+                for(int i = 0; i < MAX_LIGHT_COUNT; i++)
+                {
+                    shadowMap[i] = glGetUniformLocation(pID, ("shadowMap[" + std::to_string(i) + "]").c_str());
+                }
                 MainLoop();
             }
         }
@@ -216,6 +198,21 @@ void Engine::UnRegisterOnExit(void (*ptr)())
         }
     }
 }
+void Engine::RegisterLight(LightSource* light)
+{
+    Lights.push_back(light);
+}
+void Engine::UnRegisterLight(LightSource* light)
+{
+    for(int i = 0; i < Lights.size(); i++)
+    {
+        if(Lights[i] == light)
+        {
+            Lights.erase(Lights.begin() + i);
+            break;
+        }
+    }
+}
 void Engine::RegisterModel(Model* model)
 {
     RenderArray.push_back({model, std::vector<GameObject*>()});
@@ -236,11 +233,11 @@ void Engine::UnRegisterGameObject(GameObject* obj)
         }
     }
 }
-FPCamera& Engine::GetCurrentCamera()
+EulerCamera& Engine::GetCurrentCamera()
 {
     return *CurrentCamera;
 }
-void SetCurrentCamera(FPCamera* Camera)
+void SetCurrentCamera(EulerCamera* Camera)
 {
     CurrentCamera = Camera;
     CurrentCamera->SetPerspectiveProjection(75.0f, 800.0f/600.0f, 0.1f, 1000.0f);

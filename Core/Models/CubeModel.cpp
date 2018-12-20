@@ -2,6 +2,7 @@
 
 CubeModel::CubeModel()
 {
+	Specularity = 10;
 	count = 72;
 	indicesCount = 36;
 	indices = new unsigned short[indicesCount]
