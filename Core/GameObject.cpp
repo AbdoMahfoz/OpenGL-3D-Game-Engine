@@ -14,36 +14,57 @@ GameObject::GameObject(Model* model, Texture* texture)
 } 
 void GameObject::Translate(const glm::vec3& position)
 {
+    //Apply the Translation ..
     ModelMatrix *= glm::translate(position);
+
+    //Update Position Vector ..
     this->position += position;
 }
 void GameObject::Rotate(const glm::vec3& rotation)
 {
     //RotateAround(rotation, position);
-    //this->ModelMatrix*=glm::rotate(rotation);
+    //Apply the Rotation ..
+    this->ModelMatrix*=glm::rotate(rotation);
+
+    //Update Rotation Vector ..
+    this->rotation+=rotation;
 }
 void GameObject::RotateAround(const glm::vec3& rotation, const glm::vec3& rotationPoint)
 {
-    //position = glm::vec3(ModelMatrix[3][0], ModelMatrix[3][1], ModelMatrix[3][2]);
-    //std::cout << this->position[0] << ' ' << this->position[1] << ' ' << this->position[2] << '\n';
-    ModelMatrix *= glm::translate(-rotationPoint);
-    if(rotation.y != 0)
-        ModelMatrix *= glm::rotate(rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    if(rotation.x != 0)
-        ModelMatrix *= glm::rotate(rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-    if(rotation.z != 0)
-        ModelMatrix *= glm::rotate(rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-    ModelMatrix *= glm::translate(rotationPoint);
-    position = glm::vec3(ModelMatrix[3].x, ModelMatrix[3].y, ModelMatrix[3].z);
-    //std::cout << this->position[0] << ' ' << this->position[1] << ' ' << this->position[2] << '\n';
+    //Translate to Origin ..
+    this->ModelMatrix*=glm::translate(-rotationPoint);
+
+    //Apply Rotation ..
+    this->ModelMatrix*=glm::rotate(rotation);
+
+    //Update Rotation Vector ..
+    this->rotation+=rotation;
+
+    //Translate Back ..
+    this->ModelMatrix*=glm::translate(rotationPoint);
 }
 void GameObject::Scale(const glm::vec3& scale)
 {
+    //Aplly Scaling ..
     this->ModelMatrix*=glm::scale(scale);
+
+    //Update Scale Vector  ..
+    this->scale+=scale;
 }
 void GameObject::ScaleWithRespectTo(const glm::vec3& scale, const glm::vec3& scalingPoint)
 {
-    throw std::logic_error("function not implmented yet!");
+    
+    //Translate to Origin ..
+    this->ModelMatrix*=glm::translate(-scalingPoint);
+
+    //Apply Scaling ..
+    this->ModelMatrix*=glm::scale(scale);
+
+    //Update Scale Vector ..
+    this->scale+=scale;
+    
+    //Translate Back ..
+    this->ModelMatrix*=glm::translate(scalingPoint);
 }
 void GameObject::SetColor(const glm::vec3& m_color)
 {
