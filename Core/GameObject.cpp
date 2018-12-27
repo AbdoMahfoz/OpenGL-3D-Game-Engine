@@ -24,24 +24,29 @@ void GameObject::Rotate(const glm::vec3& rotation)
 {
     //RotateAround(rotation, position);
     //Apply the Rotation ..
+    /*
     this->ModelMatrix*=glm::rotate(rotation);
 
     //Update Rotation Vector ..
     this->rotation+=rotation;
+    */
 }
 void GameObject::RotateAround(const glm::vec3& rotation, const glm::vec3& rotationPoint)
 {
+    /*
     //Translate to Origin ..
     this->ModelMatrix*=glm::translate(-rotationPoint);
 
     //Apply Rotation ..
     this->ModelMatrix*=glm::rotate(rotation);
 
+
     //Update Rotation Vector ..
     this->rotation+=rotation;
 
     //Translate Back ..
     this->ModelMatrix*=glm::translate(rotationPoint);
+    */
 }
 void GameObject::Scale(const glm::vec3& scale)
 {
