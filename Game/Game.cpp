@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-GameObject *Cube, *Plane;
+GameObject *Cube, *Plane, *Zombo;
 LightSource* light, *light2;
 
 void func()
@@ -8,7 +8,7 @@ void func()
     //Cube->Rotate(glm::vec3(0.0f, 1.0f, 0.0f));
     light->GetCam().Reset(light->GetCam().GetEyePosition(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     light->GetCam().Strafe(-0.01f);
-    light->GetCam().Reset(light->GetCam().GetEyePosition(), Cube->GetPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
+    light->GetCam().Reset(light->GetCam().GetEyePosition(), Zombo->GetPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 void Engine::Start()
 {
@@ -17,8 +17,9 @@ void Engine::Start()
     light->GetCam().Reset(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     light->GetCam().UpdateViewMatrix();
     Texture* tex = new Texture("uvtemplate.bmp", 0);
+    Zombo = new GameObject(new BlenderModel("Zombie_1.obj"), tex);
     CubeModel* c = new CubeModel();
-    Cube = new GameObject(c, tex);
+    //Cube = new GameObject(c, tex);
     Plane = new GameObject(c, tex);
     Plane->Scale(glm::vec3(100.0f, 0.2f, 100.0f));
     Plane->Translate(glm::vec3(0.0f, -5.0f, 0.0f));

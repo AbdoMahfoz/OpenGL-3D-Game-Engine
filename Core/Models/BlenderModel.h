@@ -2,12 +2,12 @@
 #define BLENDEROBJECT_CLASS
 
 #include <GL/glew.h>
-#include "GameObject.h"
+#include "Model.h"
 #include "texture.h"
 
 class BlenderModel : public Model 
 {
 public:
-    BlenderModel();
+    BlenderModel(const char* Path);
 };
 #endif

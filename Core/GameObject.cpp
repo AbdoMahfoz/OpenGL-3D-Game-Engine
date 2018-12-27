@@ -19,7 +19,8 @@ void GameObject::Translate(const glm::vec3& position)
 }
 void GameObject::Rotate(const glm::vec3& rotation)
 {
-    RotateAround(rotation, position);
+    //RotateAround(rotation, position);
+    //this->ModelMatrix*=glm::rotate(rotation);
 }
 void GameObject::RotateAround(const glm::vec3& rotation, const glm::vec3& rotationPoint)
 {

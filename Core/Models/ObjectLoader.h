@@ -1,3 +1,6 @@
+#ifndef OBJECTLOADER_PACKAGE
+#define OBJECTLOADER_PACKAGE
+
 #include <cstdlib>
 #include <vector>
 #include <string>
@@ -14,12 +17,10 @@ struct Coordinate
 
 struct Face
 {
-    int FaceNum;
     bool Four;
-    int Faces[4];
-    int TextureCoordinates[4];
-    Face(int facenum, int f1, int f2, int f3, int t1, int t2, int t3);
-    Face(int facenum, int f1, int f2, int f3, int f4, int t1, int t2, int t3, int t4);
+    int Faces[3];
+    int TextureCoordinates[3];
+    Face(int f1, int f2, int f3, int t1, int t2, int t3);
 };
 
 struct TextureCoordinate
@@ -30,6 +31,7 @@ struct TextureCoordinate
 
 class ObjectLoader
 {
+public:
     std::vector<std::string *> FileLines;
     std::vector<Coordinate *> Verts;
     std::vector<Face *> Faces;
@@ -40,9 +42,7 @@ class ObjectLoader
     bool  IsNormal, IsTexture;
     unsigned int LoadTexture(const char *FileName);
     void Clean();
-
-  public:
-    ObjectLoader();
-    ~ObjectLoader();
-    int  LoadModel(const char *FileName);
+    int LoadModel(const char *FileName);
 };
+
+#endif

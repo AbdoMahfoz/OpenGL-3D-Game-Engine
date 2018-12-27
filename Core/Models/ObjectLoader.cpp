@@ -7,29 +7,14 @@ Coordinate::Coordinate(float a, float b, float c)
     z = c;
 }
 
-Face::Face(int facenum, int f1, int f2, int f3, int t1, int t2, int t3)
+Face::Face( int f1, int f2, int f3, int t1, int t2, int t3)
 {
-    FaceNum = facenum;
     Faces[0] = f1;
     Faces[1] = f2;
     Faces[2] = f3;
     TextureCoordinates[0] = t1;
     TextureCoordinates[1] = t2;
     TextureCoordinates[2] = t3;
-    Four = false;
-}
-
-Face::Face(int facenum, int f1, int f2, int f3, int f4, int t1, int t2, int t3, int t4)
-{
-    FaceNum = facenum;
-    Faces[0] = f1;
-    Faces[1] = f2;
-    Faces[2] = f3;
-    Faces[3] = f4;
-    TextureCoordinates[0] = t1;
-    TextureCoordinates[1] = t2;
-    TextureCoordinates[2] = t3;
-    TextureCoordinates[3] = t4;
     Four = false;
 }
 
@@ -74,12 +59,12 @@ int ObjectLoader::LoadModel(const char *filename)
         }
         else if ((*FileLines[q])[0] == 'f')
         {
-            int a, b, c, d;
+            int a, b, c;
             if (FileLines[q]->find("/") != std::string::npos)
             {
                 int t[3];
-                sscanf(FileLines[q]->c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &t[0], &b, &c, &t[1], &b, &d, &t[2], &b);
-                Faces.push_back(new Face(b, a, c, d, t[0], t[1], t[2]));
+                sscanf(FileLines[q]->c_str(), "f %d/%d %d/%d %d/%d", &a, &t[0], &b,&t[1], &c, &t[2]);
+                Faces.push_back(new Face(a,b,c, t[0], t[1], t[2]));
             }
         }
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == 't') //texture coorinate

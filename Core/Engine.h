@@ -14,6 +14,8 @@
 #include "CubeModel.h"
 #include "ShaderManager.h"
 #include "LightSource.h"
+#include "BlenderModel.h"
+#include "ObjectLoader.h"
 
 namespace Engine
 {
