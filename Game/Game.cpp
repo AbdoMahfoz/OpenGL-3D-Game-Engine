@@ -1,7 +1,7 @@
 #include "Engine.h"
 
 GameObject *Cube, *Plane, *Zombo;
-LightSource* light, *light2;
+LightSource *light, *light2;
 
 void func()
 {
@@ -18,6 +18,8 @@ void Engine::Start()
     light->GetCam().UpdateViewMatrix();
     Texture* tex = new Texture("uvtemplate.bmp", 0);
     Zombo = new GameObject(new BlenderModel("Zombie_1.obj"), tex);
+    Zombo->Scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    Zombo->Translate(glm::vec3(0.0f, -4.0f, 20.0f));
     CubeModel* c = new CubeModel();
     //Cube = new GameObject(c, tex);
     Plane = new GameObject(c, tex);

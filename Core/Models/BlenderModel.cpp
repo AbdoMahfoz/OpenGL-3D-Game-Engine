@@ -11,26 +11,32 @@ BlenderModel::BlenderModel(const char* Path)
     normals = new float[count];
     uvs = new float[(count/3)*2];
     indices = new unsigned short[indicesCount];
-    for(int i = 0; i < count/3; i++)
+    for(int i = 0; i < std::max(count/3, (int)o.Faces.size()); i++)
     {
         int j = i * 3;
         int k = i * 2;
-        verts[j]   = o.Verts[i]->x;
-        verts[j+1] = o.Verts[i]->y;
-        verts[j+2] = o.Verts[i]->z;
-        /*
-        normals[j] = o.Normals[i]->x;
-        normals[j+1] = o.Normals[i]->y;
-        normals[j+2] = o.Normals[i]->z;
-        */
-        uvs[k] = o.TextureCoordinates[i]->u;
-        uvs[k+1] = o.TextureCoordinates[i]->v;
-    }
-    for(int i = 0; i < indicesCount/3; i++)
-    {
-        int j = i * 3;
-        indices[j] = o.Faces[i]->Faces[0];
-        indices[j+1] = o.Faces[i]->Faces[1];
-        indices[j+2] = o.Faces[i]->Faces[2];
+        if(i < o.Verts.size())
+        {
+            verts[j]   = o.Verts[i].x;
+            verts[j+1] = o.Verts[i].y;
+            verts[j+2] = o.Verts[i].z;
+        }
+        if(i < o.Normals.size())
+        {
+            normals[j]   = o.Normals[i].x;
+            normals[j+1] = o.Normals[i].y;
+            normals[j+2] = o.Normals[i].z;
+        }
+        if(i < o.TextureCoordinates.size())
+        {
+            uvs[k]   = o.TextureCoordinates[i].u;
+            uvs[k+1] = o.TextureCoordinates[i].v;
+        }
+        if(i < o.Faces.size())
+        {
+            indices[j]   = o.Faces[i].Faces[0];
+            indices[j+1] = o.Faces[i].Faces[1];
+            indices[j+2] = o.Faces[i].Faces[2];
+        }
     }
 }
