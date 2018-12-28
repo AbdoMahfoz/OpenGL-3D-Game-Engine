@@ -13,7 +13,7 @@
             },
             "label": "build and run",
             "type": "shell",
-            "command": "g++ -ICore -IGame -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp -lopenal -lpthread -lGL -lglfw -lGLEW && echo \"Done :)\" && ./a.out",
+            "command": "g++ -ICore -IGame -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp -lsfml-graphics -lsfml-window -lsfml-system -lpthread -lGL -lglfw -lGLEW && echo \"Done :)\" && ./a.out",
             "problemMatcher": [
                 "$gcc"
             ]
@@ -28,7 +28,7 @@
             },
             "label": "build",
             "type": "shell",
-            "command": "g++ -g -ICore -IGame -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp -lopenal -lpthread -lGL -lglfw -lGLEW",
+            "command": "g++ -g -ICore -IGame -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp -lsfml-graphics -lsfml-window -lsfml-systems -lpthread -lGL -lglfw -lGLEW",
             "problemMatcher": [
                 "$gcc"
             ]
