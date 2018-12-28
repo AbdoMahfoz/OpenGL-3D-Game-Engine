@@ -48,13 +48,13 @@ int ObjectLoader::LoadModel(const char *filename)
         {
             float tmpx, tmpy, tmpz;
             sscanf(FileLines[q]->c_str(), "v %f %f %f", &tmpx, &tmpy, &tmpz); //read the 3 floats, which makes up the vertex
-            Verts.push_back(new Coordinate(tmpx, tmpy, tmpz));                //and put it in the vertex vector
+            Verts.push_back(Coordinate(tmpx, tmpy, tmpz));                //and put it in the vertex vector
         }
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == 'n')
         {
             float tmpx, tmpy, tmpz;
             sscanf(FileLines[q]->c_str(), "vn %f %f %f", &tmpx, &tmpy, &tmpz);
-            Normals.push_back(new Coordinate(tmpx, tmpy, tmpz)); //basically do the same
+            Normals.push_back(Coordinate(tmpx, tmpy, tmpz)); //basically do the same
             IsNormal = true;
         }
         else if ((*FileLines[q])[0] == 'f')
@@ -64,14 +64,14 @@ int ObjectLoader::LoadModel(const char *filename)
             {
                 int t[3];
                 sscanf(FileLines[q]->c_str(), "f %d/%d %d/%d %d/%d", &a, &t[0], &b,&t[1], &c, &t[2]);
-                Faces.push_back(new Face(a,b,c, t[0], t[1], t[2]));
+                Faces.push_back(Face(a,b,c, t[0], t[1], t[2]));
             }
         }
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == 't') //texture coorinate
         {
             float u, v;
             sscanf(FileLines[q]->c_str(), "vt %f %f", &u, &v);             //read the uv coordinate
-            TextureCoordinates.push_back(new TextureCoordinate(u, 1 - v)); //I push back 1-v instead of normal v, because obj file use the upper left corner as 0,0 coorinate
+            TextureCoordinates.push_back(TextureCoordinate(u, 1 - v)); //I push back 1-v instead of normal v, because obj file use the upper left corner as 0,0 coorinate
             //but OpenGL use bottom left corner as 0,0, so I convert it
             IsTexture = true;
         }

@@ -33,12 +33,12 @@ class ObjectLoader
 {
 public:
     std::vector<std::string *> FileLines;
-    std::vector<Coordinate *> Verts;
-    std::vector<Face *> Faces;
-    std::vector<Coordinate *> Normals;
+    std::vector<Coordinate> Verts;
+    std::vector<Face> Faces;
+    std::vector<Coordinate> Normals;
     std::vector<unsigned int> Textures;
     std::vector<unsigned int> Lists;
-    std::vector<TextureCoordinate *> TextureCoordinates; //all texture coorinate (UV coordinate)
+    std::vector<TextureCoordinate> TextureCoordinates; //all texture coorinate (UV coordinate)
     bool  IsNormal, IsTexture;
     unsigned int LoadTexture(const char *FileName);
     void Clean();
