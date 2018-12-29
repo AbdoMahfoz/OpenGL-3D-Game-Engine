@@ -1,32 +1,37 @@
 #include "AudioManager.h"
 
-void PlayBackGroundMusic()
+void AudioManager::PlayBackGroundMusic()
 {
+    printf("Shit");
     sf::Music music;
     music.openFromFile("zombie_Background_Music.ogg");
+    music.setVolume(100.0f);
     music.play();
 }
-void PlayGunShot()
+void AudioManager::PlayGunShot()
 {
     sf::SoundBuffer buffer;
     sf::Sound sound;
     buffer.loadFromFile("Gunshot.wav");
     sound.setBuffer(buffer);
+    sound.setVolume(100.0f);
     sound.play();
 }
-void PlayFootStep()
+void AudioManager::PlayFootStep()
 {
     sf::SoundBuffer buffer;
     sf::Sound sound;
     buffer.loadFromFile("Footsteps.wav");
     sound.setBuffer(buffer);
+    sound.setVolume(100.0f);
     sound.play();
 }
-void PlayScream()
+void AudioManager::PlayScream()
 {
     sf::SoundBuffer buffer;
     sf::Sound sound;
     buffer.loadFromFile("Scream.wav");
     sound.setBuffer(buffer);
+    sound.setVolume(100.0f);
     sound.play();
 }

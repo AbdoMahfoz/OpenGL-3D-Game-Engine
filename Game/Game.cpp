@@ -21,4 +21,5 @@ void Engine::Start()
     Engine::GetCurrentCamera().Strafe(4.0f);
     Engine::GetCurrentCamera().Yaw(45.0f);
     Engine::RegisterRoutine(func, false);
+    AudioManager::PlayBackGroundMusic();
 }

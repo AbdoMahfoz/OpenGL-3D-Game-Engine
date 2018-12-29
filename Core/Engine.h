@@ -17,6 +17,7 @@
 #include "LightSource.h"
 #include "BlenderModel.h"
 #include "ObjectLoader.h"
+#include "AudioManager.h"
 
 namespace Engine
 {
