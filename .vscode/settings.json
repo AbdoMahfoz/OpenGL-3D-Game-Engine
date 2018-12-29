@@ -2,6 +2,7 @@
     "files.associations": {
         "cstdio": "cpp",
         "vector": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "new": "cpp"
     }
 }
