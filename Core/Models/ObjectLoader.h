@@ -17,10 +17,11 @@ struct Coordinate
 
 struct Face
 {
-    bool Four;
     int Faces[3];
     int TextureCoordinates[3];
+    int Normals[3];
     Face(int f1, int f2, int f3, int t1, int t2, int t3);
+    Face(int f1, int f2, int f3, int t1, int t2, int t3,int n1,int n2,int n3);
 };
 
 struct TextureCoordinate
@@ -42,7 +43,7 @@ public:
     bool  IsNormal, IsTexture;
     unsigned int LoadTexture(const char *FileName);
     void Clean();
-    int LoadModel(const char *FileName);
+    int LoadModel(const char *FileName , int type);
 };
 
 #endif

@@ -7,7 +7,7 @@ Coordinate::Coordinate(float a, float b, float c)
     z = c;
 }
 
-Face::Face( int f1, int f2, int f3, int t1, int t2, int t3)
+Face::Face(int f1, int f2, int f3, int t1, int t2, int t3)
 {
     Faces[0] = f1;
     Faces[1] = f2;
@@ -15,16 +15,26 @@ Face::Face( int f1, int f2, int f3, int t1, int t2, int t3)
     TextureCoordinates[0] = t1;
     TextureCoordinates[1] = t2;
     TextureCoordinates[2] = t3;
-    Four = false;
 }
-
+Face::Face(int f1, int f2, int f3, int t1, int t2, int t3, int n1, int n2, int n3)
+{
+    Faces[0] = f1;
+    Faces[1] = f2;
+    Faces[2] = f3;
+    TextureCoordinates[0] = t1;
+    TextureCoordinates[1] = t2;
+    TextureCoordinates[2] = t3;
+    Normals[0] = n1;
+    Normals[1] = n2;
+    Normals[2] = n3;
+}
 TextureCoordinate::TextureCoordinate(float a, float b)
 {
     u = a;
     v = b;
 }
 
-int ObjectLoader::LoadModel(const char *filename)
+int ObjectLoader::LoadModel(const char *filename, int type)
 {
     std::ifstream in(filename); //open the model file
     if (!in.is_open())
@@ -48,7 +58,7 @@ int ObjectLoader::LoadModel(const char *filename)
         {
             float tmpx, tmpy, tmpz;
             sscanf(FileLines[q]->c_str(), "v %f %f %f", &tmpx, &tmpy, &tmpz); //read the 3 floats, which makes up the vertex
-            Verts.push_back(Coordinate(tmpx, tmpy, tmpz));                //and put it in the vertex vector
+            Verts.push_back(Coordinate(tmpx, tmpy, tmpz));                    //and put it in the vertex vector
         }
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == 'n')
         {
@@ -57,23 +67,32 @@ int ObjectLoader::LoadModel(const char *filename)
             Normals.push_back(Coordinate(tmpx, tmpy, tmpz)); //basically do the same
             IsNormal = true;
         }
-        else if ((*FileLines[q])[0] == 'f')
-        {
-            int a, b, c;
-            if (FileLines[q]->find("/") != std::string::npos)
-            {
-                int t[3];
-                sscanf(FileLines[q]->c_str(), "f %d/%d %d/%d %d/%d", &a, &t[0], &b,&t[1], &c, &t[2]);
-                Faces.push_back(Face(a,b,c, t[0], t[1], t[2]));
-            }
-        }
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == 't') //texture coorinate
         {
             float u, v;
-            sscanf(FileLines[q]->c_str(), "vt %f %f", &u, &v);             //read the uv coordinate
+            sscanf(FileLines[q]->c_str(), "vt %f %f", &u, &v);         //read the uv coordinate
             TextureCoordinates.push_back(TextureCoordinate(u, 1 - v)); //I push back 1-v instead of normal v, because obj file use the upper left corner as 0,0 coorinate
             //but OpenGL use bottom left corner as 0,0, so I convert it
             IsTexture = true;
+        }
+        else if ((*FileLines[q])[0] == 'f')
+        {
+            int a, b, c;
+            int t[3];
+            if (FileLines[q]->find("/") != std::string::npos)
+            {
+                if (type == 3)
+                {
+                    int n[3];
+                    sscanf(FileLines[q]->c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &t[0],n[0], &b, &t[1],n[1], &c, &t[2],n[2]);
+                    Faces.push_back(Face(a, b, c, t[0], t[1], t[2],n[0],n[1],n[2]));
+                }
+                else
+                {
+                    sscanf(FileLines[q]->c_str(), "f %d/%d %d/%d %d/%d", &a, &t[0], &b, &t[1], &c, &t[2]);
+                    Faces.push_back(Face(a, b, c, t[0], t[1], t[2]));
+                }
+            }
         }
     }
     return 0;
