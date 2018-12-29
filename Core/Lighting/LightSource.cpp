@@ -25,18 +25,24 @@ void LightSource::InitializeBufferTexture(int width, int height)
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-LightSource::LightSource()
+LightSource::LightSource(const glm::vec3& InitialPosition)
 {
+    IsModified = true;
     LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     InitializeBufferTexture(DEFAULT_SHADOW_WIDTH, DEFAULT_SHADOW_HEIGHT);
+    this->ProjectionMatrix = glm::perspective(75.0f, (float)DEFAULT_SHADOW_WIDTH/DEFAULT_SHADOW_HEIGHT, 1.0f, 7.5f);
+    this->Position = InitialPosition;
     this->width = DEFAULT_SHADOW_WIDTH;
     this->height = DEFAULT_SHADOW_HEIGHT;
     Engine::RegisterLight(this);
 }
-LightSource::LightSource(int width, int height)
+LightSource::LightSource(const glm::vec3& InitialPosition, int width, int height)
 {
+    IsModified = true;
     LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     InitializeBufferTexture(width, height);
+    this->ProjectionMatrix = glm::perspective(75.0f, (float)width/height, 1.0f, 7.5f);
+    this->Position = InitialPosition;
     this->width = width;
     this->height = height;
     Engine::RegisterLight(this);
@@ -55,22 +61,28 @@ void LightSource::BindDepthMap()
 {
     glBindTexture(GL_TEXTURE_2D, dmTexture);
 }
-glm::mat4 LightSource::GetLightVP()
+const glm::mat4& LightSource::GetLightVP()
 {
-    //cam.UpdateViewMatrix();
-    return cam.GetProjectionMatrix() * cam.GetViewMatrix();
+    if(IsModified)
+    {
+        IsModified = false;
+        ViewMatrix = glm::lookAt(Position, LookAt, glm::vec3(0.0f, 1.0f, 0.0f));
+        VP = ProjectionMatrix * ViewMatrix;
+    }
+    return VP;
+    //return cam.GetProjectionMatrix() * cam.GetViewMatrix();
     /*
     return glm::perspective(75.0f, (float)width/height, 1.0f, 7.5f) * 
            glm::lookAt(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     */
 }
-EulerCamera& LightSource::GetCam()
-{
-    return cam;
-}
 const glm::vec3& LightSource::GetLightColor()
 {
     return LightColor;
+}
+const glm::vec3& LightSource::GetPosition()
+{
+    return Position;
 }
 LightSource::~LightSource()
 {

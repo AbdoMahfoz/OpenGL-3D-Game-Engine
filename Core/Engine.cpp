@@ -52,9 +52,10 @@ void Rendering()
         for(auto l : Lights)
         {
             LightColor.push_back(l->GetLightColor());
-            LightPosition.push_back(l->GetCam().GetEyePosition());
+            LightPosition.push_back(l->GetPosition());
             l->SetUpEnviroment();
-            glm::mat4 m = l->GetLightVP();
+            //l->GetCam().UpdateViewMatrix();
+            const glm::mat4& m = l->GetLightVP();
             for(auto i : RenderArray)
             {
                 i.first->SetUpEnviroment(m);

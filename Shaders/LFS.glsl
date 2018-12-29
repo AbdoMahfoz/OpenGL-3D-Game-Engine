@@ -3,21 +3,21 @@
 in vec3 WSPosition;
 in vec3 WSNomral;
 in vec2 uv;
-in vec4 LightPrepPos;
+in vec4 LightPrepPos[5];
+flat in int LightCount;
 
 uniform vec3 WSEye;
 uniform vec3 AmbientLight;
 uniform vec3 Color;
 uniform float Specularity;
 uniform sampler2D InputTexture;
-uniform int LightCount;
 uniform vec3 WSLight[30];
 uniform vec3 LightColor[30];
 uniform sampler2D shadowMap[30];
 
 out vec4 Res;
 
-float CalculateShadow(vec3 LightVector, sampler2D ss)
+float CalculateShadow(vec3 LightVector, vec4 LightPrepPos, sampler2D ss)
 {
     vec3 ProjectedCoordinates = LightPrepPos.xyz / LightPrepPos.w;
     ProjectedCoordinates = ProjectedCoordinates * 0.5 + 0.5;
@@ -61,7 +61,7 @@ void main()
         float Specular = pow(clamp(dot(EyeVector, ReflectionVector), 0, 1), Specularity);
         vec3 specularLight = clamp(LightColor[i] * Specular, 0, 1) * Specularity;
         //Result
-        TotalLight += vec4(((1.0 - CalculateShadow(LightVector, shadowMap[0])) * (diffuseLight + specularLight)), 1);
+        TotalLight += vec4(((1.0 - CalculateShadow(LightVector, LightPrepPos[i], shadowMap[1])) * (diffuseLight + specularLight)), 1);
     }
     Res = PixelColor * TotalLight * Attenuation;
 }

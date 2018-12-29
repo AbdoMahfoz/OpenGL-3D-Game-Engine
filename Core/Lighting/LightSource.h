@@ -13,20 +13,21 @@
 class LightSource
 {
 protected:
-    EulerCamera cam;
+    glm::mat4 ViewMatrix, ProjectionMatrix, VP;
     GLuint dmFrameBuffer, dmTexture;
-    glm::vec3 LightColor;
+    glm::vec3 LightColor, Position, LookAt;
+    bool IsModified;
     int width, height;
     void InitializeBufferTexture(int width, int height);
 public:
-    LightSource();
-    LightSource(int width, int height);
+    LightSource(const glm::vec3& InitialPosition);
+    LightSource(const glm::vec3& InitialPosition, int width, int height);
     virtual void SetUpEnviroment();
     void SetLightColor(const glm::vec3& LightColor);
     void BindDepthMap();
-    glm::mat4 GetLightVP();
+    const glm::mat4& GetLightVP();
     const glm::vec3& GetLightColor();
-    EulerCamera& GetCam();
+    const glm::vec3& GetPosition();
     ~LightSource();
 };
 

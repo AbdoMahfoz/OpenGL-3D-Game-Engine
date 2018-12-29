@@ -24,12 +24,13 @@ void GameObject::Rotate(const glm::vec3& rotation)
 {
     //RotateAround(rotation, position);
     //Apply the Rotation ..
-    /*
-    this->ModelMatrix*=glm::rotate(rotation);
-
+    glm::mat4 m = glm::mat4(1);
+    m *= glm::rotate(rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    m *= glm::rotate(rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    m *= glm::rotate(rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+    this->ModelMatrix *= m;
     //Update Rotation Vector ..
-    this->rotation+=rotation;
-    */
+    this->rotation += rotation;
 }
 void GameObject::RotateAround(const glm::vec3& rotation, const glm::vec3& rotationPoint)
 {

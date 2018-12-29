@@ -2,6 +2,7 @@
 #define Model_CLASS
 
 #include <GL/glew.h>
+#include <vector>
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
 
@@ -20,6 +21,7 @@ protected:
     GLuint VAO, VertexID, NormalID, UVID, IndicesID;
     GLuint LightMVPID, ShadowMVPID, MVPID, ColorID, ModelMatrixID, LightPosID, EyeID, LightColorID, AmbientLightID, SpeculatiyID, texID, LightCountID;
     glm::mat4 MVP, ShadowMVP;
+    std::vector<glm::mat4> LightVP;
     Model();
 public:
     Model(float* verts, float* uvs, float* normals, int count, GLushort* indices, int indicesCount, float Speculatiry);
