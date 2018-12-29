@@ -91,6 +91,7 @@ void MainLoop()
 {
     Engine::Start();
     //glfwSwapInterval(60);
+	glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     do
     {
         /*LogicMutex.unlock();
@@ -101,12 +102,14 @@ void MainLoop()
         RenderingMutex.lock();
         LogicStarted.unlock();
         RenderStarted.unlock();*/
+        Input::CalculateDelta();
 	    glfwPollEvents();
         Logic();
         Rendering();
         glfwSwapBuffers(MainWindow);
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
+	glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     /*LogicMutex.unlock();
     RenderingMutex.unlock();
     LogicThread->join();
@@ -150,6 +153,9 @@ void Engine::FireEngine()
                 {
                     shadowMap[i] = glGetUniformLocation(pID, ("shadowMap[" + std::to_string(i) + "]").c_str());
                 }
+                glfwSetInputMode(MainWindow, GLFW_STICKY_KEYS, GL_TRUE);
+                glfwSetKeyCallback(MainWindow, &Input::KeyCallBack);
+                Input::SetWindow(MainWindow);
                 MainLoop();
             }
         }

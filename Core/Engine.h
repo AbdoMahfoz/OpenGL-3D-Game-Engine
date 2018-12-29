@@ -13,9 +13,9 @@
 #include "texture.h"
 #include "CubeModel.h"
 #include "ShaderManager.h"
-#include "Collision.h"
 #include "LightSource.h"
 #include "BlenderModel.h"
+#include "Input.h"
 #include "ObjectLoader.h"
 #include "AudioManager.h"
 

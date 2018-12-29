@@ -16,6 +16,7 @@ protected:
     glm::mat4 ModelMatrix;
     int index;
 public:
+    static bool EnableCollision;
     GameObject(Model* model, Texture* texture);
     void Translate(const glm::vec3& position);
     void Rotate(const glm::vec3& rotation);
@@ -24,7 +25,7 @@ public:
     void ScaleWithRespectTo(const glm::vec3& scale, const glm::vec3& scalingPoint);
     void SetColor(const glm::vec3& m_color);
     void BindTexture();
-    const glm::vec3& GetPosition() const;
+    const glm::vec3& GetPosition();
     const glm::vec3& GetRotation() const;
     const glm::vec3& GetScale() const;
     const glm::vec3& GetColor() const;

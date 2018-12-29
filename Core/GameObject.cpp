@@ -3,22 +3,68 @@
 
 #define PI 3.14159265
 
+std::vector<GameObject*> objs;
+bool GameObject::EnableCollision = false;
+
+bool IsCollided(GameObject* o1, GameObject* o2)
+{
+	//Get Position Vector of The First Object..
+	glm::vec3 Position_A = o1->GetPosition();
+
+	//Get Scale Vector of The First Object..
+	glm::vec3 Scale_A = o1->GetScale();
+
+	//Get Position Vector of The Second Object..
+	glm::vec3 Position_B = o2->GetPosition();
+
+	//Get Scale Vector of The Second Object..
+	glm::vec3 Scale_B = o2->GetScale();
+
+    //Apply AABB Algorithm (Axis Aligned Bounding Box)..
+    return (   abs(Position_A.x-Position_B.x)<Scale_A.x+Scale_B.x
+            && abs(Position_A.y-Position_B.y)<Scale_A.y+Scale_B.y 
+            && abs(Position_A.z-Position_B.z)<Scale_A.z+Scale_B.z );
+}
+
+bool TestCollision(GameObject* o)
+{
+    for(auto i : objs)
+    {
+        if(o != i && IsCollided(o, i))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 GameObject::GameObject(Model* model, Texture* texture)
 {
     this->texture = texture;
     this->m_color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->model = model;
-    ModelMatrix = glm::mat4(1);
+    this->scale = glm::vec3(1.2f);
+    ModelMatrix = glm::mat4(1.0f);
     if(model != 0)
         Engine::RegisterGameObject(this);
+    objs.push_back(this);
 } 
 void GameObject::Translate(const glm::vec3& position)
 {
     //Apply the Translation ..
     ModelMatrix *= glm::translate(position);
-
     //Update Position Vector ..
-    this->position += position;
+    this->position.x = ModelMatrix[3][0];
+    this->position.y = ModelMatrix[3][1];
+    this->position.z = ModelMatrix[3][2];
+    while(EnableCollision && TestCollision(this))
+    {
+        ModelMatrix *= glm::translate(glm::vec3(0.0f, 0.0f, 0.1f));
+        //Update Position Vector ..
+        this->position.x = ModelMatrix[3][0];
+        this->position.y = ModelMatrix[3][1];
+        this->position.z = ModelMatrix[3][2];
+    }
 }
 void GameObject::Rotate(const glm::vec3& rotation)
 {
@@ -55,7 +101,7 @@ void GameObject::Scale(const glm::vec3& scale)
     this->ModelMatrix*=glm::scale(scale);
 
     //Update Scale Vector  ..
-    this->scale+=scale;
+    this->scale = scale;
 }
 void GameObject::ScaleWithRespectTo(const glm::vec3& scale, const glm::vec3& scalingPoint)
 {
@@ -67,7 +113,7 @@ void GameObject::ScaleWithRespectTo(const glm::vec3& scale, const glm::vec3& sca
     this->ModelMatrix*=glm::scale(scale);
 
     //Update Scale Vector ..
-    this->scale+=scale;
+    this->scale =scale;
     
     //Translate Back ..
     this->ModelMatrix*=glm::translate(scalingPoint);
@@ -84,8 +130,11 @@ Model* GameObject::GetModel() const
 {
     return model;
 }
-const glm::vec3& GameObject::GetPosition() const
+const glm::vec3& GameObject::GetPosition()
 {
+    this->position.x = ModelMatrix[3][0];
+    this->position.y = ModelMatrix[3][1];
+    this->position.z = ModelMatrix[3][2];
     return position;
 }
 const glm::vec3& GameObject::GetRotation() const
@@ -108,4 +157,5 @@ GameObject::~GameObject()
 {
     if(model != 0)
         Engine::UnRegisterGameObject(this);
+    objs.erase(find(objs.begin(), objs.end(), this));
 }

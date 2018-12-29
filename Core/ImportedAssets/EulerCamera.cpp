@@ -28,7 +28,7 @@ void EulerCamera::Reset(float eyeX, float eyeY, float eyeZ, float centerX, float
 	Reset(eyePt, centerPt, upVec);
 }
 
-void EulerCamera::Reset(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up)
+void EulerCamera::Reset(const glm::vec3 &eye, const glm::vec3 &center, glm::vec3 &up)
 {
 	mPosition = eye;
 	
@@ -131,4 +131,15 @@ void EulerCamera::Fly(float dist)
 glm::vec3 EulerCamera::GetEyePosition()
 {
 	return mPosition;
+}
+
+void EulerCamera::SetEyePosition(const glm::vec3& other)
+{
+	mPosition = other;
+	UpdateViewMatrix();
+}
+
+void EulerCamera::SetViewMatrix(const glm::mat4& other)
+{
+	mViewMatrix = other;
 }
