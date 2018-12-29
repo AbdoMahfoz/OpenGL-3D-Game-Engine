@@ -43,7 +43,7 @@ float CalculateShadow(vec3 LightVector, vec4 LightPrepPos, sampler2D ss)
 }
 
 void main()
-{
+{   
     vec4 PixelColor = (texture(InputTexture, uv) * vec4(Color, 1));
     vec4 TotalLight = vec4(AmbientLight, 1.0);
     float Attenuation = 0;
@@ -61,7 +61,26 @@ void main()
         float Specular = pow(clamp(dot(EyeVector, ReflectionVector), 0, 1), Specularity);
         vec3 specularLight = clamp(LightColor[i] * Specular, 0, 1) * Specularity;
         //Result
-        TotalLight += vec4(((1.0 - CalculateShadow(LightVector, LightPrepPos[i], shadowMap[1])) * (diffuseLight + specularLight)), 1);
+        if(i == 0)
+        {
+            TotalLight += vec4(((1.0 - CalculateShadow(LightVector, LightPrepPos[i], shadowMap[0])) * (diffuseLight + specularLight)), 1);
+        }
+        if(i == 1)
+        {
+            TotalLight += vec4(((1.0 - CalculateShadow(LightVector, LightPrepPos[i], shadowMap[1])) * (diffuseLight + specularLight)), 1);
+        }
+        if(i == 2)
+        {
+            TotalLight += vec4(((1.0 - CalculateShadow(LightVector, LightPrepPos[i], shadowMap[2])) * (diffuseLight + specularLight)), 1);
+        }
+        if(i == 3)
+        {
+            TotalLight += vec4(((1.0 - CalculateShadow(LightVector, LightPrepPos[i], shadowMap[3])) * (diffuseLight + specularLight)), 1);
+        }
+        if(i == 4)
+        {
+            TotalLight += vec4(((1.0 - CalculateShadow(LightVector, LightPrepPos[i], shadowMap[4])) * (diffuseLight + specularLight)), 1);
+        }
     }
     Res = PixelColor * TotalLight * Attenuation;
 }
