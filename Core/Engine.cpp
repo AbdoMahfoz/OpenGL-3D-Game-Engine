@@ -201,6 +201,7 @@ void Engine::UnRegisterOnExit(void (*ptr)())
 }
 void Engine::RegisterLight(LightSource* light)
 {
+    assert(Lights.size() != 5);
     Lights.push_back(light);
 }
 void Engine::UnRegisterLight(LightSource* light)

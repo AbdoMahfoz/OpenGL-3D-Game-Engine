@@ -30,7 +30,7 @@ LightSource::LightSource(const glm::vec3& InitialPosition)
     IsModified = true;
     LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     InitializeBufferTexture(DEFAULT_SHADOW_WIDTH, DEFAULT_SHADOW_HEIGHT);
-    this->ProjectionMatrix = glm::perspective(75.0f, (float)DEFAULT_SHADOW_WIDTH/DEFAULT_SHADOW_HEIGHT, 1.0f, 7.5f);
+    this->ProjectionMatrix = glm::perspective(75.0f, (float)DEFAULT_SHADOW_WIDTH/DEFAULT_SHADOW_HEIGHT, 1.0f, 9.0f);
     this->Position = InitialPosition;
     this->width = DEFAULT_SHADOW_WIDTH;
     this->height = DEFAULT_SHADOW_HEIGHT;
@@ -41,7 +41,7 @@ LightSource::LightSource(const glm::vec3& InitialPosition, int width, int height
     IsModified = true;
     LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     InitializeBufferTexture(width, height);
-    this->ProjectionMatrix = glm::perspective(75.0f, (float)width/height, 1.0f, 7.5f);
+    this->ProjectionMatrix = glm::perspective(75.0f, (float)width/height, 1.0f, 9.0f);
     this->Position = InitialPosition;
     this->width = width;
     this->height = height;

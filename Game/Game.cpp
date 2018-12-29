@@ -10,7 +10,7 @@ void func()
 void Engine::Start()
 {
     light = new LightSource(glm::vec3(2.0f, 1.0f, 2.0f));
-    light2 = new LightSource(glm::vec3(-2.0f, 1.0f, -2.0f));
+    light2 = new LightSource(glm::vec3(-2.0f, 3.0f, -2.0f));
     Texture* tex = new Texture("uvtemplate.bmp", 0);
     CubeModel* c = new CubeModel();
     Cube = new GameObject(c, tex);
@@ -21,4 +21,5 @@ void Engine::Start()
     Engine::GetCurrentCamera().Strafe(4.0f);
     Engine::GetCurrentCamera().Yaw(45.0f);
     Engine::RegisterRoutine(func, false);
+    AudioManager::PlayBackGroundMusic();
 }
