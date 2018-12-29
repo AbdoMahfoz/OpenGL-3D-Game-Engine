@@ -1,9 +1,9 @@
 #include "Engine.h"
 
-BlenderModel::BlenderModel(const char* Path)
+BlenderModel::BlenderModel(const char* Path,int type)
 {
     ObjectLoader o;
-    o.LoadModel(Path);
+    o.LoadModel(Path,type);
 	Specularity = 10;
     count = o.Verts.size() * 3;
     indicesCount = o.Faces.size() * 3;

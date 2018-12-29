@@ -8,6 +8,6 @@
 class BlenderModel : public Model 
 {
 public:
-    BlenderModel(const char* Path);
+    BlenderModel(const char* Path, int type);
 };
 #endif
