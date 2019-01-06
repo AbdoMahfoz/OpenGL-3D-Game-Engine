@@ -61,6 +61,14 @@ void LightSource::BindDepthMap()
 {
     glBindTexture(GL_TEXTURE_2D, dmTexture);
 }
+void LightSource::SetPosition(const glm::vec3& pos)
+{
+    this->Position = pos;
+}
+void LightSource::Translate(const glm::vec3& pos)
+{
+    this->Position += pos;
+}
 const glm::mat4& LightSource::GetLightVP()
 {
     if(IsModified)

@@ -84,7 +84,7 @@ int ObjectLoader::LoadModel(const char *filename, int type)
                 if (type == 3)
                 {
                     int n[3];
-                    sscanf(FileLines[q]->c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &t[0],n[0], &b, &t[1],n[1], &c, &t[2],n[2]);
+                    sscanf(FileLines[q]->c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &t[0],&n[0], &b, &t[1],&n[1], &c, &t[2],&n[2]);
                     Faces.push_back(Face(a, b, c, t[0], t[1], t[2],n[0],n[1],n[2]));
                 }
                 else

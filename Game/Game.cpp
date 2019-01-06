@@ -5,6 +5,7 @@ LightSource *light, *light2;
 
 void MouseLook()
 {
+    StaticCube->Rotate(glm::vec3(0.0f, 1.0f, 0.0f));
     glm::vec2 delta = Input::GetMouseDelta();
     Engine::GetCurrentCamera().Pitch(-delta.y * 0.005f);
     Engine::GetCurrentCamera().Yaw(-delta.x * 0.005f);
@@ -39,6 +40,8 @@ void Engine::Start()
 {
     light = new LightSource(glm::vec3(3.0f, 3.0f, 3.0f));
     light2 = new LightSource(glm::vec3(-2.0f, 3.0f, -2.0f));
+    light->SetLightColor(glm::vec3(1.0f, 0.0f, 0.0f));
+    light2->SetLightColor(glm::vec3(0.0f, 1.0f, 0.0f));
     Texture* tex = new Texture("uvtemplate.bmp", 0);
     CubeModel* c = new CubeModel();
     StaticCube = new GameObject(c, tex);

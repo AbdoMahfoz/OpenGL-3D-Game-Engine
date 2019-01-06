@@ -25,6 +25,8 @@ public:
     virtual void SetUpEnviroment();
     void SetLightColor(const glm::vec3& LightColor);
     void BindDepthMap();
+    void SetPosition(const glm::vec3&);
+    void Translate(const glm::vec3&);
     const glm::mat4& GetLightVP();
     const glm::vec3& GetLightColor();
     const glm::vec3& GetPosition();
