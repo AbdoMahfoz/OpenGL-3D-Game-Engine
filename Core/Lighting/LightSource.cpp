@@ -30,7 +30,7 @@ LightSource::LightSource(const glm::vec3& InitialPosition)
     IsModified = true;
     LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     InitializeBufferTexture(DEFAULT_SHADOW_WIDTH, DEFAULT_SHADOW_HEIGHT);
-    this->ProjectionMatrix = glm::perspective(100.0f, (float)DEFAULT_SHADOW_WIDTH/DEFAULT_SHADOW_HEIGHT, 1.0f, 15.0f);
+    this->ProjectionMatrix = glm::perspective(75.0f, (float)DEFAULT_SHADOW_WIDTH/DEFAULT_SHADOW_HEIGHT, 1.0f, 9.0f);
     this->Position = InitialPosition;
     this->width = DEFAULT_SHADOW_WIDTH;
     this->height = DEFAULT_SHADOW_HEIGHT;
@@ -68,6 +68,11 @@ void LightSource::SetPosition(const glm::vec3& pos)
 void LightSource::Translate(const glm::vec3& pos)
 {
     this->Position += pos;
+}
+void LightSource::SetLookAt(const glm::vec3& LookAt)
+{
+    this->LookAt = LookAt;
+    IsModified = true;
 }
 const glm::mat4& LightSource::GetLightVP()
 {

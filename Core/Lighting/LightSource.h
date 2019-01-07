@@ -27,6 +27,7 @@ public:
     void BindDepthMap();
     void SetPosition(const glm::vec3&);
     void Translate(const glm::vec3&);
+    void SetLookAt(const glm::vec3&);
     const glm::mat4& GetLightVP();
     const glm::vec3& GetLightColor();
     const glm::vec3& GetPosition();
