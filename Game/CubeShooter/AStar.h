@@ -3,5 +3,5 @@
 namespace AStar
 {
     std::vector<std::pair<int, int>>* CalculatePath(
-        bool** Obstacles, std::pair<int, int> Start, std::pair<int, int> Finish);
+        bool Obstacles[][10000], std::pair<int, int> Start, std::pair<int, int> Finish);
 }

@@ -11,7 +11,7 @@
 #include "AutoClean.h"
 #include "EulerCamera.h"
 #include "texture.h"
-#include "CubeModel.h"
+#include "Cube.h"
 #include "ShaderManager.h"
 #include "LightSource.h"
 #include "BlenderModel.h"

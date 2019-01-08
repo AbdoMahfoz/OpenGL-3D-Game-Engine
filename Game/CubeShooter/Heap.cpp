@@ -1,4 +1,5 @@
 #include "Heap.h"
+#include <iostream>
 
 template<class T>
 HeapItem<T>::HeapItem(T val, int heapIndex)
@@ -7,12 +8,12 @@ HeapItem<T>::HeapItem(T val, int heapIndex)
     this->heapIndex = heapIndex;
 }
 template<class T>
-void Heap<T>::swap(HeapItem<T>* l, HeapItem<T>* r)
+void Heap<T>::swap(HeapItem<T>** l, HeapItem<T>** r)
 {
-    std::swap(l->heapIndex, r->heapIndex);
-    HeapItem<T>* temp = l;
-    l = r;
-    r = temp;
+    std::swap((*l)->heapIndex, (*r)->heapIndex);
+    HeapItem<T>* temp = *l;
+    *l = *r;
+    *r = temp;
 }
 template<class T>
 void Heap<T>::shiftUp(HeapItem<T>* val)
@@ -20,7 +21,7 @@ void Heap<T>::shiftUp(HeapItem<T>* val)
     int i = val->heapIndex;
     while(i != 0 && arr[i]->val < arr[(i-1)/2]->val)
     {
-        swap(arr[i], arr[(i-1)/2]);
+        swap(&arr[i], &arr[(i-1)/2]);
         i = (i-1)/2;
     }
 }
@@ -32,11 +33,11 @@ void Heap<T>::shiftDown(HeapItem<T>* val)
         int i = val->heapIndex;
         if((2*i)+1 < arr.size() && arr[(2*i)+1]->val < arr[i]->val)
         {
-            swap(arr[(2*i)+1], arr[i]);
+            swap(&arr[(2*i)+1], &arr[i]);
         }
         else if((2*i)+2 < arr.size() && arr[(2*i)+2]->val < arr[i]->val)
         {
-            swap(arr[(2*i)+2], arr[i]);
+            swap(&arr[(2*i)+2], &arr[i]);
         }
         else
         {
@@ -56,7 +57,8 @@ template<class T>
 T* Heap<T>::pop()
 {
     T* res = &arr[0]->val;
-    swap(arr[0], arr[arr.size() - 1]);
+    swap(&arr[0], &arr[arr.size() - 1]);
+    arr[arr.size() - 1]->heapIndex = -1;
     garbage.push_back(arr[arr.size() - 1]);
     arr.pop_back();
     shiftDown(arr[0]);
@@ -65,6 +67,11 @@ T* Heap<T>::pop()
 template<class T>
 void Heap<T>::update(HeapItem<T>* item)
 {
+    if(item->heapIndex == -1)
+    {
+        std::cout << "pingo!";
+        return;
+    }
     shiftUp(item);
     shiftDown(item);
 }

@@ -9,7 +9,7 @@ std::thread *LogicThread, *RenderingThread;
 std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
 GLuint VertexArrayID, shadowMap[MAX_LIGHT_COUNT];
 EulerCamera MainCamera, *CurrentCamera;
-glm::vec3 AmbientLight = glm::vec3(0.1f, 0.1f, 0.1f);
+glm::vec3 AmbientLight = glm::vec3(0.2f, 0.2f, 0.2f);
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------

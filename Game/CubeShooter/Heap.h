@@ -17,7 +17,7 @@ class Heap
 private:
     std::vector<HeapItem<T>*> garbage;
     std::vector<HeapItem<T>*> arr;
-    void swap(HeapItem<T>*, HeapItem<T>*);
+    void swap(HeapItem<T>**, HeapItem<T>**);
     void shiftUp(HeapItem<T>*);
     void shiftDown(HeapItem<T>*);
 public:

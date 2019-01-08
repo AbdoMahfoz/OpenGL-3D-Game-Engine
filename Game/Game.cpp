@@ -2,5 +2,5 @@
 
 void Engine::Start()
 {
-    GameScenes::DemoScene();
+    GameScenes::CubeShooter();
 }
