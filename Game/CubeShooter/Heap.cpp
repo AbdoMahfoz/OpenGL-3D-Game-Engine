@@ -30,11 +30,11 @@ void Heap<T>::shiftDown(HeapItem<T>* val)
     while(val->heapIndex != arr.size() - 1)
     {
         int i = val->heapIndex;
-        if(arr[(2*i)+1]->val < arr[i]->val)
+        if((2*i)+1 < arr.size() && arr[(2*i)+1]->val < arr[i]->val)
         {
             swap(arr[(2*i)+1], arr[i]);
         }
-        else if(arr[(2*i)+2]->val < arr[i]->val)
+        else if((2*i)+2 < arr.size() && arr[(2*i)+2]->val < arr[i]->val)
         {
             swap(arr[(2*i)+2], arr[i]);
         }
@@ -53,11 +53,11 @@ HeapItem<T>* Heap<T>::push(T val)
     return item;
 }
 template<class T>
-T Heap<T>::pop()
+T* Heap<T>::pop()
 {
-    T res = arr[0]->val;
+    T* res = &arr[0]->val;
     swap(arr[0], arr[arr.size() - 1]);
-    delete arr[arr.size() - 1];
+    garbage.push_back(arr[arr.size() - 1]);
     arr.pop_back();
     shiftDown(arr[0]);
     return res;
@@ -76,8 +76,12 @@ int Heap<T>::size()
 template<class T>
 Heap<T>::~Heap()
 {
-    while(arr.size())
+    for(HeapItem<T>* i : arr)
     {
-        pop();
+        delete i;
+    }
+    for(HeapItem<T>* i : garbage)
+    {
+        delete i;
     }
 }
