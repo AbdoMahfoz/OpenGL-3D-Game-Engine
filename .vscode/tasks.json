@@ -13,7 +13,7 @@
             },
             "label": "build and run",
             "type": "shell",
-            "command": "g++ -ICore -IGame -IGame/CubeShooter -IGame/CubeShooter/PathFinding -IGame/DemoScene -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp Game/CubeShooter/*.cpp Game/CubeShooter/PathFinding/*.cpp Game/DemoScene/*.cpp -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lpthread -lGL -lglfw -lGLEW && echo \"Done :)\" && ./a.out",
+            "command": "g++ -ICore -IGame -IGame/CubeShooter -IGame/CubeShooter/PathFinding -IGame/CubeShooter/Actor -IGame/DemoScene -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp Game/CubeShooter/*.cpp Game/CubeShooter/PathFinding/*.cpp Game/CubeShooter/Actor/*.cpp Game/DemoScene/*.cpp -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lpthread -lGL -lglfw -lGLEW && echo \"Done :)\" && ./a.out",
             "problemMatcher": [
                 "$gcc"
             ]
@@ -28,7 +28,7 @@
             },
             "label": "build",
             "type": "shell",
-            "command": "g++ -g -ICore -IGame -IGame/CubeShooter -IGame/CubeShooter/PathFinding -IGame/DemoScene -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp Game/CubeShooter/*.cpp Game/CubeShooter/PathFinding/*.cpp Game/DemoScene/*.cpp -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lpthread -lGL -lglfw -lGLEW",
+            "command": "g++ -g -ICore -IGame -IGame/CubeShooter -IGame/CubeShooter/PathFinding -IGame/CubeShooter/Actor -IGame/DemoScene -ICore/ImportedAssets -ICore/Models -ICore/Lighting -std=c++11 Core/*.cpp Core/ImportedAssets/*.cpp Core/Models/*.cpp Core/Lighting/*.cpp Game/*.cpp Game/CubeShooter/*.cpp Game/CubeShooter/PathFinding/*.cpp Game/CubeShooter/Actor/*.cpp Game/DemoScene/*.cpp -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lpthread -lGL -lglfw -lGLEW",
             "problemMatcher": [
                 "$gcc"
             ]

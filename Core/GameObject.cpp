@@ -21,9 +21,17 @@ bool IsCollided(GameObject* o1, GameObject* o2)
 	glm::vec3 Scale_B = o2->GetScale();
 
     //Apply AABB Algorithm (Axis Aligned Bounding Box)..
-    return (   abs(Position_A.x-Position_B.x)<Scale_A.x+Scale_B.x
-            && abs(Position_A.y-Position_B.y)<Scale_A.y+Scale_B.y 
-            && abs(Position_A.z-Position_B.z)<Scale_A.z+Scale_B.z );
+    if(   abs(Position_A.x-Position_B.x)<Scale_A.x+Scale_B.x
+       && abs(Position_A.y-Position_B.y)<Scale_A.y+Scale_B.y 
+       && abs(Position_A.z-Position_B.z)<Scale_A.z+Scale_B.z )
+    {
+        if(o1->CallBack != nullptr)
+            o1->CallBack(o2);
+        if(o2->CallBack != nullptr)
+            o2->CallBack(o1);
+        return true;
+    }
+    return false;
 }
 
 bool TestCollision(GameObject* o)
@@ -40,6 +48,7 @@ bool TestCollision(GameObject* o)
 
 GameObject::GameObject(Model* model, Texture* texture)
 {
+    this->CallBack = nullptr;
     this->texture = texture;
     this->m_color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->model = model;
@@ -59,7 +68,7 @@ void GameObject::Translate(const glm::vec3& position)
     this->position.z = ModelMatrix[3][2];
     while(EnableCollision && TestCollision(this))
     {
-        ModelMatrix *= glm::translate(glm::vec3(0.0f, 0.0f, 0.1f));
+        ModelMatrix *= glm::translate(-position * 0.1f);
         //Update Position Vector ..
         this->position.x = ModelMatrix[3][0];
         this->position.y = ModelMatrix[3][1];
@@ -71,9 +80,9 @@ void GameObject::Rotate(const glm::vec3& rotation)
     //RotateAround(rotation, position);
     //Apply the Rotation ..
     glm::mat4 m = glm::mat4(1);
-    m *= glm::rotate(rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-    m *= glm::rotate(rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    m *= glm::rotate(rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+    m *= glm::rotate(-rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    m *= glm::rotate(-rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    m *= glm::rotate(-rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
     this->ModelMatrix *= m;
     //Update Rotation Vector ..
     this->rotation += rotation;

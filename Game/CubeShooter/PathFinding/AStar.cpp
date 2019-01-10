@@ -42,16 +42,19 @@ std::vector<std::pair<int, int>>* AStar::CalculatePath(
     std::set<std::pair<int, int>> Visited;
     Grid[{Start.first, Start.second}] = h.push(
         AStarItem({Start.first, Start.second}, 0, AbsDiff(Start, Finish), nullptr));
-    bool FinishNotFound = true;
-    while(h.size() && FinishNotFound)
+    while(h.size())
     {
         auto val = h.pop();
+        if(val->pos == Finish)
+        {
+            break;
+        }
         if(Visited.find({val->pos.first, val->pos.second}) != Visited.end())
         {
             continue;
         }
         Visited.insert({val->pos.first, val->pos.second});
-        for(int x = -1; x <= 1 && FinishNotFound; x++)
+        for(int x = -1; x <= 1; x++)
         {
             for(int y = -1; y <= 1; y++)
             {
@@ -64,8 +67,8 @@ std::vector<std::pair<int, int>>* AStar::CalculatePath(
                 {
                     continue;
                 }
-                double coeff = ((x != 0 && y != 0) ? 1.5 : 1);
-                if(coeff == 1.5 && (Obstacles[val->pos.first][val->pos.second + y] || 
+                double coeff = ((x != 0 && y != 0) ? 1.25 : 1);
+                if(coeff == 1.25 && (Obstacles[val->pos.first][val->pos.second + y] || 
                                     Obstacles[val->pos.first + x][val->pos.second]))
                 {
                     continue;
@@ -75,13 +78,8 @@ std::vector<std::pair<int, int>>* AStar::CalculatePath(
                 {
                     Grid[{targetPos.first, targetPos.second}] = h.push(
                         AStarItem(targetPos, val->cost + coeff, AbsDiff(targetPos, Finish), val));
-                    if(targetPos == Finish)
-                    {
-                        FinishNotFound = false;
-                        break;
-                    }
                 }
-                else if(neighbour->val.cost > val->cost + coeff)
+                else if(neighbour->val.cost >= val->cost + coeff)
                 {
                     neighbour->val.cost = val->cost + coeff;
                     neighbour->val.Parent = val;

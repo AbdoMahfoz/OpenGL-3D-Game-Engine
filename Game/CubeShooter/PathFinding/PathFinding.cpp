@@ -3,7 +3,25 @@
 #include <queue>
 #include <condition_variable>
 
-std::queue<std::pair<void (*)(glm::vec3*, int), std::pair<std::pair<glm::vec3*, int>, std::pair<glm::vec3, glm::vec3>>>> JobQueue;
+struct PathRequest
+{
+public:
+    PathRequest(void (*CallBack)(glm::vec3*, int), glm::vec3* oldPath, int oldPathCount,
+        glm::vec3 Start, glm::vec3 Finish)
+    {
+        this->CallBack = CallBack;
+        this->oldPath = oldPath;
+        this->oldPathCount = oldPathCount;
+        this->Start = Start;
+        this->Finish = Finish;   
+    }
+    void (*CallBack)(glm::vec3*, int);
+    glm::vec3 Start, Finish;
+    glm::vec3* oldPath;
+    int oldPathCount;
+};
+
+std::queue<PathRequest> JobQueue;
 bool Obstacle[10000][10000];
 std::thread* WorkerThread = nullptr;
 std::mutex JobQueueMutex, ObstacleMutex, SleepMutex;
@@ -13,11 +31,11 @@ bool RunWorker = false;
 //------------Helpers-------------------
 std::pair<int, int> TranslatePosition(const glm::vec3& position)
 {
-    return std::pair<int, int>(round(position.x / 2) + 5000, round(position.z / 2) + 5000);
+    return std::pair<int, int>(((int)position.x / 2) + 5000, ((int)position.z / 2) + 5000);
 }
 glm::vec3 TranslatePosition(const std::pair<int, int> position)
 {
-    return glm::vec3((position.first - 5000) * 2, 0, (position.second - 5000) * 2);
+    return glm::vec3(((int)position.first - 5000) * 2, 0, ((int)position.second - 5000) * 2);
 }
 //--------------------------------------
 //-------------Private------------------
@@ -37,20 +55,18 @@ void Worker()
             auto job = JobQueue.front();
             JobQueue.pop();
             JobQueueMutex.unlock();
-            if(job.second.first.first != nullptr)
+            if(job.oldPath != nullptr)
             {
-                for(int i = 0; i < job.second.first.second; i++)
+                for(int i = 0; i < job.oldPathCount; i++)
                 {
-                    PathFinidng::UpdateMap(job.second.first.first[i], 1);
+                    PathFinidng::UpdateMap(job.oldPath[i], 1);
                 }
             }
-            PathFinidng::UpdateMap(job.second.second.first, 1);
-            PathFinidng::UpdateMap(job.second.second.second, 1);
-            auto res = AStar::CalculatePath(Obstacle, 
-                TranslatePosition(job.second.second.first), TranslatePosition(job.second.second.second));
+            PathFinidng::UpdateMap(job.Finish, 1);
+            auto res = AStar::CalculatePath(Obstacle, TranslatePosition(job.Start), TranslatePosition(job.Finish));
             if(res == nullptr)
             {
-                job.first(nullptr, 0);
+                job.CallBack(nullptr, 0);
             }
             else
             {
@@ -62,7 +78,7 @@ void Worker()
                     PathFinidng::UpdateMap(arr[i], 0);
                 }
                 delete res;
-                job.first(arr, count);
+                job.CallBack(arr, count);
             }
         }
     }
@@ -79,7 +95,7 @@ void PathFinidng::RequestPath(glm::vec3 Source, glm::vec3 Destination,
         Engine::RegisterOnExit(TerminateWokrer);
     }
     JobQueueMutex.lock();
-    JobQueue.push({CallBack, {{OldPath, OldPathCount}, {Source, Destination}}});
+    JobQueue.push(PathRequest(CallBack, OldPath, OldPathCount, Source, Destination));
     if(JobQueue.size() == 1)
     {
         cv.notify_all();

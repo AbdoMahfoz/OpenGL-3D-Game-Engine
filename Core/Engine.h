@@ -36,4 +36,5 @@ namespace Engine
     EulerCamera& GetCurrentCamera();
     void SetCurrentCamera(EulerCamera* Camera);
     void SetMainCameraAsCurrent();
+    void Terminate();
 }

@@ -7,7 +7,7 @@
 #include "texture.h"
 #include "AutoClean.h"
 
-class GameObject : public AutoClean
+class GameObject
 {
 protected:
     Model* model;
@@ -16,6 +16,7 @@ protected:
     glm::mat4 ModelMatrix;
     int index;
 public:
+    void (*CallBack)(GameObject*);
     static bool EnableCollision;
     GameObject(Model* model, Texture* texture);
     void Translate(const glm::vec3& position);
