@@ -1,9 +1,9 @@
 #include "AudioManager.h"
 
+sf::Music music;
 void AudioManager::PlayBackGroundMusic()
 {
     printf("Shit");
-    sf::Music music;
     music.openFromFile("zombie_Background_Music.ogg");
     music.setVolume(100.0f);
     music.play();

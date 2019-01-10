@@ -103,7 +103,7 @@ void Zombie::Walk()
     Rotate(glm::vec3(0.0f, requiredRotation * 0.2f, 0.0f));
     if(requiredRotation < 45.0f)
     {
-        Translate(glm::vec3(0.1f, 0.0f, 0.0f));
+        Translate(glm::vec3(0.08f, 0.0f, 0.0f));
     }
 }
 void Zombie::ReceivePath(glm::vec3* Path, int Count)

@@ -62,6 +62,7 @@ void Worker()
                     PathFinidng::UpdateMap(job.oldPath[i], 1);
                 }
             }
+            PathFinidng::UpdateMap(job.Start, 1);
             PathFinidng::UpdateMap(job.Finish, 1);
             auto res = AStar::CalculatePath(Obstacle, TranslatePosition(job.Start), TranslatePosition(job.Finish));
             if(res == nullptr)
