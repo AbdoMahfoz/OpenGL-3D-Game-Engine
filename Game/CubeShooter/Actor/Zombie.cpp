@@ -1,5 +1,5 @@
 #include "Zombie.h"
-#include "PathFinidng.h"
+#include "../PathFinding/PathFinidng.h"
 
 std::mutex Zombie::OrderQueueMutex;
 std::queue<Zombie*> Zombie::OrderQueue;

@@ -1,4 +1,4 @@
-#include "GameScenes.h"
+#include "../GameScenes.h"
 
 GameObject *StaticCube, *Plane, *Player;
 LightSource *light, *light2;

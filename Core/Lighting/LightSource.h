@@ -8,7 +8,11 @@
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
-#include "EulerCamera.h"
+#ifdef _WIN32
+	#include "../ImportedAssets/EulerCamera.h"
+#else
+	#include "EulerCamera.h"
+#endif
 
 class LightSource
 {

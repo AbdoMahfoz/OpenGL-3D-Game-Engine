@@ -57,20 +57,20 @@ int ObjectLoader::LoadModel(const char *filename, int type)
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == ' ')
         {
             float tmpx, tmpy, tmpz;
-            sscanf(FileLines[q]->c_str(), "v %f %f %f", &tmpx, &tmpy, &tmpz); //read the 3 floats, which makes up the vertex
+            sscanf_s(FileLines[q]->c_str(), "v %f %f %f", &tmpx, &tmpy, &tmpz); //read the 3 floats, which makes up the vertex
             Verts.push_back(Coordinate(tmpx, tmpy, tmpz));                    //and put it in the vertex vector
         }
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == 'n')
         {
             float tmpx, tmpy, tmpz;
-            sscanf(FileLines[q]->c_str(), "vn %f %f %f", &tmpx, &tmpy, &tmpz);
+            sscanf_s(FileLines[q]->c_str(), "vn %f %f %f", &tmpx, &tmpy, &tmpz);
             Normals.push_back(Coordinate(tmpx, tmpy, tmpz)); //basically do the same
             IsNormal = true;
         }
         else if ((*FileLines[q])[0] == 'v' && (*FileLines[q])[1] == 't') //texture coorinate
         {
             float u, v;
-            sscanf(FileLines[q]->c_str(), "vt %f %f", &u, &v);         //read the uv coordinate
+            sscanf_s(FileLines[q]->c_str(), "vt %f %f", &u, &v);         //read the uv coordinate
             TextureCoordinates.push_back(TextureCoordinate(u, 1 - v)); //I push back 1-v instead of normal v, because obj file use the upper left corner as 0,0 coorinate
             //but OpenGL use bottom left corner as 0,0, so I convert it
             IsTexture = true;
@@ -84,12 +84,12 @@ int ObjectLoader::LoadModel(const char *filename, int type)
                 if (type == 3)
                 {
                     int n[3];
-                    sscanf(FileLines[q]->c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &t[0],&n[0], &b, &t[1],&n[1], &c, &t[2],&n[2]);
+                    sscanf_s(FileLines[q]->c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &t[0],&n[0], &b, &t[1],&n[1], &c, &t[2],&n[2]);
                     Faces.push_back(Face(a, b, c, t[0], t[1], t[2],n[0],n[1],n[2]));
                 }
                 else
                 {
-                    sscanf(FileLines[q]->c_str(), "f %d/%d %d/%d %d/%d", &a, &t[0], &b, &t[1], &c, &t[2]);
+                    sscanf_s(FileLines[q]->c_str(), "f %d/%d %d/%d %d/%d", &a, &t[0], &b, &t[1], &c, &t[2]);
                     Faces.push_back(Face(a, b, c, t[0], t[1], t[2]));
                 }
             }

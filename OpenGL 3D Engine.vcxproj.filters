@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{8bad87bd-66d4-48fc-be5d-925ba14f8ef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Cube Shooter">
+      <UniqueIdentifier>{6244779b-8e4b-4e57-941a-dd03705e16b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Cube Shooter\Actor">
+      <UniqueIdentifier>{f6efb5d1-6514-4078-a086-951964dba608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Cube Shooter\Path finding">
+      <UniqueIdentifier>{f42dd8f8-ed92-4dcd-9102-0510d888bdca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Demo Scene">
+      <UniqueIdentifier>{38aad2a7-2c73-4d78-bc71-2b49da9ef7a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{fb4064b8-3261-4bff-bb79-75b4e556229b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Cube Shooter">
+      <UniqueIdentifier>{718074a2-8b28-49f1-b0a9-6b816190d7d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Cube Shooter\Path finding">
+      <UniqueIdentifier>{b57a1859-71d8-4ce5-9b9d-3cc0983fc0b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Cube Shooter\Actor">
+      <UniqueIdentifier>{6d8d7315-2a8d-4801-a9cd-da7f57edc289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{3c1f7ca2-56a6-4b6d-add7-08f0d9f4d797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{acc06395-46bd-4611-9d50-df9a6286160c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Models">
+      <UniqueIdentifier>{fa42a103-2819-4cb1-9bdd-817a734d6840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Models">
+      <UniqueIdentifier>{228ac858-0322-46df-b540-0441f645e095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Lighting">
+      <UniqueIdentifier>{6d581e5e-855e-43cb-8dff-a5b36f506e1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Lighting">
+      <UniqueIdentifier>{2afdf4ae-ad5a-41a7-a402-5978c5257ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Imported assets">
+      <UniqueIdentifier>{2c6972bb-6afb-4adb-a06c-fcf1004f6f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Imported assets">
+      <UniqueIdentifier>{5ffed782-8073-4fb8-becf-3b24f1b9f053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{840bf788-019f-4ee7-8979-ea564a3f0bfb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game\CubeShooter\CubeShooter.cpp">
+      <Filter>Source Files\Game\Cube Shooter</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\DemoScene\DemoScene.cpp">
+      <Filter>Source Files\Game\Demo Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CubeShooter\PathFinding\AStar.cpp">
+      <Filter>Source Files\Game\Cube Shooter\Path finding</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CubeShooter\PathFinding\PathFinding.cpp">
+      <Filter>Source Files\Game\Cube Shooter\Path finding</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CubeShooter\PathFinding\Heap.cpp">
+      <Filter>Source Files\Game\Cube Shooter\Path finding</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CubeShooter\Actor\Zombie.cpp">
+      <Filter>Source Files\Game\Cube Shooter\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\AudioManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\AutoClean.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GameObject.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\main.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ShaderManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Models\BlenderModel.cpp">
+      <Filter>Source Files\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Models\Cube.cpp">
+      <Filter>Source Files\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Models\CubeModel.cpp">
+      <Filter>Source Files\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Models\Model.cpp">
+      <Filter>Source Files\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Models\ObjectLoader.cpp">
+      <Filter>Source Files\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Lighting\LightSource.cpp">
+      <Filter>Source Files\Core\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ImportedAssets\EulerCamera.cpp">
+      <Filter>Source Files\Core\Imported assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ImportedAssets\FPCamera.cpp">
+      <Filter>Source Files\Core\Imported assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ImportedAssets\shader.cpp">
+      <Filter>Source Files\Core\Imported assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ImportedAssets\stb_image.cpp">
+      <Filter>Source Files\Core\Imported assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ImportedAssets\texture.cpp">
+      <Filter>Source Files\Core\Imported assets</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game\CubeShooter\PathFinding\AStar.h">
+      <Filter>Header Files\Game\Cube Shooter\Path finding</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CubeShooter\PathFinding\Heap.h">
+      <Filter>Header Files\Game\Cube Shooter\Path finding</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CubeShooter\PathFinding\PathFinidng.h">
+      <Filter>Header Files\Game\Cube Shooter\Path finding</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CubeShooter\Actor\Zombie.h">
+      <Filter>Header Files\Game\Cube Shooter\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameScenes.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\AudioManager.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\AutoClean.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Engine.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameObject.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ShaderManager.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Models\BlenderModel.h">
+      <Filter>Header Files\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Models\Cube.h">
+      <Filter>Header Files\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Models\CubeModel.h">
+      <Filter>Header Files\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Models\Model.h">
+      <Filter>Header Files\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Models\ObjectLoader.h">
+      <Filter>Header Files\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Lighting\LightSource.h">
+      <Filter>Header Files\Core\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ImportedAssets\EulerCamera.h">
+      <Filter>Header Files\Core\Imported assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ImportedAssets\FPCamera.h">
+      <Filter>Header Files\Core\Imported assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ImportedAssets\shader.hpp">
+      <Filter>Header Files\Core\Imported assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ImportedAssets\stb_image.h">
+      <Filter>Header Files\Core\Imported assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ImportedAssets\texture.h">
+      <Filter>Header Files\Core\Imported assets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DefaultFragmentShader.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultVertexShader.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\LFS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\LVS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\SFS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\SVS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="zombie_Background_Music.ogg">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="uvtemplate.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

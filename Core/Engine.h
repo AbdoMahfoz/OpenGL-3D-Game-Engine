@@ -5,18 +5,27 @@
 #include <thread>
 #include <mutex>
 #include <iostream>
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include "GameObject.h"
 #include "AutoClean.h"
-#include "EulerCamera.h"
-#include "texture.h"
-#include "Cube.h"
+#ifdef _WIN32
+	#include "ImportedAssets/EulerCamera.h"
+	#include "ImportedAssets/texture.h"
+	#include "Models/Cube.h"
+	#include "Lighting/LightSource.h"
+	#include "Models/BlenderModel.h"
+	#include "Models/ObjectLoader.h"
+#else
+	#include "EulerCamera.h"
+	#include "texture.h"
+	#include "Cube.h"
+	#include "LightSource.h"
+	#include "BlenderModel.h"
+	#include "ObjectLoader.h"
+#endif
 #include "ShaderManager.h"
-#include "LightSource.h"
-#include "BlenderModel.h"
 #include "Input.h"
-#include "ObjectLoader.h"
 #include "AudioManager.h"
 
 namespace Engine

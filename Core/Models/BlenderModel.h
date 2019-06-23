@@ -3,7 +3,11 @@
 
 #include <GL/glew.h>
 #include "Model.h"
-#include "texture.h"
+#ifdef _WIN32
+	#include "../ImportedAssets/texture.h"
+#else
+	#include "texture.h"
+#endif
 
 class BlenderModel : public Model 
 {

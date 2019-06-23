@@ -141,7 +141,7 @@ void Engine::FireEngine()
                 MainCamera.SetPerspectiveProjection(75.0f, (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 1000.0f);
                 MainCamera.UpdateViewMatrix();
                 CurrentCamera = &MainCamera;
-                glewExperimental = true;
+				glewExperimental = true;
                 glCreateVertexArrays(1, &VertexArrayID);
                 glBindVertexArray(VertexArrayID);
                 //SetClearColor(glm::vec3(1.0f, 0.5f, 1.0f));
@@ -245,7 +245,7 @@ EulerCamera& Engine::GetCurrentCamera()
 {
     return *CurrentCamera;
 }
-void SetCurrentCamera(EulerCamera* Camera)
+void Engine::SetCurrentCamera(EulerCamera* Camera)
 {
     CurrentCamera = Camera;
     CurrentCamera->SetPerspectiveProjection(75.0f, 800.0f/600.0f, 0.1f, 1000.0f);

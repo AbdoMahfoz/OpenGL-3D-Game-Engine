@@ -1,7 +1,7 @@
-#include "GameScenes.h"
-#include "PathFinidng.h"
-#include "Zombie.h"
-#include "Engine.h"
+#include "../GameScenes.h"
+#include "PathFinding/PathFinidng.h"
+#include "Actor/Zombie.h"
+#include "../../Core/Engine.h"
 
 LightSource* l;
 Cube *MainCube;
@@ -71,7 +71,7 @@ void GameScenes::CubeShooter()
     z[2] = new Zombie(glm::vec3(-10.0f, 0.0f, -10.0f), MainCube);
     z[3] = new Zombie(glm::vec3(10.0f, 0.0f, -10.0f), MainCube);
     */
-    Engine::GetCurrentCamera().Fly(15.0f);
+    Engine::GetCurrentCamera().Fly(60.0f);
     Engine::GetCurrentCamera().Pitch(glm::radians(-89.0f));
     Engine::GetCurrentCamera().Roll(glm::radians(45.0f));
     //Engine::RegisterRoutine(CubeShooter::CameraMovment, false);

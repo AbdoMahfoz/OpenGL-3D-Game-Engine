@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "../Engine.h"
 
 BlenderModel::BlenderModel(const char* Path,int type)
 {

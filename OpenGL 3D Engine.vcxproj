@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{1C4F6A80-BB30-434F-A955-FFD1118E7CBF}</ProjectGuid>
+    <RootNamespace>OpenGL3DEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\AudioManager.cpp" />
+    <ClCompile Include="Core\AutoClean.cpp" />
+    <ClCompile Include="Core\Engine.cpp" />
+    <ClCompile Include="Core\GameObject.cpp" />
+    <ClCompile Include="Core\ImportedAssets\EulerCamera.cpp" />
+    <ClCompile Include="Core\ImportedAssets\FPCamera.cpp" />
+    <ClCompile Include="Core\ImportedAssets\shader.cpp" />
+    <ClCompile Include="Core\ImportedAssets\stb_image.cpp" />
+    <ClCompile Include="Core\ImportedAssets\texture.cpp" />
+    <ClCompile Include="Core\Input.cpp" />
+    <ClCompile Include="Core\Lighting\LightSource.cpp" />
+    <ClCompile Include="Core\main.cpp" />
+    <ClCompile Include="Core\Models\BlenderModel.cpp" />
+    <ClCompile Include="Core\Models\Cube.cpp" />
+    <ClCompile Include="Core\Models\CubeModel.cpp" />
+    <ClCompile Include="Core\Models\Model.cpp" />
+    <ClCompile Include="Core\Models\ObjectLoader.cpp" />
+    <ClCompile Include="Core\ShaderManager.cpp" />
+    <ClCompile Include="Game\CubeShooter\Actor\Zombie.cpp" />
+    <ClCompile Include="Game\CubeShooter\CubeShooter.cpp" />
+    <ClCompile Include="Game\CubeShooter\PathFinding\AStar.cpp" />
+    <ClCompile Include="Game\CubeShooter\PathFinding\Heap.cpp" />
+    <ClCompile Include="Game\CubeShooter\PathFinding\PathFinding.cpp" />
+    <ClCompile Include="Game\DemoScene\DemoScene.cpp" />
+    <ClCompile Include="Game\Game.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\AudioManager.h" />
+    <ClInclude Include="Core\AutoClean.h" />
+    <ClInclude Include="Core\Engine.h" />
+    <ClInclude Include="Core\GameObject.h" />
+    <ClInclude Include="Core\ImportedAssets\EulerCamera.h" />
+    <ClInclude Include="Core\ImportedAssets\FPCamera.h" />
+    <ClInclude Include="Core\ImportedAssets\shader.hpp" />
+    <ClInclude Include="Core\ImportedAssets\stb_image.h" />
+    <ClInclude Include="Core\ImportedAssets\texture.h" />
+    <ClInclude Include="Core\Input.h" />
+    <ClInclude Include="Core\Lighting\LightSource.h" />
+    <ClInclude Include="Core\Models\BlenderModel.h" />
+    <ClInclude Include="Core\Models\Cube.h" />
+    <ClInclude Include="Core\Models\CubeModel.h" />
+    <ClInclude Include="Core\Models\Model.h" />
+    <ClInclude Include="Core\Models\ObjectLoader.h" />
+    <ClInclude Include="Core\ShaderManager.h" />
+    <ClInclude Include="Game\CubeShooter\Actor\Zombie.h" />
+    <ClInclude Include="Game\CubeShooter\PathFinding\AStar.h" />
+    <ClInclude Include="Game\CubeShooter\PathFinding\Heap.h" />
+    <ClInclude Include="Game\CubeShooter\PathFinding\PathFinidng.h" />
+    <ClInclude Include="Game\GameScenes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DefaultFragmentShader.glsl" />
+    <None Include="Shaders\DefaultVertexShader.glsl" />
+    <None Include="Shaders\LFS.glsl" />
+    <None Include="Shaders\LVS.glsl" />
+    <None Include="Shaders\SFS.glsl" />
+    <None Include="Shaders\SVS.glsl" />
+    <None Include="zombie_Background_Music.ogg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="uvtemplate.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

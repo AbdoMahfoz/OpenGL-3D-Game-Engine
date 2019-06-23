@@ -1,10 +1,15 @@
 #ifndef GAMEOBJECT_CLASS
 #define GAMEOBJECT_CLASS
 
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
-#include "Model.h"
-#include "texture.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#ifdef _WIN32
+	#include "Models/Model.h"
+	#include "ImportedAssets/texture.h"
+#else
+	#include "Model.h"
+	#include "texture.h"
+#endif
 #include "AutoClean.h"
 
 class GameObject
