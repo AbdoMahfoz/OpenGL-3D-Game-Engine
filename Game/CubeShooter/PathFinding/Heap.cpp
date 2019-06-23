@@ -61,7 +61,10 @@ T* Heap<T>::pop()
     arr[arr.size() - 1]->heapIndex = -1;
     garbage.push_back(arr[arr.size() - 1]);
     arr.pop_back();
-    shiftDown(arr[0]);
+	if (arr.size() > 0)
+	{
+		shiftDown(arr[0]);
+	}
     return res;
 }
 template<class T>

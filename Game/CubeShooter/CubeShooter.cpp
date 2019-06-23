@@ -56,7 +56,7 @@ namespace CubeShooter
 void GameScenes::CubeShooter()
 {
     AudioManager::PlayBackGroundMusic();
-    GameObject::EnableCollision = true;
+    GameObject::EnableCollision = false;
     l = new LightSource(glm::vec3(0.0f, 5.0f, 0.0f));
     l->SetLightColor(glm::vec3(1.0f) * 100.0f);
     MainCube = new Cube();
@@ -66,8 +66,9 @@ void GameScenes::CubeShooter()
     CubeShooter::Plane->Scale(glm::vec3(10000.0f, 0.1f, 10000.0f));
     CubeShooter::Plane->Translate(glm::vec3(0.0f, 3.0f, 0.0f));
     z[0] = new Zombie(glm::vec3(-10.0f, 0.0f, 10.0f), MainCube);
-    z[1] = new Zombie(glm::vec3(10.0f, 0.0f, 10.0f), MainCube);
+	z[0]->SetDebugging(true);
     /*
+    z[1] = new Zombie(glm::vec3(10.0f, 0.0f, 10.0f), MainCube);
     z[2] = new Zombie(glm::vec3(-10.0f, 0.0f, -10.0f), MainCube);
     z[3] = new Zombie(glm::vec3(10.0f, 0.0f, -10.0f), MainCube);
     */

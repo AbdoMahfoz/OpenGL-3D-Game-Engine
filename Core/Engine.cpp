@@ -90,7 +90,6 @@ void Rendering()
 void MainLoop()
 {
     Engine::Start();
-    //glfwSwapInterval(60);
 	glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     do
     {
