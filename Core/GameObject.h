@@ -19,7 +19,9 @@ protected:
     Texture* texture;
     glm::vec3 position, rotation, scale, m_color;
     glm::mat4 ModelMatrix;
+	bool dirty;
     int index;
+	void updatePosRot();
 public:
     void (*CallBack)(GameObject*);
     static bool EnableCollision;
@@ -32,8 +34,8 @@ public:
     void SetColor(const glm::vec3& m_color);
     void BindTexture();
     const glm::vec3& GetPosition();
-    const glm::vec3& GetRotation() const;
-    const glm::vec3& GetScale() const;
+    const glm::vec3& GetRotation();
+    const glm::vec3& GetScale();
     const glm::vec3& GetColor() const;
     const glm::mat4& GetModelMatrix() const;
     Model* GetModel() const;

@@ -90,7 +90,7 @@ void Rendering()
 void MainLoop()
 {
     Engine::Start();
-	glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	Engine::HideCursor();
     do
     {
         /*LogicMutex.unlock();
@@ -108,7 +108,7 @@ void MainLoop()
         glfwSwapBuffers(MainWindow);
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
-	glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	Engine::ShowCursor();
     /*LogicMutex.unlock();
     RenderingMutex.unlock();
     LogicThread->join();
@@ -129,7 +129,7 @@ void Engine::FireEngine()
         isInitalized = false;
         if(glfwInit())
         {
-            MainWindow = CreateWindow(1280, 720, "Engine");
+            MainWindow = CreateWindow(800, 600, "Engine");
             /*LogicMutex.lock();
             RenderingMutex.lock();
             LogicThread = new std::thread(Logic);
@@ -163,6 +163,18 @@ void Engine::FireEngine()
 void Engine::SetClearColor(const glm::vec3& color)
 {
     glClearColor(color.x, color.y, color.z, 1.0f);
+}
+void Engine::SetAmbientLight(const glm::vec3& light)
+{
+	AmbientLight = light;
+}
+void Engine::HideCursor()
+{
+	glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+void Engine::ShowCursor()
+{
+	glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 void Engine::RegisterRoutine(void (*ptr)(), bool shouldCheck = false)
 {

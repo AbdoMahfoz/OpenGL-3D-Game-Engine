@@ -8,19 +8,10 @@ bool GameObject::EnableCollision = false;
 
 bool IsCollided(GameObject* o1, GameObject* o2)
 {
-	//Get Position Vector of The First Object..
 	glm::vec3 Position_A = o1->GetPosition();
-
-	//Get Scale Vector of The First Object..
 	glm::vec3 Scale_A = o1->GetScale();
-
-	//Get Position Vector of The Second Object..
 	glm::vec3 Position_B = o2->GetPosition();
-
-	//Get Scale Vector of The Second Object..
 	glm::vec3 Scale_B = o2->GetScale();
-
-    //Apply AABB Algorithm (Axis Aligned Bounding Box)..
     if(   abs(Position_A.x-Position_B.x)<Scale_A.x+Scale_B.x
        && abs(Position_A.y-Position_B.y)<Scale_A.y+Scale_B.y 
        && abs(Position_A.z-Position_B.z)<Scale_A.z+Scale_B.z )
@@ -33,7 +24,6 @@ bool IsCollided(GameObject* o1, GameObject* o2)
     }
     return false;
 }
-
 bool TestCollision(GameObject* o)
 {
     for(auto i : objs)
@@ -45,87 +35,83 @@ bool TestCollision(GameObject* o)
     }
     return false;
 }
-
 GameObject::GameObject(Model* model, Texture* texture)
 {
+	this->dirty = false;
     this->CallBack = nullptr;
     this->texture = texture;
     this->m_color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->model = model;
-    this->scale = glm::vec3(1.2f);
+	this->position = glm::vec3(0.0f);
+	this->rotation = glm::vec3(0.0f);
+	this->index = 0;
+    this->scale = glm::vec3(1.0f);
     ModelMatrix = glm::mat4(1.0f);
     if(model != 0)
         Engine::RegisterGameObject(this);
     objs.push_back(this);
-} 
+}
+void GameObject::updatePosRot()
+{
+	if (dirty)
+	{
+		dirty = false;
+		position.x = ModelMatrix[3][0];
+		position.y = ModelMatrix[3][1];
+		position.z = ModelMatrix[3][2];
+		glm::vec3 xDirection = glm::vec3(1.0f, 0.0f, 0.0f) - (glm::vec3)(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) * ModelMatrix);
+		glm::vec3 yDirection = glm::vec3(0.0f, 1.0f, 0.0f) - (glm::vec3)(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) * ModelMatrix);
+		glm::vec3 zDirection = glm::vec3(0.0f, 0.0f, 1.0f) - (glm::vec3)(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) * ModelMatrix);
+		rotation.x = atan2(xDirection.z, xDirection.x);
+		rotation.y = atan2(xDirection.z, xDirection.y);
+		rotation.z = atan2(xDirection.y, xDirection.x);
+	}
+}
 void GameObject::Translate(const glm::vec3& position)
 {
-    //Apply the Translation ..
-    ModelMatrix *= glm::translate(position);
-    //Update Position Vector ..
-    this->position.x = ModelMatrix[3][0];
-    this->position.y = ModelMatrix[3][1];
-    this->position.z = ModelMatrix[3][2];
+	updatePosRot();
+	ModelMatrix = glm::translate(position) * ModelMatrix;
+	this->position += position;
     while(EnableCollision && TestCollision(this))
     {
-        ModelMatrix *= glm::translate(-position * 0.1f);
-        //Update Position Vector ..
-        this->position.x = ModelMatrix[3][0];
-        this->position.y = ModelMatrix[3][1];
-        this->position.z = ModelMatrix[3][2];
+		ModelMatrix = glm::translate(-position * 0.1f) * ModelMatrix;
+		this->position += position;
     }
 }
 void GameObject::Rotate(const glm::vec3& rotation)
 {
-    //RotateAround(rotation, position);
-    //Apply the Rotation ..
-    glm::mat4 m = glm::mat4(1);
-    m *= glm::rotate(-rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-    m *= glm::rotate(-rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    m *= glm::rotate(-rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-    this->ModelMatrix *= m;
-    //Update Rotation Vector ..
-    this->rotation += rotation;
+	updatePosRot();
+	ModelMatrix = glm::translate(position) *
+				  glm::rotate(rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)) *
+				  glm::rotate(rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)) *
+		          glm::rotate(rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)) *
+		          glm::translate(-position) *
+			      ModelMatrix;
+	this->rotation += rotation;
 }
 void GameObject::RotateAround(const glm::vec3& rotation, const glm::vec3& rotationPoint)
 {
-    /*
-    //Translate to Origin ..
-    this->ModelMatrix*=glm::translate(-rotationPoint);
-
-    //Apply Rotation ..
-    this->ModelMatrix*=glm::rotate(rotation);
-
-
-    //Update Rotation Vector ..
-    this->rotation+=rotation;
-
-    //Translate Back ..
-    this->ModelMatrix*=glm::translate(rotationPoint);
-    */
+	updatePosRot();
+	ModelMatrix = glm::translate(position-rotationPoint) *
+				  glm::rotate(rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)) *
+				  glm::rotate(rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)) *
+				  glm::rotate(rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)) *
+				  glm::translate(rotationPoint-position) *
+				  ModelMatrix;
+	dirty = true;
 }
 void GameObject::Scale(const glm::vec3& scale)
 {
-    //Aplly Scaling ..
-    this->ModelMatrix*=glm::scale(scale);
-
-    //Update Scale Vector  ..
-    this->scale = scale;
+    ModelMatrix = glm::scale(scale) * ModelMatrix;
+    this->scale *= scale;
 }
 void GameObject::ScaleWithRespectTo(const glm::vec3& scale, const glm::vec3& scalingPoint)
 {
-    
-    //Translate to Origin ..
-    this->ModelMatrix*=glm::translate(-scalingPoint);
-
-    //Apply Scaling ..
-    this->ModelMatrix*=glm::scale(scale);
-
-    //Update Scale Vector ..
-    this->scale =scale;
-    
-    //Translate Back ..
-    this->ModelMatrix*=glm::translate(scalingPoint);
+	ModelMatrix = glm::translate(position-scalingPoint) * 
+				  glm::scale(scale) *
+		          glm::translate(scalingPoint-position) *
+		          ModelMatrix;
+	throw std::exception("Scale deduction from ModelMatrix is not yet implmented");
 }
 void GameObject::SetColor(const glm::vec3& m_color)
 {
@@ -141,18 +127,17 @@ Model* GameObject::GetModel() const
 }
 const glm::vec3& GameObject::GetPosition()
 {
-    this->position.x = ModelMatrix[3][0];
-    this->position.y = ModelMatrix[3][1];
-    this->position.z = ModelMatrix[3][2];
-    return position;
+	updatePosRot();
+	return position;
 }
-const glm::vec3& GameObject::GetRotation() const
+const glm::vec3& GameObject::GetRotation()
 {
-    return rotation;
+	updatePosRot();
+	return rotation;
 }
-const glm::vec3& GameObject::GetScale() const
+const glm::vec3& GameObject::GetScale()
 {
-    return scale;
+	return scale;
 }
 const glm::vec3& GameObject::GetColor() const
 {

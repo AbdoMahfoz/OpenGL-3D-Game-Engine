@@ -144,6 +144,9 @@
     <ClCompile Include="Core\ImportedAssets\texture.cpp">
       <Filter>Source Files\Core\Imported assets</Filter>
     </ClCompile>
+    <ClCompile Include="Game\RortationTest\RotationTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\CubeShooter\PathFinding\AStar.h">

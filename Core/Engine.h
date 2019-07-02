@@ -40,6 +40,9 @@ namespace Engine
     void RegisterLight(LightSource* light);
     void UnRegisterLight(LightSource* light);
     void RegisterModel(Model* model);
+	void SetAmbientLight(const glm::vec3& light);
+	void HideCursor();
+	void ShowCursor();
     void RegisterGameObject(GameObject* obj);
     void UnRegisterGameObject(GameObject* obj);
     EulerCamera& GetCurrentCamera();

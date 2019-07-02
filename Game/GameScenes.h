@@ -4,4 +4,5 @@ namespace GameScenes
 {
     void DemoScene();
     void CubeShooter();
+	void RotationTest();
 }
