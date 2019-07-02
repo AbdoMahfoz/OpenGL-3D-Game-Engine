@@ -30,6 +30,7 @@ void Zombie::ZombieRoutine()
 }
 Zombie::Zombie(const glm::vec3& InitialPos, GameObject* Target)
 {
+	this->refreshDebug = false;
     this->debugPath = false;
     this->PathRequested = false;
     this->LastPos = glm::vec3(-999999, -9999999, -9999999);
@@ -63,6 +64,22 @@ glm::vec3 Zombie::Round(const glm::vec3& v)
 void Zombie::Main()
 {
     glm::vec3 pos = Round(Target->GetPosition());
+	if (refreshDebug)
+	{
+		refreshDebug = false;
+		for (auto j : PathDebug)
+		{
+			delete j;
+		}
+		PathDebug.clear();
+		for (int j = 0; j < PathCount; j++)
+		{
+			Cube* c = new Cube();
+			c->Translate(Path[j]);
+			c->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
+			PathDebug.push_back(c);
+		}
+	}
     if(!PathRequested && pos != LastPos)
     {
         LastPos = pos;
@@ -132,18 +149,7 @@ void Zombie::ReceivePath(glm::vec3* Path, int Count)
     this->PathCount = Count;
     if(debugPath)
     {
-        for(auto j : PathDebug)
-        {
-            delete j;
-        }
-        PathDebug.clear();
-        for(int j = 0; j < PathCount; j++)
-        {
-            Cube* c = new Cube();
-            c->Translate(Path[j]);
-            c->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
-            PathDebug.push_back(c);
-        }
+		refreshDebug = true;
     }
     PathRequested = false;
 }

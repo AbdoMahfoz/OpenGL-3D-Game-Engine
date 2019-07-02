@@ -49,7 +49,7 @@ template<class T>
 HeapItem<T>* Heap<T>::push(T val)
 {
     HeapItem<T>* item = new HeapItem<T>(val, arr.size());
-    arr.push_back(item);
+	arr.push_back(item);
     shiftUp(item);
     return item;
 }
@@ -72,7 +72,7 @@ void Heap<T>::update(HeapItem<T>* item)
 {
     if(item->heapIndex == -1)
     {
-        std::cout << "pingo!";
+		std::cout << "pingo!";
         return;
     }
     shiftUp(item);
