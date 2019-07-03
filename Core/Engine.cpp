@@ -81,12 +81,12 @@ void MainLoop()
 {
 	std::thread* LogicThread = new std::thread(Logic);
     Engine::Start();
-	Engine::HideCursor();
+	//Engine::HideCursor();
 	glfwSwapInterval(1);
     do
     {
 	    glfwPollEvents();
-        Input::CalculateDelta();
+        //Input::CalculateDelta();
 		logic.notify();
         Rendering();
 		render.wait();

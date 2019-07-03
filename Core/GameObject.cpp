@@ -60,7 +60,7 @@ void GameObject::FlushBuffer()
 	MatLock.lock();
 	if (lastBufferUsed != i && bufferDirty[i])
 	{
-		Buffer[!i] = Buffer[i] * Buffer[!i];
+		Buffer[!i] = Buffer[!i] * Buffer[i];
 		Buffer[i] = glm::mat4(1);
 		bufferDirty[i] = false;
 		bufferDirty[!i] = true;
@@ -91,7 +91,7 @@ void GameObject::UpdateModelMatrix(const glm::mat4& m)
 	MatLock.lock();
 	if (lastBufferUsed != i && bufferDirty[i])
 	{
-		Buffer[!i] = Buffer[i] * Buffer[!i];
+		Buffer[!i] = Buffer[!i] * Buffer[i];
 		Buffer[i] = glm::mat4(1);
 		bufferDirty[i] = false;
 	}
@@ -219,6 +219,10 @@ glm::mat4 GameObject::GetModelMatrix()
 	}
 	MatLock.unlock();
     return Buffer[i] * Buffer[!i] * ModelMatrix;
+}
+const glm::mat4& GameObject::GetRenderingModelMatrix()
+{
+	return ModelMatrix;
 }
 GameObject::~GameObject()
 {

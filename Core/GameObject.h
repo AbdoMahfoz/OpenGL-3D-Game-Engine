@@ -46,6 +46,7 @@ public:
     const glm::vec3& GetScale();
     const glm::vec3& GetColor() const;
     glm::mat4 GetModelMatrix();
+	const glm::mat4& GetRenderingModelMatrix();
     Model* GetModel() const;
     ~GameObject();
 };

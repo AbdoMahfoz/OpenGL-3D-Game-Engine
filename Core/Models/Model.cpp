@@ -126,12 +126,12 @@ void Model::Draw(GameObject& obj)
         glUniform1i(texID, 0);
         obj.BindTexture();
         glUniform3fv(ColorID, 1, &(obj.GetColor()[0]));
-        glUniformMatrix4fv(MVPID, 1, GL_FALSE, &(MVP * obj.GetModelMatrix())[0][0]);
-        glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &obj.GetModelMatrix()[0][0]);
+        glUniformMatrix4fv(MVPID, 1, GL_FALSE, &(MVP * obj.GetRenderingModelMatrix())[0][0]);
+        glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &obj.GetRenderingModelMatrix()[0][0]);
     }
     else
     {
-        glUniformMatrix4fv(ShadowMVPID, 1, GL_FALSE, &(ShadowMVP * obj.GetModelMatrix())[0][0]);
+        glUniformMatrix4fv(ShadowMVPID, 1, GL_FALSE, &(ShadowMVP * obj.GetRenderingModelMatrix())[0][0]);
     }
     glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_SHORT, 0);
 }
