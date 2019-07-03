@@ -66,9 +66,9 @@ void GameScenes::CubeShooter()
     CubeShooter::Plane->Scale(glm::vec3(10000.0f, 0.1f, 10000.0f));
     CubeShooter::Plane->Translate(glm::vec3(0.0f, -1.0f, 0.0f));
     z[0] = new Zombie(glm::vec3(0.0f, 0.0f, 15.0f), MainCube);
-	z[0]->SetDebugging(true);
+	//z[0]->SetDebugging(true);
     z[1] = new Zombie(glm::vec3(0.0f, 0.0f, 10.0f), MainCube);
-	z[1]->SetDebugging(true);
+	//z[1]->SetDebugging(true);
     /*
     z[2] = new Zombie(glm::vec3(-10.0f, 0.0f, -10.0f), MainCube);
     z[3] = new Zombie(glm::vec3(10.0f, 0.0f, -10.0f), MainCube);

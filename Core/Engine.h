@@ -32,6 +32,7 @@ namespace Engine
 {
     void FireEngine();
     void Start();
+	int GetFrameNumber();
     void SetClearColor(const glm::vec3& color);
     void RegisterRoutine(void (*func)(), bool shouldCheck);
     void UnRegisterRoutine(void (*func)());

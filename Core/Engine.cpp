@@ -5,12 +5,13 @@ GLFWwindow* MainWindow;
 std::vector<void(*)()> routines, exitFuncs;
 std::vector<std::pair<Model*, std::vector<GameObject*>>> RenderArray;
 std::vector<LightSource*> Lights;
-std::thread *LogicThread, *RenderingThread;
-std::mutex LogicMutex, RenderingMutex, LogicStarted, RenderStarted;
+std::thread* LogicThread;
+std::mutex LogicMutex, LogicStarted;
 GLuint VertexArrayID, shadowMap[MAX_LIGHT_COUNT];
 EulerCamera MainCamera, *CurrentCamera;
 glm::vec3 AmbientLight = glm::vec3(0.5f, 0.5f, 0.5f);
-int SCREEN_WIDTH, SCREEN_HEIGHT;
+int SCREEN_WIDTH, SCREEN_HEIGHT, FrameNumber = 0;
+bool ProgramTerminated = false;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
 GLFWwindow* CreateWindow(int width, int height, const char* title)
@@ -27,65 +28,59 @@ GLFWwindow* CreateWindow(int width, int height, const char* title)
 }
 void Logic()
 {
-    /*while(glfwWindowShouldClose(MainWindow) == 0)
+    while(!ProgramTerminated)
     {
-        LogicMutex.unlock();
         LogicStarted.lock();
         LogicMutex.lock();
-        LogicStarted.unlock();*/
+        LogicStarted.unlock();
         for(auto i : routines)
         {
             i();
         }
-    //}
+        LogicMutex.unlock();
+    }
 }
 void Rendering()
 {
-    /*glfwMakeContextCurrent(MainWindow);
-    while(glfwWindowShouldClose(MainWindow) == 0)
+    std::vector<glm::vec3> LightColor, LightPosition;
+    for(auto l : Lights)
     {
-        RenderingMutex.unlock();
-        RenderStarted.lock();
-        RenderingMutex.lock();
-        RenderStarted.unlock();*/
-        std::vector<glm::vec3> LightColor, LightPosition;
-        for(auto l : Lights)
-        {
-            LightColor.push_back(l->GetLightColor());
-            LightPosition.push_back(l->GetPosition());
-            l->SetUpEnviroment();
-            //l->GetCam().UpdateViewMatrix();
-            const glm::mat4& m = l->GetLightVP();
-            for(auto i : RenderArray)
-            {
-                i.first->SetUpEnviroment(m);
-                for(auto j : i.second)
-                {
-                    i.first->Draw(*j);
-                }
-            }
-        }
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        CurrentCamera->UpdateViewMatrix();
+        LightColor.push_back(l->GetLightColor());
+        LightPosition.push_back(l->GetPosition());
+        l->SetUpEnviroment();
+        //l->GetCam().UpdateViewMatrix();
+        const glm::mat4& m = l->GetLightVP();
         for(auto i : RenderArray)
         {
-            i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
-                                     AmbientLight, CurrentCamera->GetEyePosition(), 
-                                     &LightColor[0], &LightPosition[0], LightColor.size());
+            i.first->SetUpEnviroment(m);
             for(auto j : i.second)
             {
-                for(int l = 0; l < Lights.size(); l++)
-                {
-                    glActiveTexture(GL_TEXTURE1 + l);
-                    glUniform1i(shadowMap[l], l + 1);
-                    Lights[l]->BindDepthMap();
-                }
+				j->FlushBuffer();
                 i.first->Draw(*j);
             }
         }
-    //}
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    CurrentCamera->UpdateViewMatrix();
+    for(auto i : RenderArray)
+    {
+        i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
+                                    AmbientLight, CurrentCamera->GetEyePosition(), 
+                                    &LightColor[0], &LightPosition[0], LightColor.size());
+        for(auto j : i.second)
+        {
+			j->FlushBuffer();
+            for(int l = 0; l < Lights.size(); l++)
+            {
+                glActiveTexture(GL_TEXTURE1 + l);
+                glUniform1i(shadowMap[l], l + 1);
+                Lights[l]->BindDepthMap();
+            }
+            i.first->Draw(*j);
+        }
+    }
 }
 void MainLoop()
 {
@@ -93,28 +88,22 @@ void MainLoop()
 	Engine::HideCursor();
     do
     {
-        /*LogicMutex.unlock();
-        RenderingMutex.unlock();
-        LogicStarted.lock();
-        RenderStarted.lock();
-        LogicMutex.lock();
-        RenderingMutex.lock();
-        LogicStarted.unlock();
-        RenderStarted.unlock();*/
-        Input::CalculateDelta();
 	    glfwPollEvents();
-        Logic();
+        Input::CalculateDelta();
+        LogicMutex.unlock();
+        LogicStarted.lock();
         Rendering();
+        LogicMutex.lock();
+        LogicStarted.unlock();
         glfwSwapBuffers(MainWindow);
+		FrameNumber = !FrameNumber;
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
+	ProgramTerminated = true;
 	Engine::ShowCursor();
-    /*LogicMutex.unlock();
-    RenderingMutex.unlock();
+    LogicMutex.unlock();
     LogicThread->join();
-    RenderingThread->join();
     delete LogicThread;
-    delete RenderingThread;*/
     for(auto i : exitFuncs)
     {
         i();
@@ -130,10 +119,8 @@ void Engine::FireEngine()
         if(glfwInit())
         {
             MainWindow = CreateWindow(800, 600, "Engine");
-            /*LogicMutex.lock();
-            RenderingMutex.lock();
+            LogicMutex.lock();
             LogicThread = new std::thread(Logic);
-            RenderingThread = new std::thread(Rendering);*/
             if(glewInit() == GLEW_OK)
             {
                 MainCamera.Walk(-0.5f);
@@ -159,6 +146,10 @@ void Engine::FireEngine()
             }
         }
     }
+}
+int Engine::GetFrameNumber()
+{
+	return FrameNumber;
 }
 void Engine::SetClearColor(const glm::vec3& color)
 {

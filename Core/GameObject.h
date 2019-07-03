@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <mutex>
 #ifdef _WIN32
 	#include "Models/Model.h"
 	#include "ImportedAssets/texture.h"
@@ -18,11 +19,16 @@ protected:
     Model* model;
     Texture* texture;
     glm::vec3 position, rotation, scale, m_color;
-    glm::mat4 ModelMatrix;
+    glm::mat4 ModelMatrix, Buffer[2];
+	std::mutex MatLock;
+	bool bufferDirty[2];
 	bool dirty;
     int index;
+	int lastBufferUsed, BufferToBeFlushed;
 	void updatePosRot();
 public:
+	void FlushBuffer();
+	void UpdateModelMatrix(const glm::mat4&);
     void (*CallBack)(GameObject*);
     static bool EnableCollision;
     GameObject(Model* model, Texture* texture);
@@ -39,7 +45,7 @@ public:
     const glm::vec3& GetRotation();
     const glm::vec3& GetScale();
     const glm::vec3& GetColor() const;
-    const glm::mat4& GetModelMatrix() const;
+    const glm::mat4& GetModelMatrix();
     Model* GetModel() const;
     ~GameObject();
 };
