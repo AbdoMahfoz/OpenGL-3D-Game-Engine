@@ -18,6 +18,7 @@ private:
     glm::vec3* Path;
     glm::vec3 LastPos;
     GameObject* Target;
+	glm::vec3 LastDirection;
     bool PathRequested, debugPath, refreshDebug;
     double targetAngle;
     int PathCount, PathIndex;

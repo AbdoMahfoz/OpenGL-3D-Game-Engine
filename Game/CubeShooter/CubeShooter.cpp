@@ -18,19 +18,19 @@ namespace CubeShooter
     {
         if(Input::IsKeyPressed(GLFW_KEY_UP))
         {
-            MainCube->Translate(glm::vec3(0.0f, 0.0f, -0.1f));
+            MainCube->Translate(glm::vec3(0.0f, 0.0f, 0.1f));
         }
         if(Input::IsKeyPressed(GLFW_KEY_DOWN))
         {
-            MainCube->Translate(glm::vec3(0.0f, 0.0f, 0.1f));
+            MainCube->Translate(glm::vec3(0.0f, 0.0f, -0.1f));
         }
         if(Input::IsKeyPressed(GLFW_KEY_LEFT))
         {
-            MainCube->Translate(glm::vec3(-0.1f, 0.0f, 0.0f));
+            MainCube->Translate(glm::vec3(0.1f, 0.0f, 0.0f));
         }
         if(Input::IsKeyPressed(GLFW_KEY_RIGHT))
         {
-            MainCube->Translate(glm::vec3(0.1f, 0.0f, 0.0f));
+            MainCube->Translate(glm::vec3(-0.1f, 0.0f, 0.0f));
         }
     }
     void CleanUp()
@@ -55,7 +55,7 @@ namespace CubeShooter
 }
 void GameScenes::CubeShooter()
 {
-    AudioManager::PlayBackGroundMusic();
+    //AudioManager::PlayBackGroundMusic();
     GameObject::EnableCollision = false;
     l = new LightSource(glm::vec3(0.0f, 5.0f, 0.0f));
     l->SetLightColor(glm::vec3(1.0f) * 100.0f);
@@ -64,9 +64,9 @@ void GameScenes::CubeShooter()
     MainCube->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
     CubeShooter::Plane = new Cube();
     CubeShooter::Plane->Scale(glm::vec3(10000.0f, 0.1f, 10000.0f));
-    CubeShooter::Plane->Translate(glm::vec3(0.0f, 3.0f, 0.0f));
-    z[0] = new Zombie(glm::vec3(-10.0f, 0.0f, 10.0f), MainCube);
-	z[0]->SetDebugging(true);
+    CubeShooter::Plane->Translate(glm::vec3(0.0f, -3.0f, 0.0f));
+    z[0] = new Zombie(glm::vec3(-5.0f, 0.0f, 5.0f), MainCube);
+	//z[0]->SetDebugging(true);
     /*
     z[1] = new Zombie(glm::vec3(10.0f, 0.0f, 10.0f), MainCube);
     z[2] = new Zombie(glm::vec3(-10.0f, 0.0f, -10.0f), MainCube);

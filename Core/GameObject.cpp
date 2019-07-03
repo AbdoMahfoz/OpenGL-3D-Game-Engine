@@ -78,6 +78,21 @@ void GameObject::Translate(const glm::vec3& position)
 		this->position += position;
     }
 }
+void GameObject::Translate(float distance, const glm::vec3& direction)
+{
+	updatePosRot();
+	ModelMatrix = glm::translate((glm::vec3)(glm::normalize(ModelMatrix[2])) * distance) * ModelMatrix;
+	this->position.x = ModelMatrix[3][0];
+	this->position.y = ModelMatrix[3][1];
+	this->position.z = ModelMatrix[3][2];
+	while (EnableCollision && TestCollision(this))
+	{
+		ModelMatrix = glm::translate(-position * 0.1f) * ModelMatrix;
+		this->position.x = ModelMatrix[3][0];
+		this->position.y = ModelMatrix[3][1];
+		this->position.z = ModelMatrix[3][2];
+	}
+}
 void GameObject::Rotate(const glm::vec3& rotation)
 {
 	updatePosRot();

@@ -30,6 +30,7 @@ void Zombie::ZombieRoutine()
 }
 Zombie::Zombie(const glm::vec3& InitialPos, GameObject* Target)
 {
+	this->LastDirection = glm::vec3(0);
 	this->refreshDebug = false;
     this->debugPath = false;
     this->PathRequested = false;
@@ -84,7 +85,7 @@ void Zombie::Main()
     {
         LastPos = pos;
         PathRequested = true;
-        RequestPath(position, Target->GetPosition(), Path, PathCount, this);
+        RequestPath(GetPosition(), Target->GetPosition(), Path, PathCount, this);
     }
     if(Path != nullptr)
     {
@@ -93,7 +94,7 @@ void Zombie::Main()
 }
 void Zombie::Walk()
 {
-    glm::vec3 pos = Round(position);
+    glm::vec3 pos = Round(GetPosition());
     while(pos == Path[PathIndex] && PathIndex < PathCount - 1)
     {
         PathIndex++;
@@ -101,27 +102,17 @@ void Zombie::Walk()
     glm::vec3 Direction;
     if(pos == Path[PathIndex])
     {
-        Direction = Target->GetPosition() - position;
+        Direction = Target->GetPosition() - GetPosition();
     }
     else
     {
         Direction = Path[PathIndex] - pos;
     }
-    targetAngle = glm::degrees(atan2(Direction.z, Direction.x));
-    if(targetAngle < 0.0)
-    {
-        targetAngle += 360.0;
-    }
-    double requiredRotation = targetAngle - rotation.y;
-    if(360.0 - requiredRotation < requiredRotation)
-    {
-        requiredRotation = requiredRotation - 360.0;
-    }
-    Rotate(glm::vec3(0.0f, requiredRotation * 0.2f, 0.0f));
-    if(requiredRotation < 45.0f)
-    {
-        Translate(glm::vec3(0.08f, 0.0f, 0.0f));
-    }
+	Direction = (Direction * 0.2f) + (LastDirection * 0.8f);
+	LastDirection = Direction;
+	Translate(glm::normalize(Direction) * 0.08f);
+	ModelMatrix = glm::inverse(glm::lookAt(GetPosition(), GetPosition() + glm::normalize(Direction), glm::vec3(0.0f, 1.0f, 0.0f)));
+	dirty = true;
 }
 void Zombie::ReceivePath(glm::vec3* Path, int Count)
 {
