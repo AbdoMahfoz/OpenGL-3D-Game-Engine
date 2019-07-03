@@ -119,6 +119,7 @@ void Model::SetUpEnviroment(const glm::mat4& LightMVP)
 }
 void Model::Draw(GameObject& obj)
 {
+	obj.FlushBuffer();
     if(!isShadowRendering)
     {
         glActiveTexture(GL_TEXTURE0);

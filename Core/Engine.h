@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <thread>
-#include <mutex>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -12,11 +11,13 @@
 #ifdef _WIN32
 	#include "ImportedAssets/EulerCamera.h"
 	#include "ImportedAssets/texture.h"
+	#include "ImportedAssets/Semaphore.h"
 	#include "Models/Cube.h"
 	#include "Lighting/LightSource.h"
 	#include "Models/BlenderModel.h"
 	#include "Models/ObjectLoader.h"
 #else
+	#include "Semaphore.h"
 	#include "EulerCamera.h"
 	#include "texture.h"
 	#include "Cube.h"

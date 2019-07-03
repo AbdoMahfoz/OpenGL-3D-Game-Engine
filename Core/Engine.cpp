@@ -5,13 +5,12 @@ GLFWwindow* MainWindow;
 std::vector<void(*)()> routines, exitFuncs;
 std::vector<std::pair<Model*, std::vector<GameObject*>>> RenderArray;
 std::vector<LightSource*> Lights;
-std::thread* LogicThread;
-std::mutex LogicMutex, LogicStarted;
 GLuint VertexArrayID, shadowMap[MAX_LIGHT_COUNT];
 EulerCamera MainCamera, *CurrentCamera;
 glm::vec3 AmbientLight = glm::vec3(0.5f, 0.5f, 0.5f);
 int SCREEN_WIDTH, SCREEN_HEIGHT, FrameNumber = 0;
 bool ProgramTerminated = false;
+Semaphore logic, render;
 
 //------------Start of Private functions(Inaccessable outside of this file)---------
 GLFWwindow* CreateWindow(int width, int height, const char* title)
@@ -30,14 +29,12 @@ void Logic()
 {
     while(!ProgramTerminated)
     {
-        LogicStarted.lock();
-        LogicMutex.lock();
-        LogicStarted.unlock();
+		logic.wait();
         for(auto i : routines)
         {
             i();
         }
-        LogicMutex.unlock();
+		render.notify();
     }
 }
 void Rendering()
@@ -55,7 +52,6 @@ void Rendering()
             i.first->SetUpEnviroment(m);
             for(auto j : i.second)
             {
-				j->FlushBuffer();
                 i.first->Draw(*j);
             }
         }
@@ -71,7 +67,6 @@ void Rendering()
                                     &LightColor[0], &LightPosition[0], LightColor.size());
         for(auto j : i.second)
         {
-			j->FlushBuffer();
             for(int l = 0; l < Lights.size(); l++)
             {
                 glActiveTexture(GL_TEXTURE1 + l);
@@ -84,24 +79,23 @@ void Rendering()
 }
 void MainLoop()
 {
+	std::thread* LogicThread = new std::thread(Logic);
     Engine::Start();
 	Engine::HideCursor();
     do
     {
 	    glfwPollEvents();
         Input::CalculateDelta();
-        LogicMutex.unlock();
-        LogicStarted.lock();
+		logic.notify();
         Rendering();
-        LogicMutex.lock();
-        LogicStarted.unlock();
+		render.wait();
         glfwSwapBuffers(MainWindow);
 		FrameNumber = !FrameNumber;
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
 	ProgramTerminated = true;
 	Engine::ShowCursor();
-    LogicMutex.unlock();
+	logic.notify();
     LogicThread->join();
     delete LogicThread;
     for(auto i : exitFuncs)
@@ -119,8 +113,6 @@ void Engine::FireEngine()
         if(glfwInit())
         {
             MainWindow = CreateWindow(800, 600, "Engine");
-            LogicMutex.lock();
-            LogicThread = new std::thread(Logic);
             if(glewInit() == GLEW_OK)
             {
                 MainCamera.Walk(-0.5f);

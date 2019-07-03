@@ -215,6 +215,9 @@
     <ClInclude Include="Core\ImportedAssets\texture.h">
       <Filter>Header Files\Core\Imported assets</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ImportedAssets\Semaphore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\DefaultFragmentShader.glsl">

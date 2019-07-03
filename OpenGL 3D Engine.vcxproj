@@ -157,6 +157,7 @@
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\ImportedAssets\EulerCamera.h" />
     <ClInclude Include="Core\ImportedAssets\FPCamera.h" />
+    <ClInclude Include="Core\ImportedAssets\Semaphore.h" />
     <ClInclude Include="Core\ImportedAssets\shader.hpp" />
     <ClInclude Include="Core\ImportedAssets\stb_image.h" />
     <ClInclude Include="Core\ImportedAssets\texture.h" />
