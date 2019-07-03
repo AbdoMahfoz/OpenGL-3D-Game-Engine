@@ -206,7 +206,7 @@ const glm::vec3& GameObject::GetColor() const
 {
     return m_color;
 }
-const glm::mat4& GameObject::GetModelMatrix()
+glm::mat4 GameObject::GetModelMatrix()
 {
 	int i = Engine::GetFrameNumber(); 
 	MatLock.lock();

@@ -2,5 +2,5 @@
 
 void Engine::Start()
 {
-    GameScenes::CubeShooter();
+    GameScenes::RotationTest();
 }

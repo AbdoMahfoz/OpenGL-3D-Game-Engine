@@ -82,6 +82,7 @@ void MainLoop()
 	std::thread* LogicThread = new std::thread(Logic);
     Engine::Start();
 	Engine::HideCursor();
+	glfwSwapInterval(1);
     do
     {
 	    glfwPollEvents();

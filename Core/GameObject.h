@@ -45,7 +45,7 @@ public:
     const glm::vec3& GetRotation();
     const glm::vec3& GetScale();
     const glm::vec3& GetColor() const;
-    const glm::mat4& GetModelMatrix();
+    glm::mat4 GetModelMatrix();
     Model* GetModel() const;
     ~GameObject();
 };
