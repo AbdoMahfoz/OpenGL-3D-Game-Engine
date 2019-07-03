@@ -104,7 +104,7 @@ void Zombie::Walk()
 	LastDirection = Direction;
 	Direction = glm::normalize(Direction);
 	Translate(Direction * 0.08f);
-	ModelMatrix = glm::inverse(glm::lookAt(GetPosition(), GetPosition() + Direction, glm::vec3(0.0f, 1.0f, 0.0f)));
+	UpdateModelMatrix(glm::inverse(glm::lookAt(GetPosition(), GetPosition() + Direction, glm::vec3(0.0f, 1.0f, 0.0f))) / GetModelMatrix());
 	dirty = true;
 }
 void Zombie::ReceivePath(glm::vec3* Path, int Count)
