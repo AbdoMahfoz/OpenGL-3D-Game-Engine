@@ -11,7 +11,7 @@ private:
     static std::vector<Zombie*> Instances;
     static std::queue<Zombie*> OrderQueue;
     static void ZombieRoutine();                            
-    static void PathCallback(glm::vec3* Path, int Count);
+    static void PathCallback(glm::vec3* Path, int Count, Zombie* requester);
     static void RequestPath(const glm::vec3& Start, const glm::vec3& Finish, 
                             glm::vec3* oldPath, int oldPathCount, Zombie* self);
     std::vector<Cube*> PathDebug;
@@ -20,7 +20,6 @@ private:
     GameObject* Target;
 	glm::vec3 LastDirection;
     bool PathRequested, debugPath, refreshDebug;
-    double targetAngle;
     int PathCount, PathIndex;
     glm::vec3 Round(const glm::vec3&);
     void Main();

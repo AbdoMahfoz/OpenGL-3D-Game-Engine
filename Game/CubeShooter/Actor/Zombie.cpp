@@ -2,24 +2,16 @@
 #include "../PathFinding/PathFinidng.h"
 
 std::mutex Zombie::OrderQueueMutex;
-std::queue<Zombie*> Zombie::OrderQueue;
 std::vector<Zombie*> Zombie::Instances;
 
-void Zombie::PathCallback(glm::vec3* Path, int Count)
+void Zombie::PathCallback(glm::vec3* Path, int Count, Zombie* requester)
 {
-    OrderQueueMutex.lock();
-    auto ptr = OrderQueue.front();
-    OrderQueue.pop();
-    OrderQueueMutex.unlock();
-    ptr->ReceivePath(Path, Count);
+    requester->ReceivePath(Path, Count);
 }
 void Zombie::RequestPath(const glm::vec3& Start, const glm::vec3& Finish, 
     glm::vec3* oldPath, int oldPathCount, Zombie* self)
 {
-    OrderQueueMutex.lock();
-    OrderQueue.push(self);
-    PathFinidng::RequestPath(Start, Finish, oldPath, oldPathCount, PathCallback);
-    OrderQueueMutex.unlock();
+    PathFinidng::RequestPath(Start, Finish, oldPath, oldPathCount, PathCallback, self);
 }
 void Zombie::ZombieRoutine()
 {
@@ -110,8 +102,9 @@ void Zombie::Walk()
     }
 	Direction = (Direction * 0.2f) + (LastDirection * 0.8f);
 	LastDirection = Direction;
-	Translate(glm::normalize(Direction) * 0.08f);
-	ModelMatrix = glm::inverse(glm::lookAt(GetPosition(), GetPosition() + glm::normalize(Direction), glm::vec3(0.0f, 1.0f, 0.0f)));
+	Direction = glm::normalize(Direction);
+	Translate(Direction * 0.08f);
+	ModelMatrix = glm::inverse(glm::lookAt(GetPosition(), GetPosition() + Direction, glm::vec3(0.0f, 1.0f, 0.0f)));
 	dirty = true;
 }
 void Zombie::ReceivePath(glm::vec3* Path, int Count)

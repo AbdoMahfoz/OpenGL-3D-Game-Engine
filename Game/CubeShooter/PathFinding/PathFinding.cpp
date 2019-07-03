@@ -1,23 +1,26 @@
 #include "PathFinidng.h"
 #include "AStar.h"
+#include "../Actor/Zombie.h"
 #include <queue>
 #include <condition_variable>
 
 struct PathRequest
 {
 public:
-    PathRequest(void (*CallBack)(glm::vec3*, int), glm::vec3* oldPath, int oldPathCount,
-        glm::vec3 Start, glm::vec3 Finish)
+    PathRequest(void (*CallBack)(glm::vec3*, int, Zombie*), glm::vec3* oldPath, int oldPathCount,
+        glm::vec3 Start, glm::vec3 Finish, Zombie* requester)
     {
+		this->requester = requester;
         this->CallBack = CallBack;
         this->oldPath = oldPath;
         this->oldPathCount = oldPathCount;
         this->Start = Start;
         this->Finish = Finish;   
     }
-    void (*CallBack)(glm::vec3*, int);
+    void (*CallBack)(glm::vec3*, int, Zombie*);
     glm::vec3 Start, Finish;
     glm::vec3* oldPath;
+	Zombie* requester;
     int oldPathCount;
 };
 
@@ -67,7 +70,7 @@ void Worker()
             auto res = AStar::CalculatePath(Obstacle, TranslatePosition(job.Start), TranslatePosition(job.Finish));
             if(res == nullptr)
             {
-                job.CallBack(nullptr, 0);
+                job.CallBack(nullptr, 0, job.requester);
             }
             else
             {
@@ -79,7 +82,7 @@ void Worker()
                     PathFinidng::UpdateMap(arr[i], 0);
                 }
                 delete res;
-                job.CallBack(arr, count);
+                job.CallBack(arr, count, job.requester);
             }
         }
     }
@@ -87,7 +90,7 @@ void Worker()
 //--------------------------------------
 //-------------Public-------------------
 void PathFinidng::RequestPath(glm::vec3 Source, glm::vec3 Destination,
-    glm::vec3* OldPath, int OldPathCount, void (*CallBack)(glm::vec3*, int))
+    glm::vec3* OldPath, int OldPathCount, void (*CallBack)(glm::vec3*, int, Zombie*), Zombie* requester)
 {
     if(WorkerThread == nullptr)
     {
@@ -96,7 +99,7 @@ void PathFinidng::RequestPath(glm::vec3 Source, glm::vec3 Destination,
         Engine::RegisterOnExit(TerminateWokrer);
     }
     JobQueueMutex.lock();
-    JobQueue.push(PathRequest(CallBack, OldPath, OldPathCount, Source, Destination));
+    JobQueue.push(PathRequest(CallBack, OldPath, OldPathCount, Source, Destination, requester));
     if(JobQueue.size() == 1)
     {
         cv.notify_all();
