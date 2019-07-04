@@ -82,14 +82,15 @@ void MainLoop()
 	std::thread* LogicThread = new std::thread(Logic);
     Engine::Start();
 	glfwSwapInterval(1);
+	logic.notify();
     do
     {
-	    glfwPollEvents();
-		logic.notify();
         Rendering();
 		render.wait();
-        glfwSwapBuffers(MainWindow);
+	    glfwPollEvents();
 		FrameNumber = !FrameNumber;
+		logic.notify();
+        glfwSwapBuffers(MainWindow);
     }
     while(glfwWindowShouldClose(MainWindow) == 0);
 	ProgramTerminated = true;
