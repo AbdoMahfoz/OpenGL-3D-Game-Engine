@@ -56,8 +56,8 @@ GameObject::GameObject(Model* model, Texture* texture)
 }
 void GameObject::FlushBuffer()
 {
-	int i = Engine::GetFrameNumber();
 	MatLock.lock();
+	int i = Engine::GetFrameNumber();
 	if (lastBufferUsed != i && bufferDirty[i])
 	{
 		Buffer[!i] = Buffer[!i] * Buffer[i];
@@ -65,16 +65,13 @@ void GameObject::FlushBuffer()
 		bufferDirty[i] = false;
 		bufferDirty[!i] = true;
 	}
-	MatLock.unlock();
 	if (bufferDirty[!i])
 	{
 		if (BufferToBeFlushed == i)
 		{
-			MatLock.lock();
 			ModelMatrix = Buffer[!i] * Buffer[i] * ModelMatrix;
 			Buffer[i] = glm::mat4(1);
 			bufferDirty[i] = false;
-			MatLock.unlock();
 		}
 		else
 		{
@@ -84,21 +81,22 @@ void GameObject::FlushBuffer()
 		bufferDirty[!i] = false;
 	}
 	BufferToBeFlushed = i;
+	MatLock.unlock();
 }
 void GameObject::UpdateModelMatrix(const glm::mat4& m)
 {
-	int i = Engine::GetFrameNumber();
 	MatLock.lock();
+	int i = Engine::GetFrameNumber();
 	if (lastBufferUsed != i && bufferDirty[i])
 	{
 		Buffer[!i] = Buffer[!i] * Buffer[i];
 		Buffer[i] = glm::mat4(1);
 		bufferDirty[i] = false;
 	}
-	MatLock.unlock();
 	Buffer[i] = m * Buffer[i];
 	lastBufferUsed = i;
 	bufferDirty[i] = true;
+	MatLock.unlock();
 }
 void GameObject::updatePosRot()
 {
@@ -208,8 +206,8 @@ const glm::vec3& GameObject::GetColor() const
 }
 glm::mat4 GameObject::GetModelMatrix()
 {
-	int i = Engine::GetFrameNumber(); 
 	MatLock.lock();
+	int i = Engine::GetFrameNumber(); 
 	if (lastBufferUsed != i && bufferDirty[i])
 	{
 		Buffer[!i] = Buffer[i] * Buffer[!i];
@@ -217,8 +215,9 @@ glm::mat4 GameObject::GetModelMatrix()
 		bufferDirty[i] = false;
 		bufferDirty[!i] = true;
 	}
+    glm::mat4 res = Buffer[i] * Buffer[!i] * ModelMatrix;
 	MatLock.unlock();
-    return Buffer[i] * Buffer[!i] * ModelMatrix;
+	return res;
 }
 const glm::mat4& GameObject::GetRenderingModelMatrix()
 {
