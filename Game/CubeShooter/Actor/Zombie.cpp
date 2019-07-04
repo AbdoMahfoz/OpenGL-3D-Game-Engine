@@ -31,6 +31,7 @@ Zombie::Zombie(const glm::vec3& InitialPos, GameObject* Target)
     this->PathCount = 0;
     this->PathIndex = 0;
     this->Target = Target;
+	this->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
     Translate(InitialPos);
     Instances.push_back(this);
     if(Instances.size() == 1)
@@ -103,7 +104,7 @@ void Zombie::Walk()
 	Direction = (Direction * 0.2f) + (LastDirection * 0.8f);
 	LastDirection = Direction;
 	Direction = glm::normalize(Direction);
-	Translate(Direction * 0.08f);
+	Translate(Direction * 0.1f);
 	UpdateModelMatrix(glm::inverse(glm::lookAt(GetPosition(), GetPosition() + Direction, glm::vec3(0.0f, 1.0f, 0.0f))) / GetModelMatrix());
 	dirty = true;
 }
