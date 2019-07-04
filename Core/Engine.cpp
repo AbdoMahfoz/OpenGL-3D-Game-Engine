@@ -59,6 +59,7 @@ void FlushBuffers()
 				auto itr = deleteBuff.find(objs[k]);
 				if (itr != deleteBuff.end())
 				{
+					delete objs[k];
 					objs.erase(objs.begin() + k);
 					deleteBuff.erase(itr);
 					k--;
@@ -163,11 +164,11 @@ void MainLoop()
 	logic.notify();
     do
     {
-		FlushBuffers();
         Rendering();
 		render.wait();
 	    glfwPollEvents();
 		FrameNumber = !FrameNumber;
+		FlushBuffers();
 		logic.notify();
         glfwSwapBuffers(MainWindow);
     }

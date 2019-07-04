@@ -44,7 +44,7 @@ void Zombie::SetDebugging(bool val)
     {
         for(auto i : PathDebug)
         {
-            delete i;
+            i->Delete();
         }
         PathDebug.clear();
     }
@@ -62,7 +62,7 @@ void Zombie::Main()
 		refreshDebug = false;
 		for (auto j : PathDebug)
 		{
-			delete j;
+			j->Delete();
 		}
 		PathDebug.clear();
 		for (int j = 0; j < PathCount; j++)
@@ -154,6 +154,6 @@ Zombie::~Zombie()
     }
     for(auto i : PathDebug)
     {
-        delete i;
+        i->Delete();
     }
 }

@@ -223,9 +223,11 @@ const glm::mat4& GameObject::GetRenderingModelMatrix()
 {
 	return ModelMatrix;
 }
-GameObject::~GameObject()
+void GameObject::Delete()
 {
-    if(model != 0)
-        Engine::UnRegisterGameObject(this);
-    objs.erase(find(objs.begin(), objs.end(), this));
+	if (model != 0)
+		Engine::UnRegisterGameObject(this);
+	objs.erase(find(objs.begin(), objs.end(), this));
+	if (model == 0)
+		delete this;
 }
