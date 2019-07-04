@@ -29,6 +29,31 @@
 #include "Input.h"
 #include "AudioManager.h"
 
+#ifndef RENDERARRAYELEMENT
+#define RENDERARRAYELEMENT
+
+struct RenderArrayElement
+{
+public:
+	Model* model;
+	std::vector<GameObject*> objs, buff;
+	std::set<GameObject*> deleteBuff;
+	float *verts, *uvs, *normals;
+	GLushort* indices;
+	RenderArrayElement(Model* model)
+	{
+		this->model = model;
+		verts = uvs = normals = nullptr;
+		indices = nullptr;
+	}
+	~RenderArrayElement()
+	{
+		delete[] verts, uvs, normals, indices;
+	}
+};
+
+#endif
+
 namespace Engine
 {
     void FireEngine();
@@ -41,7 +66,8 @@ namespace Engine
     void UnRegisterOnExit(void (*func)());
     void RegisterLight(LightSource* light);
     void UnRegisterLight(LightSource* light);
-    void RegisterModel(Model* model);
+    void RegisterModel(RenderArrayElement* element);
+	void UnRegisterModel(RenderArrayElement* element);
 	void SetAmbientLight(const glm::vec3& light);
 	void HideCursor();
 	void ShowCursor();

@@ -1,10 +1,13 @@
 #include "Engine.h"
 
+
 bool isInitalized = false;
 GLFWwindow* MainWindow;
+std::set<RenderArrayElement*> invalidatedModels;
 std::vector<void(*)()> routines, exitFuncs;
-std::vector<std::pair<Model*, std::vector<GameObject*>>> RenderArray;
-std::vector<LightSource*> Lights;
+std::vector<RenderArrayElement*> RenderArray, RenderArrayBuffer, RenderArrayEraseBuffer;
+std::vector<LightSource*> Lights, LightBuffer;
+std::set<LightSource*> LightEraseBuffer;
 GLuint VertexArrayID, shadowMap[MAX_LIGHT_COUNT];
 EulerCamera MainCamera, *CurrentCamera;
 glm::vec3 AmbientLight = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -24,6 +27,81 @@ GLFWwindow* CreateWindow(int width, int height, const char* title)
     GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     glfwMakeContextCurrent(window);
     return window;
+}
+void FlushBuffers()
+{
+	if (!RenderArrayBuffer.empty())
+	{
+		for (auto i : RenderArrayBuffer)
+		{
+			RenderArray.push_back(i);
+		}
+		RenderArrayBuffer.clear();
+	}
+	if (!invalidatedModels.empty())
+	{
+		for (auto i : invalidatedModels)
+		{
+			std::vector<GameObject*>& objs = i->objs;
+			std::vector<GameObject*>& buff = i->buff;
+			std::set<GameObject*>& deleteBuff = i->deleteBuff;
+			if (buff.size() > 0)
+			{
+				objs.reserve(objs.size() + buff.size());
+				for (auto j : buff)
+				{
+					objs.push_back(j);
+				}
+				buff.clear();
+			}
+			for (unsigned int k = 0; k < objs.size() && !deleteBuff.empty(); k++)
+			{
+				auto itr = deleteBuff.find(objs[k]);
+				if (itr != deleteBuff.end())
+				{
+					objs.erase(objs.begin() + k);
+					deleteBuff.erase(itr);
+					k--;
+				}
+			}
+			deleteBuff.clear();
+		}
+		invalidatedModels.clear();
+	}
+	if (!LightBuffer.empty())
+	{
+		Lights.reserve(Lights.size() + LightBuffer.size());
+		for (auto i : LightBuffer)
+		{
+			Lights.push_back(i);
+		}
+		LightBuffer.clear();
+	}
+	if (!LightEraseBuffer.empty())
+	{
+		for (unsigned int i = 0; i < Lights.size(); i++)
+		{
+			auto itr = LightEraseBuffer.find(Lights[i]);
+			if (itr != LightEraseBuffer.end())
+			{
+				Lights.erase(Lights.begin() + i);
+				LightEraseBuffer.erase(itr);
+				i--;
+			}
+		}
+	}
+	if (!RenderArrayEraseBuffer.empty())
+	{
+		for (auto i : RenderArrayEraseBuffer)
+		{
+			for (auto j : i->objs)
+			{
+				delete j;
+			}
+			RenderArray.erase(find(RenderArray.begin(), RenderArray.end(), i));
+			delete i;
+		}
+	}
 }
 void Logic()
 {
@@ -49,10 +127,10 @@ void Rendering()
         const glm::mat4& m = l->GetLightVP();
         for(auto i : RenderArray)
         {
-            i.first->SetUpEnviroment(m);
-            for(auto j : i.second)
+            i->model->SetUpEnviroment(m);
+            for(auto j : i->objs)
             {
-                i.first->Draw(*j);
+                i->model->Draw(*j);
             }
         }
     }
@@ -62,18 +140,18 @@ void Rendering()
     CurrentCamera->UpdateViewMatrix();
     for(auto i : RenderArray)
     {
-        i.first->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
+        i->model->SetUpEnviroment(CurrentCamera->GetProjectionMatrix(), CurrentCamera->GetViewMatrix(),
                                     AmbientLight, CurrentCamera->GetEyePosition(), 
                                     &LightColor[0], &LightPosition[0], LightColor.size());
-        for(auto j : i.second)
+        for(unsigned int l = 0; l < Lights.size(); l++)
         {
-            for(int l = 0; l < Lights.size(); l++)
-            {
-                glActiveTexture(GL_TEXTURE1 + l);
-                glUniform1i(shadowMap[l], l + 1);
-                Lights[l]->BindDepthMap();
-            }
-            i.first->Draw(*j);
+            glActiveTexture(GL_TEXTURE1 + l);
+            glUniform1i(shadowMap[l], l + 1);
+            Lights[l]->BindDepthMap();
+        }
+        for(auto j : i->objs)
+        {
+            i->model->Draw(*j);
         }
     }
 }
@@ -85,6 +163,7 @@ void MainLoop()
 	logic.notify();
     do
     {
+		FlushBuffers();
         Rendering();
 		render.wait();
 	    glfwPollEvents();
@@ -174,7 +253,7 @@ void Engine::RegisterRoutine(void (*ptr)(), bool shouldCheck = false)
 }
 void Engine::UnRegisterRoutine(void (*ptr)())
 {
-    for(int i = 0; i < routines.size(); i++)
+    for(unsigned int i = 0; i < routines.size(); i++)
     {
         if(routines[i] == ptr)
         {
@@ -189,7 +268,7 @@ void Engine::RegisterOnExit(void (*ptr)())
 }
 void Engine::UnRegisterOnExit(void (*ptr)())
 {
-    for(int i = 0; i < exitFuncs.size(); i++)
+    for(unsigned int i = 0; i < exitFuncs.size(); i++)
     {
         if(exitFuncs[i] == ptr)
         {
@@ -200,39 +279,32 @@ void Engine::UnRegisterOnExit(void (*ptr)())
 }
 void Engine::RegisterLight(LightSource* light)
 {
-    assert(Lights.size() != 5);
-    Lights.push_back(light);
+    assert(Lights.size() + LightBuffer.size() - LightEraseBuffer.size() != 5);
+    LightBuffer.push_back(light);
 }
 void Engine::UnRegisterLight(LightSource* light)
 {
-    for(int i = 0; i < Lights.size(); i++)
-    {
-        if(Lights[i] == light)
-        {
-            Lights.erase(Lights.begin() + i);
-            break;
-        }
-    }
+	LightEraseBuffer.insert(light);
 }
-void Engine::RegisterModel(Model* model)
+void Engine::RegisterModel(RenderArrayElement* element)
 {
-    RenderArray.push_back({model, std::vector<GameObject*>()});
+	RenderArrayBuffer.push_back(element);
+}
+void Engine::UnRegisterModel(RenderArrayElement* element)
+{
+	RenderArrayEraseBuffer.push_back(element);
 }
 void Engine::RegisterGameObject(GameObject* obj)
 {
-    RenderArray[obj->GetModel()->GetID()].second.push_back(obj);
+	RenderArrayElement* rend = obj->GetModel()->GetRenderElement();
+	rend->buff.push_back(obj);
+	invalidatedModels.insert(rend);
 }
 void Engine::UnRegisterGameObject(GameObject* obj)
 {
-    std::vector<GameObject*>& arr = RenderArray[obj->GetModel()->GetID()].second;
-    for(int i = 0; i < arr.size(); i++)
-    {
-        if(arr[i] == obj)
-        {
-            arr.erase(arr.begin() + i);
-            return;
-        }
-    }
+	RenderArrayElement* rend = obj->GetModel()->GetRenderElement();
+	rend->deleteBuff.insert(obj);
+	invalidatedModels.insert(rend);
 }
 EulerCamera& Engine::GetCurrentCamera()
 {

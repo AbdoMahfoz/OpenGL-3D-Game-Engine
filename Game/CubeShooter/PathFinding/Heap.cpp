@@ -30,7 +30,7 @@ void Heap<T>::shiftDown(HeapItem<T>* val)
 {
     while(val->heapIndex != arr.size() - 1)
     {
-        int i = val->heapIndex;
+        unsigned int i = val->heapIndex;
         if((2*i)+1 < arr.size() && arr[(2*i)+1]->val < arr[i]->val)
         {
             swap(&arr[(2*i)+1], &arr[i]);

@@ -11,7 +11,7 @@ BlenderModel::BlenderModel(const char* Path,int type)
     normals = new float[count];
     uvs = new float[(count/3)*2];
     indices = new unsigned short[indicesCount];
-    for(int i = 0; i < std::max(count/3, (int)o.Faces.size()); i++)
+    for(unsigned int i = 0; i < std::max((unsigned int)(count/3), o.Faces.size()); i++)
     {
         int j = i * 3;
         int k = i * 2;

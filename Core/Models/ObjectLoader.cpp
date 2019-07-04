@@ -50,7 +50,7 @@ int ObjectLoader::LoadModel(const char *filename, int type)
         FileLines.push_back(new std::string(LineBuffer));
     }
 
-    for (int q = 0; q < FileLines.size(); q++)
+    for (unsigned int q = 0; q < FileLines.size(); q++)
     {
         if ((*FileLines[q])[0] == '#') //if it's a comment
             continue;

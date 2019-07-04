@@ -140,7 +140,7 @@ void Zombie::ReceivePath(glm::vec3* Path, int Count)
 Zombie::~Zombie()
 {
     delete[] this->Path;
-    for(int i = 0; i < Instances.size(); i++)
+    for(unsigned int i = 0; i < Instances.size(); i++)
     {
         if(Instances[i] == this)
         {

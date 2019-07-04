@@ -10,7 +10,7 @@ void MouseLook()
     Engine::GetCurrentCamera().Pitch(-delta.y * 0.005f);
     Engine::GetCurrentCamera().Yaw(-delta.x * 0.005f);
     Player->Rotate(glm::vec3(0.0f, -delta.x * 0.28656f, 0.0f));
-    float temp = Engine::GetCurrentCamera().mAngleY;
+    double temp = Engine::GetCurrentCamera().mAngleY;
     Engine::GetCurrentCamera().mAngleY = 0;
     Engine::GetCurrentCamera().UpdateViewMatrix();
     Engine::GetCurrentCamera().SetEyePosition(Player->GetPosition() + 1.3f * Engine::GetCurrentCamera().mDirection);

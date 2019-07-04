@@ -7,12 +7,12 @@
 #include <glm/gtx/transform.hpp>
 
 class GameObject;
+struct RenderArrayElement;
 
 class Model
 {
 protected:
-    static int univ_id;
-    int id;
+	RenderArrayElement* renderElement;
     float *verts, *uvs, *normals, Specularity;
     GLushort *indices;
     int count, indicesCount;
@@ -25,7 +25,7 @@ protected:
     Model();
 public:
     Model(float* verts, float* uvs, float* normals, int count, GLushort* indices, int indicesCount, float Speculatiry);
-    int GetID() const;
+    RenderArrayElement* GetRenderElement() const;
     virtual void SetUpEnviroment(const glm::mat4& LightMVP);
     virtual void SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View,
                                  const glm::vec3& AmbientLight, const glm::vec3& EyePos,

@@ -1,17 +1,15 @@
 #include "../Engine.h"
 
-int Model::univ_id = 0;
-
 Model::Model()
 {
-    id = univ_id++;
     isBufferCreated = false;
     isShadowRendering = false;
-    Engine::RegisterModel(this);
+	renderElement = new RenderArrayElement(this);
+    Engine::RegisterModel(renderElement);
 }
 Model::Model(float* verts, float* uvs, float* normals, int count, GLushort* indices, int indicesCount, float Specularity)
 {
-    id = univ_id++;
+	renderElement = new RenderArrayElement(this);
     isBufferCreated = false;
     isShadowRendering = false;
     this->count = count;
@@ -37,11 +35,11 @@ Model::Model(float* verts, float* uvs, float* normals, int count, GLushort* indi
             this->indices[i] = indices[i];
         }
     }
-    Engine::RegisterModel(this);
+    Engine::RegisterModel(renderElement);
 }
-int Model::GetID() const
+RenderArrayElement* Model::GetRenderElement() const
 {
-    return id;
+    return renderElement;
 }
 void Model::CreateBuffer()
 {
@@ -137,5 +135,14 @@ void Model::Draw(GameObject& obj)
 }
 Model::~Model()
 {
-    delete[] verts, uvs, normals, indices;
+	renderElement->verts = verts;
+	renderElement->uvs = uvs;
+	renderElement->normals = normals;
+	renderElement->indices = indices;
+	for (auto i : renderElement->buff)
+	{
+		delete i;
+	}
+	renderElement->deleteBuff.clear();
+	Engine::UnRegisterModel(renderElement);
 }

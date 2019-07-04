@@ -25,7 +25,7 @@ AutoClean::~AutoClean()
 {
     if(!IsCleaningUp)
     {
-        for(int i = 0; i < CleanUpList.size(); i++)
+        for(unsigned int i = 0; i < CleanUpList.size(); i++)
         {
             if(CleanUpList[i] == this)
             {
