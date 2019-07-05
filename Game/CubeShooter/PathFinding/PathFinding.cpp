@@ -34,11 +34,11 @@ bool RunWorker = false;
 //------------Helpers-------------------
 std::pair<int, int> TranslatePosition(const glm::vec3& position)
 {
-    return std::pair<int, int>(((int)position.x / 2) + 5000, ((int)position.z / 2) + 5000);
+    return std::pair<int, int>(((int)floor(position.x / 2)) + 5000, ((int)floor(position.z / 2)) + 5000);
 }
-glm::vec3 TranslatePosition(const std::pair<int, int> position)
+glm::vec3 TranslatePosition(const std::pair<int, int>& position)
 {
-    return glm::vec3(((int)position.first - 5000) * 2, 0, ((int)position.second - 5000) * 2);
+    return glm::vec3((position.first - 5000) * 2, 0, (position.second - 5000) * 2);
 }
 //--------------------------------------
 //-------------Private------------------
@@ -64,9 +64,10 @@ void Worker()
                 {
                     PathFinidng::UpdateMap(job.oldPath[i], 1);
                 }
-            }
-            PathFinidng::UpdateMap(job.Start, 1);
-            PathFinidng::UpdateMap(job.Finish, 1);
+				delete[] job.oldPath;
+			}
+			PathFinidng::UpdateMap(job.Start, 1);
+			PathFinidng::UpdateMap(job.Finish, 1);
             auto res = AStar::CalculatePath(Obstacle, TranslatePosition(job.Start), TranslatePosition(job.Finish));
             if(res == nullptr)
             {
@@ -76,10 +77,10 @@ void Worker()
             {
                 int count = res->size();
                 glm::vec3* arr = new glm::vec3[count];
-                for(int i = 0; i < count; i++)
+                for(int i = count - 1, j = 0; i >= 0; i--, j++)
                 {
-                    arr[i] = TranslatePosition(res->at(i));
-                    PathFinidng::UpdateMap(arr[i], 0);
+                    arr[j] = TranslatePosition(res->at(i));
+                    PathFinidng::UpdateMap(arr[j], 0);
                 }
                 delete res;
                 job.CallBack(arr, count, job.requester);

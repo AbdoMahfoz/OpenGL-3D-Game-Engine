@@ -48,7 +48,8 @@ public:
     glm::mat4 GetModelMatrix();
 	const glm::mat4& GetRenderingModelMatrix();
     Model* GetModel() const;
-	void Delete();
+	virtual void Delete();
+	virtual ~GameObject() {}
 };
 
 #endif

@@ -73,11 +73,10 @@ std::vector<std::pair<int, int>>* AStar::CalculatePath(
                 {
                     continue;
                 }
-                auto neighbour = Grid[{targetPos.first, targetPos.second}];
+                auto& neighbour = Grid[{targetPos.first, targetPos.second}];
                 if(neighbour == 0)
                 {
-                    Grid[{targetPos.first, targetPos.second}] = h.push(
-                        AStarItem(targetPos, val->cost + coeff, AbsDiff(targetPos, Finish), val));
+                    neighbour = h.push(AStarItem(targetPos, val->cost + coeff, AbsDiff(targetPos, Finish), val));
                 }
                 else if(neighbour->val.cost >= val->cost + coeff)
                 {
@@ -99,6 +98,5 @@ std::vector<std::pair<int, int>>* AStar::CalculatePath(
         res->push_back(itr->pos);
         itr = itr->Parent;
     }
-    std::reverse(res->begin(), res->end());
     return res;
 }

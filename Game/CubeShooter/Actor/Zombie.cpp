@@ -1,27 +1,48 @@
 #include "Zombie.h"
 #include "../PathFinding/PathFinidng.h"
 
-std::mutex Zombie::OrderQueueMutex;
 std::vector<Zombie*> Zombie::Instances;
+std::set<Zombie*> Zombie::InstanceSet;
 
 void Zombie::PathCallback(glm::vec3* Path, int Count, Zombie* requester)
 {
-    requester->ReceivePath(Path, Count);
+	if (InstanceSet.find(requester) != InstanceSet.end())
+	{
+		requester->ReceivePath(Path, Count);
+	}
+	else
+	{
+		for (int i = 0; i < Count; i++)
+		{
+			PathFinidng::UpdateMap(Path[i], 1);
+		}
+		delete[] Path;
+	}
 }
 void Zombie::RequestPath(const glm::vec3& Start, const glm::vec3& Finish, 
     glm::vec3* oldPath, int oldPathCount, Zombie* self)
 {
-    PathFinidng::RequestPath(Start, Finish, oldPath, oldPathCount, PathCallback, self);
+	glm::vec3* p = nullptr;
+	if (oldPath != nullptr)
+	{
+		p = new glm::vec3[oldPathCount];
+		for (int i = 0; i < oldPathCount; i++)
+		{
+			p[i] = oldPath[i];
+		}
+	}
+    PathFinidng::RequestPath(Start, Finish, p, oldPathCount, PathCallback, self);
 }
 void Zombie::ZombieRoutine()
 {
-    for(auto i : Instances)
+    for(unsigned int i = 0; i < Instances.size(); i++)
     {
-        i->Main();
+        Instances[i]->Main();
     }
 }
-Zombie::Zombie(const glm::vec3& InitialPos, GameObject* Target)
+Zombie::Zombie(const glm::vec3& InitialPos, GameObject* Target, glm::vec3 debugColor)
 {
+	this->debugColor = debugColor;
 	this->LastDirection = glm::vec3(0);
 	this->refreshDebug = false;
     this->debugPath = false;
@@ -34,6 +55,7 @@ Zombie::Zombie(const glm::vec3& InitialPos, GameObject* Target)
 	this->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
     Translate(InitialPos);
     Instances.push_back(this);
+	InstanceSet.insert(this);
     if(Instances.size() == 1)
     {
         Engine::RegisterRoutine(ZombieRoutine, false);
@@ -70,7 +92,7 @@ void Zombie::Main()
 		{
 			Cube* c = new Cube();
 			c->Translate(Path[j]);
-			c->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
+			c->SetColor(debugColor);
 			PathDebug.push_back(c);
 		}
 	}
@@ -138,23 +160,29 @@ void Zombie::ReceivePath(glm::vec3* Path, int Count)
     }
     PathRequested = false;
 }
-Zombie::~Zombie()
+void Zombie::Delete()
 {
-    delete[] this->Path;
-    for(unsigned int i = 0; i < Instances.size(); i++)
-    {
-        if(Instances[i] == this)
-        {
-            Instances.erase(Instances.begin() + i);
-            break;
-        }
-    }
-    if(Instances.size() == 0)
-    {
-        Engine::UnRegisterRoutine(ZombieRoutine);
-    }
-    for(auto i : PathDebug)
-    {
-        i->Delete();
-    }
+	GameObject::Delete();
+	for (int i = 0; i < PathCount; i++)
+	{
+		PathFinidng::UpdateMap(Path[i], 1);
+	}
+	delete[] this->Path;
+	InstanceSet.erase(this);
+	for (unsigned int i = 0; i < Instances.size(); i++)
+	{
+		if (Instances[i] == this)
+		{
+			Instances.erase(Instances.begin() + i);
+			break;
+		}
+	}
+	if (Instances.size() == 0)
+	{
+		Engine::UnRegisterRoutine(ZombieRoutine);
+	}
+	for (auto i : PathDebug)
+	{
+		i->Delete();
+	}
 }

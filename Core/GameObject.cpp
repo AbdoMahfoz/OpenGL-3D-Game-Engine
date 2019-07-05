@@ -122,8 +122,8 @@ void GameObject::Translate(const glm::vec3& position)
 	this->position += position;
     while(EnableCollision && TestCollision(this))
     {
-		UpdateModelMatrix(glm::translate(-position * 0.1f));
-		this->position += position;
+		UpdateModelMatrix(glm::translate(-position));
+		this->position -= position;
     }
 }
 void GameObject::Translate(float distance, const glm::vec3& direction)

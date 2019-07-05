@@ -85,6 +85,7 @@ void FlushBuffers()
 			auto itr = LightEraseBuffer.find(Lights[i]);
 			if (itr != LightEraseBuffer.end())
 			{
+				delete Lights[i];
 				Lights.erase(Lights.begin() + i);
 				LightEraseBuffer.erase(itr);
 				i--;
@@ -109,6 +110,7 @@ void Logic()
     while(!ProgramTerminated)
     {
 		logic.wait();
+		if (ProgramTerminated) break;
         for(auto i : routines)
         {
             i();
