@@ -14,7 +14,7 @@ GLuint ShaderManager::GetShaders(const char* vertex, const char* fragment)
     }
     return LoadedShaders[{vertex, fragment}] = LoadShaders(vertex, fragment);
 }
-void ShaderManager::UnLoadShader(const char* vertex, const char* fragment)
+void ShaderManager::UnloadShader(const char* vertex, const char* fragment)
 {
     auto itr = LoadedShaders.find({vertex, fragment});
     if(itr == LoadedShaders.end())

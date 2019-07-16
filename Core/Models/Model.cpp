@@ -133,6 +133,10 @@ void Model::Draw(GameObject& obj)
     }
     glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_SHORT, 0);
 }
+void Model::Delete()
+{
+	Engine::UnRegisterModel(this->renderElement);
+}
 Model::~Model()
 {
 	renderElement->verts = verts;

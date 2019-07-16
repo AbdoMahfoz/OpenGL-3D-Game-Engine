@@ -15,8 +15,7 @@ int SCREEN_WIDTH, SCREEN_HEIGHT, FrameNumber = 0;
 bool ProgramTerminated = false;
 Semaphore logic, render;
 
-//------------Start of Private functions(Inaccessable outside of this file)---------
-GLFWwindow* CreateWindow(int width, int height, const char* title)
+GLFWwindow* Engine::CreateWindow(int width, int height, const char* title)
 {   
     SCREEN_WIDTH = width;
     SCREEN_HEIGHT = height;
@@ -28,7 +27,7 @@ GLFWwindow* CreateWindow(int width, int height, const char* title)
     glfwMakeContextCurrent(window);
     return window;
 }
-void FlushBuffers()
+void Engine::FlushBuffers()
 {
 	if (!RenderArrayBuffer.empty())
 	{
@@ -101,11 +100,12 @@ void FlushBuffers()
 				delete j;
 			}
 			RenderArray.erase(find(RenderArray.begin(), RenderArray.end(), i));
+			delete i->model;
 			delete i;
 		}
 	}
 }
-void Logic()
+void Engine::Logic()
 {
     while(!ProgramTerminated)
     {
@@ -118,7 +118,7 @@ void Logic()
 		render.notify();
     }
 }
-void Rendering()
+void Engine::Rendering()
 {
     std::vector<glm::vec3> LightColor, LightPosition;
     for(auto l : Lights)
@@ -158,7 +158,7 @@ void Rendering()
         }
     }
 }
-void MainLoop()
+void Engine::MainLoop()
 {
 	std::thread* LogicThread = new std::thread(Logic);
     Engine::Start();
@@ -185,7 +185,6 @@ void MainLoop()
     }
     glfwTerminate();
 }
-//------------End of Private functions(Inaccessable outside of this file)---------
 void Engine::FireEngine()
 {
     if(!isInitalized)

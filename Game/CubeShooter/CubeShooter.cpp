@@ -35,11 +35,11 @@ namespace CubeShooter
     }
     void CleanUp()
     {
-        delete l;
-        delete MainCube;
+        //delete l;
+		MainCube->Delete();
         for(int i = 0; i < 4; i++)
         {
-            delete z[i];
+            z[i]->Delete();
         }
     }
 	void ZombieHitMe(GameObject* o);

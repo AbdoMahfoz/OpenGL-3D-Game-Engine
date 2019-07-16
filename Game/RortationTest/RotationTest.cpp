@@ -6,7 +6,7 @@ namespace RotationTest
 	LightSource* light;
 	void Cleanup()
 	{
-		delete c;
+		c->Delete();
 	}
 	void Update()
 	{

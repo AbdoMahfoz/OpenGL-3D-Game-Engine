@@ -8,23 +8,13 @@
 #include <glm/gtx/transform.hpp>
 #include "GameObject.h"
 #include "AutoClean.h"
-#ifdef _WIN32
-	#include "ImportedAssets/EulerCamera.h"
-	#include "ImportedAssets/texture.h"
-	#include "ImportedAssets/Semaphore.h"
-	#include "Models/Cube.h"
-	#include "Lighting/LightSource.h"
-	#include "Models/BlenderModel.h"
-	#include "Models/ObjectLoader.h"
-#else
-	#include "Semaphore.h"
-	#include "EulerCamera.h"
-	#include "texture.h"
-	#include "Cube.h"
-	#include "LightSource.h"
-	#include "BlenderModel.h"
-	#include "ObjectLoader.h"
-#endif
+#include "ImportedAssets/EulerCamera.h"
+#include "ImportedAssets/texture.h"
+#include "ImportedAssets/Semaphore.h"
+#include "Models/Cube.h"
+#include "Lighting/LightSource.h"
+#include "Models/BlenderModel.h"
+#include "Models/ObjectLoader.h"
 #include "ShaderManager.h"
 #include "Input.h"
 #include "AudioManager.h"
@@ -54,27 +44,43 @@ public:
 
 #endif
 
-namespace Engine
+#ifndef ENGINE
+#define ENGINE
+
+class Engine
 {
-    void FireEngine();
-    void Start();
-	int GetFrameNumber();
-    void SetClearColor(const glm::vec3& color);
-    void RegisterRoutine(void (*func)(), bool shouldCheck);
-    void UnRegisterRoutine(void (*func)());
-    void RegisterOnExit(void (*func)());
-    void UnRegisterOnExit(void (*func)());
-    void RegisterLight(LightSource* light);
-    void UnRegisterLight(LightSource* light);
-    void RegisterModel(RenderArrayElement* element);
-	void UnRegisterModel(RenderArrayElement* element);
-	void SetAmbientLight(const glm::vec3& light);
-	void HideCursor();
-	void ShowCursor();
-    void RegisterGameObject(GameObject* obj);
-    void UnRegisterGameObject(GameObject* obj);
-    EulerCamera& GetCurrentCamera();
-    void SetCurrentCamera(EulerCamera* Camera);
-    void SetMainCameraAsCurrent();
-    void Terminate();
-}
+private:
+	friend class Model;
+	friend class GameObject;
+	friend class LightSource;
+	Engine();
+	static GLFWwindow* CreateWindow(int width, int height, const char* title);
+	static void FlushBuffers();
+	static void Logic();
+	static void Rendering();
+	static void MainLoop();
+	static int GetFrameNumber();
+	static void RegisterLight(LightSource* light);
+	static void UnRegisterLight(LightSource* light);
+	static void RegisterModel(RenderArrayElement* element);
+	static void UnRegisterModel(RenderArrayElement* element);
+	static void RegisterGameObject(GameObject* obj);
+	static void UnRegisterGameObject(GameObject* obj);
+public:
+	static void FireEngine();
+	static void Start();
+	static void SetClearColor(const glm::vec3& color);
+	static void RegisterRoutine(void (*func)(), bool shouldCheck);
+	static void UnRegisterRoutine(void (*func)());
+	static void RegisterOnExit(void (*func)());
+	static void UnRegisterOnExit(void (*func)());
+	static void SetAmbientLight(const glm::vec3& light);
+	static void HideCursor();
+	static void ShowCursor();
+	static EulerCamera& GetCurrentCamera();
+	static void SetCurrentCamera(EulerCamera* Camera);
+	static void SetMainCameraAsCurrent();
+	static void Terminate();
+};
+
+#endif

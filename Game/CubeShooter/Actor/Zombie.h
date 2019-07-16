@@ -24,6 +24,8 @@ private:
     void Main();
     void Walk();
     void ReceivePath(glm::vec3* Path, int Count);
+protected:
+	virtual ~Zombie() {}
 public:
     Zombie(const glm::vec3& InitialPosition, GameObject* Target, glm::vec3 debugColor = glm::vec3(0.0f, 1.0f, 0.0f));
     void SetDebugging(bool);

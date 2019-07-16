@@ -8,14 +8,15 @@
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
-#ifdef _WIN32
-	#include "../ImportedAssets/EulerCamera.h"
-#else
-	#include "EulerCamera.h"
-#endif
+#include "../ImportedAssets/EulerCamera.h"
 
 class LightSource
 {
+private:
+	friend class Engine;
+	void BindDepthMap();
+	const glm::mat4& GetLightVP();
+	virtual void SetUpEnviroment();
 protected:
     glm::mat4 ViewMatrix, ProjectionMatrix, VP;
     GLuint dmFrameBuffer, dmTexture;
@@ -23,19 +24,16 @@ protected:
     bool IsModified;
     int width, height;
     void InitializeBufferTexture(int width, int height);
+	virtual ~LightSource();
 public:
     LightSource(const glm::vec3& InitialPosition);
     LightSource(const glm::vec3& InitialPosition, int width, int height);
-    virtual void SetUpEnviroment();
     void SetLightColor(const glm::vec3& LightColor);
-    void BindDepthMap();
     void SetPosition(const glm::vec3&);
     void Translate(const glm::vec3&);
     void SetLookAt(const glm::vec3&);
-    const glm::mat4& GetLightVP();
     const glm::vec3& GetLightColor();
     const glm::vec3& GetPosition();
-    ~LightSource();
 };
 
 #endif
