@@ -4,6 +4,7 @@ void DefaultShader::Initialize(Texture* tex)
 {
 	Specularity = 10;
 	programID = ShaderManager::GetShaders("Shaders/LVS.glsl", "Shaders/LFS.glsl");
+	EyeID = glGetUniformLocation(programID, "WSEye");
 	LightMVPID = glGetUniformLocation(programID, "LightMVP");
 	AmbientLightID = glGetUniformLocation(programID, "AmbientLight");
 	SpeculatiyID = glGetUniformLocation(programID, "Specularity");
