@@ -66,7 +66,7 @@ void Model::CreateBuffer()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndicesID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * indicesCount, indices, GL_STATIC_DRAW);
-	shader->Initialize();
+	shader->Initialize(texture);
 	shader->InitializeShadow();
 }
 void Model::SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View,
@@ -91,21 +91,25 @@ void Model::SetUpEnviroment(const glm::mat4& LightMVP)
     isShadowRendering = true;
 	shader->SetUpShadowEnviroment(LightMVP);
 }
-void Model::BufferData(GameObject& obj)
+void Model::BufferData(GameObject& obj, int i)
 {
 	obj.FlushBuffer();
     if(!isShadowRendering)
     {
-		shader->BufferData(obj, obj.GetRenderingModelMatrix());
+		shader->BufferData(obj, obj.GetRenderingModelMatrix(), i);
     }
     else
     {
-		shader->BufferShadowData(obj, obj.GetRenderingModelMatrix());
+		shader->BufferShadowData(obj, obj.GetRenderingModelMatrix(), i);
     }
 }
-void Model::BindTexture()
+Texture* Model::GetTexture()
 {
-	texture->Bind();
+	return texture;
+}
+void Model::SetTexture(Texture* tex)
+{
+	texture = tex;
 }
 void Model::Draw(int count)
 {

@@ -1,7 +1,16 @@
 #include "CubeModel.h"
 
+Texture* CubeModel::tex = nullptr;
+bool CubeModel::TextureLoaded = false;
+
 CubeModel::CubeModel()
 {
+	if (!TextureLoaded)
+	{
+		tex = new Texture("uvtemplate.bmp", 0);
+		TextureLoaded = true;
+	}
+	texture = tex;
 	Specularity = 10;
 	count = 72;
 	indicesCount = 36;

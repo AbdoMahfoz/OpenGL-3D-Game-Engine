@@ -2,13 +2,13 @@
 
 in vec3 WSPosition;
 in vec3 WSNomral;
+in vec3 color;
 in vec2 uv;
 in vec4 LightPrepPos[5];
 flat in int LightCount;
 
 uniform vec3 WSEye;
 uniform vec3 AmbientLight;
-uniform vec3 Color;
 uniform float Specularity;
 uniform sampler2D InputTexture;
 uniform vec3 WSLight[30];
@@ -44,7 +44,7 @@ float CalculateShadow(vec3 LightVector, vec4 LightPrepPos, sampler2D ss)
 
 void main()
 {   
-    vec4 PixelColor = (texture(InputTexture, uv) * vec4(Color, 1));
+    vec4 PixelColor = (texture(InputTexture, uv) * vec4(color, 1));
     vec4 TotalLight = vec4(AmbientLight, 1.0);
     float Attenuation = 0;
     for(int i = 0; i < LightCount; i++)

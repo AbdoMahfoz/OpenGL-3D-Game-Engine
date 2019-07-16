@@ -25,10 +25,9 @@ private:
 	virtual void SetUpEnviroment(const glm::mat4& Prespective, const glm::mat4& View,
 		const glm::vec3& AmbientLight, const glm::vec3& EyePos,
 		glm::vec3* LightColor, glm::vec3* LightPos, int LightCount);
-	virtual void BufferData(GameObject&);
+	virtual void BufferData(GameObject& obj, int i);
 	virtual void Draw(int count);
 	virtual void CreateBuffer();
-	virtual void BindTexture();
 protected:
 	Texture* texture;
     float *verts, *uvs, *normals, Specularity;
@@ -38,6 +37,8 @@ protected:
     Model();
 public:
     Model(Texture* texture, float* verts, float* uvs, float* normals, int count, GLushort* indices, int indicesCount, float Speculatiry);
+	Texture* GetTexture();
+	void SetTexture(Texture* tex);
 	void Delete();
 };
 

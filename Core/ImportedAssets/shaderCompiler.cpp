@@ -12,7 +12,7 @@ using namespace std;
 
 
 
-#include "shader.hpp"
+#include "shaderCompiler.hpp"
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path){
 

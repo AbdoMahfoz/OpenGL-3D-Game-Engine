@@ -7,6 +7,9 @@
 
 class CubeModel : public Model 
 {
+private:
+	static Texture* tex;
+	static bool TextureLoaded;
 public:
     CubeModel();
 };

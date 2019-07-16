@@ -131,9 +131,9 @@ void Engine::Rendering()
         for(auto i : RenderArray)
         {
             i->model->SetUpEnviroment(m);
-            for(auto j : i->objs)
+            for(int j = 0; j < (int)i->objs.size(); j++)
             {
-                i->model->BufferData(*j);
+                i->model->BufferData(*(i->objs[j]), j);
             }
 			i->model->Draw(i->objs.size());
         }
@@ -153,13 +153,10 @@ void Engine::Rendering()
             glUniform1i(shadowMap[l], l + 1);
             Lights[l]->BindDepthMap();
         }
-		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(texID, 0);
-		i->objs[0]->BindTexture();
-        for(auto j : i->objs)
-        {
-            i->model->BufferData(*j);
-        }
+		for (int j = 0; j < (int)i->objs.size(); j++)
+		{
+			i->model->BufferData(*(i->objs[j]), j);
+		}
 		i->model->Draw(i->objs.size());
     }
 }

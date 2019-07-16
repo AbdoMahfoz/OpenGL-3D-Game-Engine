@@ -42,11 +42,10 @@ void GameScenes::DemoScene()
     //light2 = new LightSource(glm::vec3(-2.0f, 3.0f, -2.0f));
     //light->SetLightColor(glm::vec3(1.0f, 0.0f, 0.0f));
     //light2->SetLightColor(glm::vec3(0.0f, 1.0f, 0.0f));
-    Texture* tex = new Texture("uvtemplate.bmp", 0);
     CubeModel* c = new CubeModel();
-    StaticCube = new GameObject(c, tex);
-    Plane = new GameObject(c, tex);
-    Player = new GameObject(c, tex);
+    StaticCube = new GameObject(c);
+    Plane = new GameObject(c);
+    Player = new GameObject(c);
     StaticCube->Translate(glm::vec3(0.0f, 1.0f, 0.0f));
     Plane->Scale(glm::vec3(100.0f, 0.2f, 100.0f));
     Plane->Translate(glm::vec3(0.0f, -5.0f, 0.0f));

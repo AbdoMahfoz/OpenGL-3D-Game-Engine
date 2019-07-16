@@ -129,7 +129,7 @@
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\ImportedAssets\EulerCamera.cpp" />
     <ClCompile Include="Core\ImportedAssets\FPCamera.cpp" />
-    <ClCompile Include="Core\ImportedAssets\shader.cpp" />
+    <ClCompile Include="Core\ImportedAssets\shaderCompiler.cpp" />
     <ClCompile Include="Core\ImportedAssets\stb_image.cpp" />
     <ClCompile Include="Core\ImportedAssets\texture.cpp" />
     <ClCompile Include="Core\Input.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="Core\ImportedAssets\EulerCamera.h" />
     <ClInclude Include="Core\ImportedAssets\FPCamera.h" />
     <ClInclude Include="Core\ImportedAssets\Semaphore.h" />
-    <ClInclude Include="Core\ImportedAssets\shader.hpp" />
+    <ClInclude Include="Core\ImportedAssets\shaderCompiler.hpp" />
     <ClInclude Include="Core\ImportedAssets\stb_image.h" />
     <ClInclude Include="Core\ImportedAssets\texture.h" />
     <ClInclude Include="Core\Input.h" />
