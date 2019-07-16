@@ -15,7 +15,8 @@
 #include "Lighting/LightSource.h"
 #include "Models/BlenderModel.h"
 #include "Models/ObjectLoader.h"
-#include "ShaderManager.h"
+#include "Shaders/ShaderManager.h"
+#include "Shaders/DefaultShader.h"
 #include "Input.h"
 #include "AudioManager.h"
 

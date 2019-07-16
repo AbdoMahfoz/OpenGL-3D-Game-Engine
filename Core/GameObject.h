@@ -15,9 +15,7 @@ private:
 	friend class Model;
 	const glm::mat4& GetRenderingModelMatrix();
 	void FlushBuffer();
-	void BindTexture();
     Model* model;
-    Texture* texture;
     glm::vec3 position, rotation, scale, m_color;
     glm::mat4 ModelMatrix, Buffer[2];
 	std::mutex MatLock;
@@ -32,7 +30,7 @@ public:
 	void UpdateModelMatrix(const glm::mat4&);
     void (*CallBack)(GameObject*);
     static bool EnableCollision;
-    GameObject(Model* model, Texture* texture);
+    GameObject(Model* model);
     void Translate(const glm::vec3& position);
 	void Translate(float distance, const glm::vec3& direction);
 	void TranslateLeft(float distance);

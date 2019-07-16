@@ -35,14 +35,13 @@ bool TestCollision(GameObject* o)
     }
     return false;
 }
-GameObject::GameObject(Model* model, Texture* texture)
+GameObject::GameObject(Model* model)
 {
 	this->BufferToBeFlushed = -1;
 	this->bufferDirty[0] = this->bufferDirty[1] = 0;
 	this->lastBufferUsed = -1;
 	this->dirty = false;
     this->CallBack = nullptr;
-    this->texture = texture;
     this->m_color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->model = model;
 	this->position = glm::vec3(0.0f);
@@ -177,10 +176,6 @@ void GameObject::ScaleWithRespectTo(const glm::vec3& scale, const glm::vec3& sca
 void GameObject::SetColor(const glm::vec3& m_color)
 {
     this->m_color = m_color;
-}
-void GameObject::BindTexture()
-{
-    texture->Bind();
 }
 Model* GameObject::GetModel() const
 {

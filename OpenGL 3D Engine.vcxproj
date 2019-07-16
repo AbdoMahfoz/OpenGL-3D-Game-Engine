@@ -140,7 +140,9 @@
     <ClCompile Include="Core\Models\CubeModel.cpp" />
     <ClCompile Include="Core\Models\Model.cpp" />
     <ClCompile Include="Core\Models\ObjectLoader.cpp" />
-    <ClCompile Include="Core\ShaderManager.cpp" />
+    <ClCompile Include="Core\Shaders\DefaultShader.cpp" />
+    <ClCompile Include="Core\Shaders\Shader.cpp" />
+    <ClCompile Include="Core\Shaders\ShaderManager.cpp" />
     <ClCompile Include="Game\CubeShooter\Actor\Zombie.cpp" />
     <ClCompile Include="Game\CubeShooter\CubeShooter.cpp" />
     <ClCompile Include="Game\CubeShooter\PathFinding\AStar.cpp" />
@@ -168,7 +170,10 @@
     <ClInclude Include="Core\Models\CubeModel.h" />
     <ClInclude Include="Core\Models\Model.h" />
     <ClInclude Include="Core\Models\ObjectLoader.h" />
-    <ClInclude Include="Core\ShaderManager.h" />
+    <ClInclude Include="Core\Shaders\DefaultShader.h" />
+    <ClInclude Include="Core\Shaders\Shader.h" />
+    <ClInclude Include="Core\Shaders\ShaderData.h" />
+    <ClInclude Include="Core\Shaders\ShaderManager.h" />
     <ClInclude Include="Game\CubeShooter\Actor\Zombie.h" />
     <ClInclude Include="Game\CubeShooter\PathFinding\AStar.h" />
     <ClInclude Include="Game\CubeShooter\PathFinding\Heap.h" />

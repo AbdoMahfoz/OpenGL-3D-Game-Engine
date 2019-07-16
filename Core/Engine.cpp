@@ -133,8 +133,9 @@ void Engine::Rendering()
             i->model->SetUpEnviroment(m);
             for(auto j : i->objs)
             {
-                i->model->Draw(*j);
+                i->model->BufferData(*j);
             }
+			i->model->Draw(i->objs.size());
         }
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -152,10 +153,14 @@ void Engine::Rendering()
             glUniform1i(shadowMap[l], l + 1);
             Lights[l]->BindDepthMap();
         }
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(texID, 0);
+		i->objs[0]->BindTexture();
         for(auto j : i->objs)
         {
-            i->model->Draw(*j);
+            i->model->BufferData(*j);
         }
+		i->model->Draw(i->objs.size());
     }
 }
 void Engine::MainLoop()
